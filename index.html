@@ -91,7 +91,7 @@ function ymd(ts){var d=new Date(ts);return d.getFullYear()+"-"+pad(d.getMonth()+
 function summarize(st){
   var S=Array.isArray(st.sessions)?st.sessions:[],dm={},last=0,cut=Date.now()-70*864e5;
   S.forEach(function(s){if(!s||!s.s||!s.e)return;if(s.e>last)last=s.e;if(s.s<cut)return;var k=ymd(s.s);dm[k]=Math.round(((dm[k]||0)+(s.e-s.s)/60000)*100)/100});
-  var av=8,run=null; /* kunlik sof ish vaqti: 9:00-18:00, tushlik 13:30-14:30 chiqarilgan = 8 soat */
+  var av=9,run=null; /* kunlik sof ish vaqti: 9:00-19:00, tushlik 13:30-14:30 chiqarilgan = 9 soat */
   if(st.run&&st.run.id){var tk=(st.tasks||[]).filter(function(x){return x.id===st.run.id})[0]||{};run={p:tk.p||"",t:tk.t||"",s:st.run.s}}
   var td=ymd(Date.now()),tn=0,lt=null;
   S.forEach(function(s){if(!s||!s.s||!s.e)return;if(ymd(s.s)===td)tn++;if(!lt||s.e>lt.e){var t=(st.tasks||[]).filter(function(x){return x.id===s.id})[0]||{};lt={e:s.e,p:t.p||s.p||"",t:t.t||s.t||""}}});
@@ -722,8 +722,8 @@ html.adminonly .top{justify-content:flex-start}
 :is(#s-team,#mHeroWrap) .tmh-day{grid-column:1/-1;margin-top:20px}
 :is(#s-team,#mHeroWrap) .tmd-bar{position:relative;display:flex;height:12px;border-radius:6px;background:rgba(255,255,255,.1)}
 :is(#s-team,#mHeroWrap) .tmd-bar i{display:block;height:100%;background:rgba(255,255,255,.34)}
-:is(#s-team,#mHeroWrap) .tmd-bar i.a{width:50%;border-radius:6px 0 0 6px}
-:is(#s-team,#mHeroWrap) .tmd-bar i.l{width:11.111%;background:repeating-linear-gradient(135deg,rgba(255,255,255,.2) 0 4px,transparent 4px 8px);margin:0 2px}
+:is(#s-team,#mHeroWrap) .tmd-bar i.a{width:45%;border-radius:6px 0 0 6px}
+:is(#s-team,#mHeroWrap) .tmd-bar i.l{width:10%;background:repeating-linear-gradient(135deg,rgba(255,255,255,.2) 0 4px,transparent 4px 8px);margin:0 2px}
 :is(#s-team,#mHeroWrap) .tmd-bar i.b{flex:1;border-radius:0 6px 6px 0}
 :is(#s-team,#mHeroWrap) .tmd-now{position:absolute;top:-6px;bottom:-6px;width:4px;margin-left:-2px;border-radius:2px;background:#f2a33a;box-shadow:0 0 0 3px rgba(242,163,58,.25)}
 :is(#s-team,#mHeroWrap) .tmd-now[hidden]{display:none}
@@ -833,7 +833,7 @@ html.adminonly .top{justify-content:flex-start}
     </div>
     <div class="tmh-day" id="tmDay">
       <div class="tmd-bar" aria-hidden="true"><i class="a"></i><i class="l"></i><i class="b"></i><span class="tmd-now" id="tmNow"></span></div>
-      <div class="tmd-lab" aria-hidden="true"><span>09:00</span><span class="lu">tushlik 13:30–14:30</span><span>18:00</span></div>
+      <div class="tmd-lab" aria-hidden="true"><span>09:00</span><span class="lu">tushlik 13:30–14:30</span><span>19:00</span></div>
       <div class="tmd-txt" id="tmDayTxt"></div>
     </div>
   </div>
@@ -850,7 +850,7 @@ html.adminonly .top{justify-content:flex-start}
   </section>
   <script>if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)){var __t=document.getElementById("s-team");if(__t){var __h=document.getElementById("tmHero");if(__h){var __w=document.createElement("div");__w.id="mHeroWrap";__w.appendChild(__h);__t.parentNode.parentNode.insertBefore(__w,__t.parentNode)}__t.remove()}}</script>
 
-  <div id="cfgHidden" hidden aria-hidden="true"><input id="days" type="number" value="22"><input id="st" type="number" value="9"><input id="en" type="number" value="18"><input id="lu" type="number" value="1"></div>
+  <div id="cfgHidden" hidden aria-hidden="true"><input id="days" type="number" value="22"><input id="st" type="number" value="9"><input id="en" type="number" value="19"><input id="lu" type="number" value="1"></div>
 
   <section class="sec" id="s-hero" data-sec="hero">
   <div class="card hero">
@@ -1176,7 +1176,7 @@ function renderHist(){
     var tk_=Object.keys(tmap).sort(function(a,b){return tmap[b]-tmap[a]}).slice(0,10),mx=tmap[tk_[0]];
     st='<div class="hst"><div class="kpi"><b>'+hmTxt(tot)+'</b><span>Jami davomiylik ('+days.length+' kun)</span></div>'
       +'<div class="kpi"><b>'+hmTxt(tot/days.length)+'</b><span>O‘rtacha / kun</span></div>'
-      +'<div class="kpi"><b>'+Math.round(tot/(days.length*availMin)*100)+'%</b><span'+' title=\"Hisob: 13:30–14:30 tushlik chiqarilgan, 8 soatlik sof ish vaqti bo‘yicha\"'+'>Ish vaqtining ulushi (kuniga '+hmTxt(calc().span*60)+')</span></div></div>'
+      +'<div class="kpi"><b>'+Math.round(tot/(days.length*availMin)*100)+'%</b><span'+' title=\"Hisob: 13:30–14:30 tushlik chiqarilgan, 9 soatlik sof ish vaqti bo‘yicha\"'+'>Ish vaqtining ulushi (kuniga '+hmTxt(calc().span*60)+')</span></div></div>'
       +'<div class="pb"><i style="width:'+Math.min(100,tot/(days.length*availMin)*100)+'%"></i></div>'
       +'<h2 style="margin:14px 0 6px;font-size:14px">Vazifalar bo‘yicha jami vaqt</h2>'
       +tk_.map(function(n){return '<div class="bar"><span>'+esc(n)+'</span><div class="track"><i style="width:'+(tmap[n]/mx*100)+'%;background:var(--cool)"></i></div><b>'+hmTxt(tmap[n])+'</b></div>'}).join("");
@@ -1405,7 +1405,7 @@ function renderDayLoad(d){
   if(run){var rk=ymd(run.s);mins[rk]=(mins[rk]||0)+(Date.now()-run.s)/60000}
   for(i=N-1;i>=0;i--){var ts=Date.now()-i*864e5,k=ymd(ts),m=mins[k]||0;days.push({k:k,m:m,pct:m/avM*100,wd:WD[new Date(ts).getDay()],today:i===0})}
   var mx=Math.max(100,Math.max.apply(null,days.map(function(z){return z.pct}))),H=100;
-  var h='<h3>Har kunlik kuchlanish <span'+' title=\"Hisob: 13:30–14:30 tushlik chiqarilgan, 8 soatlik sof ish vaqti bo‘yicha\"'+'>— oxirgi '+N+' kun, kunlik ish vaqtiga ('+hm(d.span)+') nisbatan. Katta diagrammada shu kunlarning o‘rtachasi.</span></h3><div class="cols">';
+  var h='<h3>Har kunlik kuchlanish <span'+' title=\"Hisob: 13:30–14:30 tushlik chiqarilgan, 9 soatlik sof ish vaqti bo‘yicha\"'+'>— oxirgi '+N+' kun, kunlik ish vaqtiga ('+hm(d.span)+') nisbatan. Katta diagrammada shu kunlarning o‘rtachasi.</span></h3><div class="cols">';
   h+='<div class="ln" style="bottom:'+(24+H*100/mx)+'px" title="100%"></div>';
   days.forEach(function(z){
     var lv=0;LV.forEach(function(l,j){if(z.pct>=l[2])lv=j});
@@ -1736,7 +1736,7 @@ function rpBlocks(D){
     blk(st("Vazifalar bo‘yicha sarflangan vaqt")+top.map(function(x){return'<div class="tb"><span class="rtl">'+esc(x.p)+' — '+esc(x.t)+'</span><div class="rt"><i style="width:'+(x.m/mx*100)+'%;background:'+col(names.indexOf(x.p))+'"></i></div><span class="tv">'+hmTxt(x.m)+' · '+x.n+' ta</span></div>'}).join("")+(tk.length>top.length?'<div class="mut">… va yana '+(tk.length-top.length)+' ta vazifa</div>':""));
   }
   if(RP.sec.hour){
-    var h0=Math.min(9,new Date(D.first).getHours()),h1=Math.max(18,new Date(D.last).getHours()),hx=Math.max.apply(null,D.hours),cols="",h;
+    var h0=Math.min(9,new Date(D.first).getHours()),h1=Math.max(19,new Date(D.last).getHours()),hx=Math.max.apply(null,D.hours),cols="",h;
     for(h=h0;h<=h1;h++){var v=D.hours[h],ht=hx?Math.round(v/hx*90):0;
       cols+='<div class="hc"><em>'+(v>=1?Math.round(v)+"′":"")+'</em><i style="height:'+Math.max(v>=1?3:1,ht)+'px;background:'+(v>=1?AC:"#dbe1ec")+'"></i><span>'+pad(h)+'</span></div>'}
     blk(st("Soatlar bo‘yicha taqsimot")+'<div class="hh">'+cols+'</div><div class="mut">Har ustun — shu soat ichida ishlangan daqiqalar'+(single?"":" (davr bo‘yicha yig‘indi)")+'.</div>');
@@ -1745,7 +1745,7 @@ function rpBlocks(D){
     var dk=D.keys.filter(function(k){return D.days[k]});
     if(dk.length&&dk.length<=7){
       var w0=24,w1=0;D.recs.forEach(function(r){w0=Math.min(w0,new Date(r.s).getHours());var e=new Date(r.e);w1=Math.max(w1,e.getHours()+(e.getMinutes()||e.getSeconds()?1:0))});
-      w0=Math.min(w0,9);w1=Math.max(w1,18);w1=Math.min(24,w1);var W=(w1-w0)*60,tk2="",hh;
+      w0=Math.min(w0,9);w1=Math.max(w1,19);w1=Math.min(24,w1);var W=(w1-w0)*60,tk2="",hh;
       for(hh=w0;hh<=w1;hh++)tk2+='<span style="left:'+((hh-w0)/(w1-w0)*100)+'%">'+pad(hh%24)+'</span>';
       var rowsT=dk.map(function(k){var segs2=D.recs.filter(function(r){return r.day===k}).map(function(r){var a=new Date(r.s),mm=a.getHours()*60+a.getMinutes()-w0*60;
           return'<i style="left:'+(mm/W*100).toFixed(3)+'%;width:'+Math.max(0.3,r.m/W*100).toFixed(3)+'%;background:'+col(names.indexOf(r.p))+'" title="'+esc(r.p)+'"></i>'}).join("");
@@ -2647,7 +2647,7 @@ function tmViewAs(){
 /* ---- Admin: jamoa jadvali ---- */
 function tmRange(){var now=new Date(),d=TM.days;if(d===0)d=now.getDate();return d}
 function tmStat(r,days){
-  var dm=(r.sum&&r.sum.dm)||{},av=480,tot=0,act=0,i,now=new Date();
+  var dm=(r.sum&&r.sum.dm)||{},av=540,tot=0,act=0,i,now=new Date();
   for(i=0;i<days;i++){var k=ymd(new Date(now.getFullYear(),now.getMonth(),now.getDate()-i).getTime()),m=dm[k]||0;if(m>0){tot+=m;act++}}
   return{tot:tot,act:act,avg:act?tot/act:0,pct:act?tot/act/av*100:0,av:av,today:dm[ymd(Date.now())]||0};
 }
@@ -2816,31 +2816,31 @@ function tmHeroTick(){
   var g=t.hh<12?"Xayrli tong":t.hh<18?"Xayrli kun":"Xayrli kech",run=0;TM.rows.forEach(function(r){if(r.sum&&r.sum.run)run++});
   if(!tmAdmin()){tmMeInfo(g,t);}else
   $("tmSub").textContent=g+". "+(TM.at?(!TM.rows.length?"Hali xodim qo‘shilmagan.":run?"Hozir "+run+" xodim ishlayapti.":"Hozir hech kim ishlamayapti."):"Jamoa ma’lumoti yuklanmoqda…");
-  var mins=t.hh*60+t.mm+t.ss/60,S=540,L1=810,L2=870,E=1080,now=$("tmNow"),tx;
+  var mins=t.hh*60+t.mm+t.ss/60,S=540,L1=810,L2=870,E=1140,now=$("tmNow"),tx;
   if(t.wd===0){tx="Bugun dam olish kuni (yakshanba).";now.hidden=true}
   else if(mins<S){tx="Ish kuni 09:00 da boshlanadi.";now.hidden=true}
   else if(mins>=E){tx="Ish kuni tugadi.";now.hidden=true}
   else{now.hidden=false;now.style.left=((mins-S)/(E-S)*100)+"%";
-    tx=(mins>=L1&&mins<L2)?"Tushlik vaqti, 14:30 gacha.":"Ish kunining "+Math.round((mins-S)/(E-S)*100)+"% o‘tdi, 18:00 gacha "+hmTxt(E-mins).replace(/\.$/,"")+" qoldi."}
+    tx=(mins>=L1&&mins<L2)?"Tushlik vaqti, 14:30 gacha.":"Ish kunining "+Math.round((mins-S)/(E-S)*100)+"% o‘tdi, 19:00 gacha "+hmTxt(E-mins).replace(/\.$/,"")+" qoldi."}
   $("tmDayTxt").textContent=tx;
 }
 function tmMeInfo(g,t){
   var T0=ymd(Date.now()),ms=0,n=0,sub;
   sessions.forEach(function(s){if(ymd(s.s)===T0){ms+=s.e-s.s;n++}});if(run)ms+=Date.now()-run.s;
-  var min=ms/60000,pct=Math.round(min/480*100);
+  var min=ms/60000,pct=Math.round(min/540*100);
   if(run){var tk=null;tasks.forEach(function(x){if(x.id===run.id)tk=x});sub=g+". Hozir "+((tk&&((tk.p?tk.p+" — ":"")+tk.t))||(run.p?run.p+" — ":"")+(run.t||"vazifa"))+" ustida ishlayapsiz."}
   else if(min>0)sub=g+". Bugun "+hmTxt(min)+" ish qildingiz."+(n?" Tugatilgan vazifalar: "+n+".":"");
   else sub=g+". Bugun hali ish boshlamadingiz, vazifani tanlab ▶ Start bosing.";
   $("tmSub").textContent=sub;
   var el=$("tmMe");if(el){var h='<div class="mi2'+(run?' on':'')+'"><b>'+(min>0?hmTxt(min):'—')+'</b><span>Bugungi ish vaqti</span></div>'
     +'<div class="mi2"><b>'+n+'</b><span>Tugatilgan vazifa</span></div>'
-    +'<div class="mi2"><b>'+(min>0?pct+'%':'—')+'</b><span>Kunlik me’yordan (8 soat)</span></div>';
+    +'<div class="mi2"><b>'+(min>0?pct+'%':'—')+'</b><span>Kunlik me’yordan (9 soat)</span></div>';
     if(el.dataset.h!==h){el.dataset.h=h;el.innerHTML=h}}
 }
 function tmMeInit(){tmHeroInit();setInterval(tmHeroTick,1000)}
 function tmBand(){
   var el=$("tmBand");if(!el)return;var T=ymd(Date.now()),n=TM.rows.length,run=0,act=0,min=0,done=0,pc=[];
-  TM.rows.forEach(function(r){var u=r.sum||{},m=(u.dm&&u.dm[T])||0;if(u.run)run++;if(m>0||u.run)act++;min+=m;if(u.td===T)done+=u.tn||0;if(m>0)pc.push(m/480*100)});
+  TM.rows.forEach(function(r){var u=r.sum||{},m=(u.dm&&u.dm[T])||0;if(u.run)run++;if(m>0||u.run)act++;min+=m;if(u.td===T)done+=u.tn||0;if(m>0)pc.push(m/540*100)});
   var avg=pc.length?pc.reduce(function(a,b){return a+b},0)/pc.length:0,lv=tmLevel(avg);
   el.innerHTML='<div class="tmbi"><b>'+(run?'<span class="tmrun">●</span> ':'')+run+'<small> / '+n+'</small></b><span>Hozir ishlayapti</span></div>'
    +'<div class="tmbi"><b>'+act+'<small> / '+n+'</small></b><span>Bugun ish boshlagan</span></div>'
@@ -2870,7 +2870,7 @@ function tmSess(st,from,to){
   });
   out.sort(function(a,b){return a.s-b.s});return out;
 }
-function tmAvail(){return 480}
+function tmAvail(){return 540}
 function tmOpen(id){
   TM.sel=id;tmRender();var d=$("tmDet");d.hidden=false;d.innerHTML='<p class="note">Yuklanmoqda…</p>';
   if(TM.full[id]){tmDetail();return}
