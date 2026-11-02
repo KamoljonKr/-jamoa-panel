@@ -742,7 +742,7 @@ html.adminonly .top{justify-content:flex-start}
 #s-team .tmt tr.sel td{background:rgba(31,138,138,.1)}
 #s-team .tmwho{display:flex;align-items:center;gap:12px}
 #s-team .tmwho b{font-size:14.5px}
-#s-team .tmav{flex:none;width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:hsl(var(--h,180) 36% 36%)}
+#s-team .tmav{overflow:hidden;flex:none;width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:hsl(var(--h,180) 36% 36%)}
 #s-team .tmpill{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;border-radius:999px;font-size:12.5px;font-weight:700;background:var(--bg);color:var(--mute)}
 #s-team .tmpill.on{background:rgba(31,138,138,.15);color:var(--cool)}
 #s-team .tmtask{margin-top:5px;font-size:13px}
@@ -751,6 +751,19 @@ html.adminonly .top{justify-content:flex-start}
 #s-team .tmt td.tma{white-space:nowrap}
 #s-team .tmbar{height:8px;width:130px;background:var(--bg)}
 @media(max-width:720px){:is(#s-team,#mHeroWrap) .tmhero{grid-template-columns:1fr;padding:22px 20px 18px}:is(#s-team,#mHeroWrap) .tmh-side{align-items:flex-start;text-align:left;margin-top:10px}:is(#s-team,#mHeroWrap) .tmd-lab .lu{display:none}}
+.tmh-top{display:flex;align-items:center;gap:18px}
+.tmh-txt{min-width:0}
+.tmh-av{position:relative;flex:none;width:84px;height:84px;padding:0;border:3px solid rgba(255,255,255,.4);border-radius:50%;background:hsl(var(--h,180) 36% 36%);color:#fff;cursor:pointer;overflow:visible;font:inherit}
+.tmh-av:disabled{cursor:default}
+.tmh-avin{position:absolute;inset:0;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800}
+.tmh-avin img,.tmav img{width:100%;height:100%;object-fit:cover;display:block}
+.tmh-av .cam{position:absolute;right:-4px;bottom:-4px;width:28px;height:28px;border-radius:50%;background:#f2a33a;color:#14213d;display:flex;align-items:center;justify-content:center;font-size:14px;font-style:normal;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.tmh-av:disabled .cam{display:none}
+.tmh-av:hover:not(:disabled) .tmh-avin{filter:brightness(1.12)}
+.tmh-av:focus-visible{outline:3px solid #f2a33a;outline-offset:3px}
+.tmh-avst{margin:8px 0 0;font-size:13px;color:#ffcf86}.tmh-avst:empty{display:none}
+@media(max-width:520px){.tmh-av{width:64px;height:64px}.tmh-avin{font-size:22px}.tmh-top{gap:14px}}
+.tmav{overflow:hidden}
 #mHeroWrap{margin:0 0 14px}
 #mHeroWrap .tmhero{margin:0}
 .tmh-me{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
@@ -781,6 +794,8 @@ html.adminonly .top{justify-content:flex-start}
     <nav id="menuNav" aria-label="Bo‘limlar"></nav>
         <div class="mh" id="tmAcc">Hisob</div>
     <div class="mrow tmacc" id="tmAcc2"><div class="tmu"><b id="tmName"></b><span id="tmRole"></span></div>
+      <button class="sm" type="button" data-tm="avpick">📷 Rasm yuklash</button>
+      <button class="sm" type="button" data-tm="avdel" id="tmAvDel" hidden>🗑 Rasmni olib tashlash</button>
       <button class="sm" type="button" data-tm="pw">🔑 Parolni o‘zgartirish</button>
       <div id="tmPwBox" hidden><input id="tmPw1" type="password" autocomplete="new-password" placeholder="Yangi parol (kamida 6 belgi)" aria-label="Yangi parol"><button class="sm" type="button" data-tm="pwok">Saqlash</button><small id="tmPwSt"></small></div>
       <button class="sm" type="button" data-tm="out">⎋ Chiqish</button></div>
@@ -800,10 +815,16 @@ html.adminonly .top{justify-content:flex-start}
   <section class="sec" id="s-team" data-sec="team">
   <div class="tmhero" id="tmHero">
     <div class="tmh-main">
-      <h2 class="tmh-hi" id="tmHi">Xush kelibsiz!</h2>
-      <p class="tmh-date" id="tmDate"></p>
-      <p class="tmh-sub" id="tmSub"></p>
+      <div class="tmh-top">
+        <button type="button" class="tmh-av" id="tmAvBtn" data-avpick="1" title="Rasmni yuklash yoki almashtirish" aria-label="Profil rasmini yuklash yoki almashtirish"><span class="tmh-avin" id="tmAvIn" aria-hidden="true"></span><i class="cam" aria-hidden="true">📷</i></button>
+        <div class="tmh-txt">
+          <h2 class="tmh-hi" id="tmHi">Xush kelibsiz!</h2>
+          <p class="tmh-date" id="tmDate"></p>
+          <p class="tmh-sub" id="tmSub"></p>
+        </div>
+      </div>
       <div class="tmh-me" id="tmMe"></div>
+      <p class="tmh-avst" id="tmAvSt" role="status"></p>
     </div>
     <div class="tmh-side">
       <div class="tmh-clock" id="tmClock" role="timer" aria-label="Toshkent vaqti"></div>
@@ -2666,7 +2687,7 @@ function tmRender(){
   h='<div class="tw"><table class="tmt"><thead><tr><th>Xodim</th><th>Holat</th><th>Bugun</th><th>'+esc(lbl)+' (o‘rtacha / faol kun)</th><th>Yuklama</th><th></th></tr></thead><tbody>';
   TM.rows.forEach(function(r){
     var s=tmStat(r,days),lv=tmLevel(s.pct),run=r.sum&&r.sum.run;totAll+=s.tot;if(run)runN++;
-    h+='<tr data-tmr="'+esc(r.id)+'"'+(TM.sel===r.id?' class="sel"':'')+'><td><div class="tmwho"><span class="tmav" style="--h:'+tmHue(r.login)+'" aria-hidden="true">'+esc(tmIni(r.name))+'</span><div><b>'+esc(r.name)+'</b><small>'+esc(r.login)+'</small></div></div></td>'
+    h+='<tr data-tmr="'+esc(r.id)+'"'+(TM.sel===r.id?' class="sel"':'')+'><td><div class="tmwho">'+avSpan(r)+'<div><b>'+esc(r.name)+'</b><small>'+esc(r.login)+'</small></div></div></td>'
      +'<td>'+(run?'<span class="tmpill on"><span class="tmrun">●</span> Ishlayapti</span><div class="tmtask">'+esc((run.p||"")+" — "+(run.t||""))+' <b class="tmel" data-s="'+(+run.s||0)+'"></b></div>'
         :'<span class="tmpill">Oflayn</span><small class="tmago">'+(r.saved?'oxirgi saqlash: '+esc(tmAgo(r.saved)):'hali kirmagan')+'</small>')+'</td>'
      +'<td>'+(s.today?'<b>'+hmTxt(s.today)+'</b>':'<span class="tmoff">—</span>')+tmDone(r)+'</td>'
@@ -2676,6 +2697,80 @@ function tmRender(){
   });
   h+='</tbody></table></div><p class="note">'+esc(lbl)+' bo‘yicha jamoa jami: <b>'+hmTxt(totAll)+'</b> Yuklama faol kunlardagi o‘rtacha vaqtning kunlik sof ish vaqtiga nisbati.</p>';
   box.innerHTML=h;tmLive();
+}
+/* ---- Profil rasmi: xodim yuklaydi, admin dumaloq ko'radi ---- */
+var AV={map:{},busy:false,inited:false};
+function avOk(d){return typeof d==="string"&&d.length<200000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(d)}
+function avImg(uid){var o=AV.map[uid];return o&&avOk(o.img)?o.img:""}
+function avUid(){var T=window.TEAM||{};return T.as?T.as.uid:T.uid}
+function avSpan(r){var im=avImg(r.id);
+  return '<span class="tmav" style="--h:'+tmHue(r.login)+'" aria-hidden="true">'+(im?'<img alt="" src="'+im+'">':esc(tmIni(r.name)))+'</span>'}
+function avSay(t,bad){var e=$("tmAvSt");if(e){e.textContent=t||"";e.style.color=bad?"#ffb4a8":""}}
+function avPaint(){
+  var T=window.TEAM||{},uid=avUid(),im=avImg(uid),nm=T.as?T.as.name:T.name,el=$("tmAvIn"),btn=$("tmAvBtn");
+  if(el)el.innerHTML=im?'<img alt="" src="'+im+'">':esc(tmIni(nm||"?"));
+  if(btn){btn.style.setProperty("--h",tmHue(nm||""));btn.disabled=!!T.as;btn.title=T.as?"":"Rasmni yuklash yoki almashtirish"}
+  var d=$("tmAvDel");if(d)d.hidden=!im||!!T.as;
+}
+function avCache(uid,img,at){if(window.TEAM&&TEAM.as)return;try{if(img)localStorage.setItem("kd_avatar",JSON.stringify({uid:uid,img:img,at:at||0}));else localStorage.removeItem("kd_avatar")}catch(e){}}
+function avLoadOwn(){
+  var uid=avUid();if(!uid)return;
+  if(!(window.TEAM&&TEAM.as)){try{var c=JSON.parse(localStorage.getItem("kd_avatar")||"null");if(c&&c.uid===uid&&avOk(c.img))AV.map[uid]={img:c.img,at:c.at||0}}catch(e){}}
+  avPaint();
+  TEAM.api("/rest/v1/avatars?user_id=eq."+encodeURIComponent(uid)+"&select=img,updated_at").then(function(rows){
+    var r=rows&&rows[0];
+    if(r&&avOk(r.img)){var at=Date.parse(r.updated_at)||0;AV.map[uid]={img:r.img,at:at};avCache(uid,r.img,at)}else{delete AV.map[uid];avCache(uid,"")}
+    avPaint();if(tmAdmin()&&TM.rows.length)tmRender();
+  },function(){});
+}
+function avProc(file){return new Promise(function(res,rej){
+  if(!file||!/^image\//.test(file.type)){rej({message:"Faqat rasm fayli tanlang (JPG yoki PNG)."});return}
+  if(file.size>15e6){rej({message:"Fayl juda katta (15 MB dan oshmasin)."});return}
+  var url=URL.createObjectURL(file),im=new Image();
+  im.onload=function(){URL.revokeObjectURL(url);
+    var w=im.naturalWidth,h=im.naturalHeight,s=Math.min(w,h);if(!s){rej({message:"Rasm o‘qib bo‘lmadi."});return}
+    var c=document.createElement("canvas");c.width=c.height=256;var g=c.getContext("2d");
+    g.fillStyle="#fff";g.fillRect(0,0,256,256);g.imageSmoothingQuality="high";g.drawImage(im,(w-s)/2,(h-s)/2,s,s,0,0,256,256);
+    res(c.toDataURL("image/jpeg",0.86))};
+  im.onerror=function(){URL.revokeObjectURL(url);rej({message:"Rasm o‘qib bo‘lmadi. JPG yoki PNG tanlang."})};
+  im.src=url})}
+function avErr(e){var m=String((e&&e.message)||"");
+  if(/avatars|relation|42P01|PGRST205|http_404/.test(m+(e&&e.code||"")))return "Rasm jadvali hali sozlanmagan. Administrator README dagi ‘Profil rasmi’ SQL ini ishga tushirsin.";
+  return m||"Saqlab bo‘lmadi."}
+function avPick(){if(window.TEAM&&TEAM.as)return;var f=$("tmAvFile");if(f){f.value="";f.click()}}
+function avUpload(file){
+  var uid=TEAM.uid;avSay("Rasm yuklanmoqda…");
+  avProc(file).then(function(data){
+    return TEAM.api("/rest/v1/avatars?on_conflict=user_id",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},json:{user_id:uid,img:data,updated_at:new Date().toISOString()}}).then(function(){return data})
+  }).then(function(data){AV.map[uid]={img:data,at:Date.now()};avCache(uid,data,Date.now());avPaint();avSay("✓ Rasm saqlandi. Admin uni ko‘radi.");setTimeout(function(){avSay("")},5000)},
+    function(e){avSay(avErr(e),true)});
+}
+function avDel(){
+  if(window.TEAM&&TEAM.as)return;var uid=TEAM.uid;
+  TEAM.api("/rest/v1/avatars?user_id=eq."+encodeURIComponent(uid),{method:"DELETE"}).then(function(){delete AV.map[uid];avCache(uid,"");avPaint();avSay("Rasm olib tashlandi.");setTimeout(function(){avSay("")},4000)},function(e){avSay(avErr(e),true)});
+}
+/* admin: xodimlar rasmlari (faqat o'zgarganlarini yuklaydi) */
+function tmAvSync(){
+  if(!tmAdmin()||AV.busy||document.hidden)return;AV.busy=true;
+  TEAM.api("/rest/v1/avatars?select=user_id,updated_at").then(function(rows){
+    var seen={},need=[],gone=false;
+    (rows||[]).forEach(function(r){seen[r.user_id]=1;var at=Date.parse(r.updated_at)||0,o=AV.map[r.user_id];if(!o||o.at!==at)need.push(r.user_id)});
+    Object.keys(AV.map).forEach(function(k){if(!seen[k]){delete AV.map[k];gone=true}});
+    if(!need.length){AV.busy=false;if(gone){avPaint();tmRender()}return}
+    var ch=[],i;for(i=0;i<need.length;i+=15)ch.push(need.slice(i,i+15));
+    Promise.all(ch.map(function(c){return TEAM.api("/rest/v1/avatars?user_id=in.("+c.map(encodeURIComponent).join(",")+")&select=user_id,img,updated_at")})).then(function(res){
+      res.forEach(function(rs){(rs||[]).forEach(function(r){if(avOk(r.img))AV.map[r.user_id]={img:r.img,at:Date.parse(r.updated_at)||0}})});
+      AV.busy=false;avPaint();tmRender();
+    },function(){AV.busy=false});
+  },function(){AV.busy=false});
+}
+function avInit(){
+  if(AV.inited)return;AV.inited=true;
+  var f=document.createElement("input");f.type="file";f.id="tmAvFile";f.accept="image/*";f.hidden=true;f.setAttribute("aria-hidden","true");document.body.appendChild(f);
+  f.addEventListener("change",function(){var x=f.files&&f.files[0];f.value="";if(x)avUpload(x)});
+  var b=$("tmAvBtn");if(b)b.addEventListener("click",avPick);
+  avLoadOwn();
+  if(tmAdmin()){tmAvSync();setInterval(tmAvSync,10000)}
 }
 /* ---- Xush kelibsiz bloki: sana, soat, ob-havo (Toshkent) ---- */
 function tmTz(){
@@ -2756,7 +2851,7 @@ function tmBand(){
 function tmHeroInit(){
   var nm=tmAdminName();$("tmHi").textContent=nm?"Xush kelibsiz, "+nm+"!":"Xush kelibsiz!";
   try{var c=JSON.parse(localStorage.getItem("kdt_wx")||"null");if(c&&c.d&&Date.now()-c.at<30*60000){TMW.d=c.d;TMW.at=c.at}}catch(e){}
-  tmWxPaint();tmWxLoad(false);tmHeroTick();
+  tmWxPaint();tmWxLoad(false);tmHeroTick();avInit();
   setInterval(function(){if(!document.hidden)tmWxLoad(false)},60000);
   document.addEventListener("visibilitychange",function(){if(!document.hidden)tmWxLoad(false)});
 }
@@ -2857,6 +2952,7 @@ function tmClick(e){
   if(b=c("[data-tm]")){var a=b.dataset.tm;
     if(a==="out"){b.disabled=true;TEAM.logout()}
     else if(a==="pw")tmPw("open");else if(a==="pwok")tmPw("save");
+    else if(a==="avpick")avPick();else if(a==="avdel")avDel();
     else if(a==="reload")location.reload();
     else if(a==="close"){window.close();setTimeout(function(){location.replace(location.pathname)},250)}
     return}
