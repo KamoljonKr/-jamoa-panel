@@ -2,7 +2,7 @@
 <html lang="uz">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
 <title>Ish kuchlanishi paneli — Jamoa</title>
 <!-- ====================== SOZLAMA (faqat shu yerni to'ldiring) ======================
   url      : Supabase -> Project Settings -> API -> "Project URL"
@@ -934,9 +934,10 @@ img,svg,video,canvas{max-width:100%}
   #s-team table.tmt:not(.tmj) td:nth-child(1){grid-area:1/1}
   #s-team table.tmt:not(.tmj) td:nth-child(3){grid-area:1/2;text-align:right;white-space:nowrap}
   #s-team table.tmt:not(.tmj) td:nth-child(2){grid-area:2/1/3/3}
-  #s-team table.tmt:not(.tmj) td:nth-child(4){grid-area:3/1;font-size:12.5px}
-  #s-team table.tmt:not(.tmj) td:nth-child(5){grid-area:3/2;text-align:right}
-  #s-team table.tmt:not(.tmj) td:nth-child(6){grid-area:4/1/5/3;display:flex;gap:8px}
+  #s-team table.tmt:not(.tmj) td:nth-child(4){grid-area:3/1/4/3;font-size:12.5px}
+  #s-team table.tmt:not(.tmj) td:nth-child(5){grid-area:4/1/5/3;display:flex;align-items:center;gap:8px}
+  #s-team table.tmt:not(.tmj) td:nth-child(5) .tmbar{flex:1 1 auto;width:auto;min-width:50px}
+  #s-team table.tmt:not(.tmj) td:nth-child(6){grid-area:5/1/6/3;display:flex;gap:8px}
   #s-team table.tmt:not(.tmj) td.tma .sm{flex:1;margin:0;padding:8px 10px}
   #s-team table.tmt:not(.tmj) td:nth-child(3)::before{content:"Bugun";display:block;font-size:10.5px;color:var(--mute);font-weight:600}
   #s-team table.tmt:not(.tmj) td:nth-child(4)::before{content:"O‘rtacha";color:var(--mute);margin-right:4px}
@@ -948,6 +949,57 @@ img,svg,video,canvas{max-width:100%}
   #s-team table.tmj td:nth-child(2){grid-area:2/1/3/3;overflow-wrap:anywhere}
   #s-team table.tmj td:nth-child(4){grid-area:3/1/4/3;color:var(--mute);font-size:12.5px;overflow-wrap:anywhere}
   #s-team table.tmj td:nth-child(4):empty{display:none}
+}
+
+/* ===== iPhone (Safari) uchun qo'shimcha mustahkamlash ===== */
+/* 1) Kiritish maydonlari 16px dan kichik bo'lsa, iOS fokusda sahifani kattalashtirib, yon tomonga surib yuboradi */
+@media(max-width:900px){
+  input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea,#tip textarea{font-size:16px!important}
+}
+/* 2) iOS sana/vaqt maydonlari konteynerdan chiqib ketmasligi uchun */
+input[type=date],input[type=time],input[type=datetime-local],input[type=month]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%;box-sizing:border-box;min-height:38px;line-height:1.2}
+input[type=date]::-webkit-date-and-time-value,input[type=time]::-webkit-date-and-time-value{text-align:left;min-width:0}
+input[type=date]::-webkit-datetime-edit,input[type=time]::-webkit-datetime-edit{padding:0}
+select{max-width:100%}
+/* 3) Hech narsa sahifa kengligidan chiqib, uni yon tomonga cho'zib yubormasin */
+@media(max-width:900px){
+  body{min-width:0;width:100%}
+  .wrap,#mHeroWrap,.top,.recbar{max-width:100%}
+  .wrap,#sections,.sec{overflow-x:clip}
+  .menu{max-width:calc(100vw - 20px)}
+  .tmtool>label,.tmtool select,.tmf label{min-width:0;max-width:100%}
+  .tmtool select{width:auto}
+  svg{max-width:100%}
+}
+@media(max-width:400px){
+  #s-team table.tmt:not(.tmj) td:nth-child(1){grid-area:1/1/2/3}
+  #s-team table.tmt:not(.tmj) td:nth-child(3){grid-area:2/1/3/3;text-align:left;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}
+  #s-team table.tmt:not(.tmj) td:nth-child(3)::before{display:inline;margin:0}
+  #s-team table.tmt:not(.tmj) td:nth-child(3)::before{content:"Bugun:"}
+  #s-team table.tmt:not(.tmj) td:nth-child(2){grid-area:3/1/4/3}
+  #s-team table.tmt:not(.tmj) td:nth-child(4){grid-area:4/1/5/3}
+  #s-team table.tmt:not(.tmj) td:nth-child(5){grid-area:5/1/6/3}
+  #s-team table.tmt:not(.tmj) td:nth-child(6){grid-area:6/1/7/3}
+  .tmtool .tmx label{grid-template-columns:minmax(0,1fr)!important}
+  .tmtool .tmx .tmdash{display:none}
+  input[type=date]{padding-left:8px;padding-right:6px}
+}
+@media(max-width:900px){
+  .tmwho,.tmwho>div{min-width:0}
+  .tmwho b,.tmwho small,.tmtask,.tmago{overflow-wrap:anywhere}
+  #s-team table.tmt td{overflow-wrap:anywhere}
+}
+@media(max-width:640px){
+  .tmtool{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+  .tmtool>label{display:flex;align-items:center;gap:8px;min-width:0}
+  .tmtool>label select{flex:1 1 auto;width:100%}
+  .tmtool .tmx{grid-column:1/-1;width:100%;margin:0;display:grid;gap:8px}
+  .tmtool #tmSt{grid-column:1/-1}
+  .tmtool .tmx .sm{width:100%}
+  .tmtool .tmx label{display:grid!important;grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr);gap:6px!important;align-items:center}
+  .tmtool .tmx .tmlb{grid-column:1/-1}
+  .tmtool .tmx .tmdash{text-align:center;color:var(--mute)}
+  .tmtool .tmx input[type=date]{width:100%!important;min-width:0!important;flex:none!important}
 }
 </style>
 </head>
