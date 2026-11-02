@@ -1196,6 +1196,21 @@ select{max-width:100%}
   .menu:not([hidden]){animation:sheetUp .42s var(--ease) backwards}
   #hsPanel:not([hidden]){animation:sheetUp .42s var(--ease) backwards}
 }
+
+/* ===== Panellar uchun yumshoq, qatlamli soya ===== */
+:root{--sh:0 1px 1px rgba(20,33,61,.04),0 3px 8px -2px rgba(20,33,61,.06),0 14px 30px -14px rgba(20,33,61,.16);--shh:0 1px 1px rgba(20,33,61,.05),0 6px 14px -4px rgba(20,33,61,.09),0 22px 44px -16px rgba(20,33,61,.24);--shs:0 1px 2px rgba(20,33,61,.05),0 4px 10px -6px rgba(20,33,61,.12)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="cream"]){--sh:inset 0 1px 0 rgba(255,255,255,.045),0 2px 4px rgba(0,0,0,.22),0 16px 34px -14px rgba(0,0,0,.55);--shh:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.28),0 24px 48px -16px rgba(0,0,0,.65);--shs:inset 0 1px 0 rgba(255,255,255,.04),0 6px 14px -8px rgba(0,0,0,.5)}}
+:root[data-theme="cream"]{--sh:0 1px 1px rgba(92,60,14,.05),0 3px 8px -2px rgba(92,60,14,.08),0 14px 30px -14px rgba(92,60,14,.22);--shh:0 1px 1px rgba(92,60,14,.06),0 6px 14px -4px rgba(92,60,14,.12),0 22px 44px -16px rgba(92,60,14,.30);--shs:0 1px 2px rgba(92,60,14,.06),0 4px 10px -6px rgba(92,60,14,.16)}
+:root[data-theme="dark"]{--sh:inset 0 1px 0 rgba(255,255,255,.045),0 2px 4px rgba(0,0,0,.22),0 16px 34px -14px rgba(0,0,0,.55);--shh:inset 0 1px 0 rgba(255,255,255,.06),0 4px 10px rgba(0,0,0,.28),0 24px 48px -16px rgba(0,0,0,.65);--shs:inset 0 1px 0 rgba(255,255,255,.04),0 6px 14px -8px rgba(0,0,0,.5)}
+.card{box-shadow:var(--sh)}
+.kpi{box-shadow:var(--shs)}
+.top{box-shadow:0 1px 0 var(--line),0 8px 20px -14px rgba(20,33,61,.25)}
+:is(#s-team,#mHeroWrap) .tmhero{box-shadow:0 2px 6px rgba(10,40,50,.18),0 22px 46px -20px rgba(10,50,60,.6)}
+@media (prefers-reduced-motion:no-preference){
+  .card,.kpi{transition:box-shadow .3s var(--ease),border-color .3s}
+}
+@media (hover:hover){.card:hover{box-shadow:var(--shh)}}
+.sec.maxd .card,#s-media.max .card{box-shadow:var(--shh)}
 </style>
 </head>
 <body>
