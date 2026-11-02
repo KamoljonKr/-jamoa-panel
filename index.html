@@ -525,6 +525,13 @@ label.rpc .rd{width:10px;height:10px;border-radius:50%;display:inline-block}
 .undobar .ux{background:transparent;border:0;color:#fff;opacity:.7;font-size:12px;padding:2px 5px}
 @media(max-width:700px){.undobar{top:calc(var(--hh,52px) + 4px)}}
 .mdclr{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 10px;background:var(--bg)}.mdclr[hidden]{display:none}
+.mdait{width:100%;box-sizing:border-box;margin:8px 0;font:inherit;font-size:14px;line-height:1.45;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);resize:vertical;min-height:110px}
+.mdaicmd{margin-top:10px}.mdaicmd label{display:block;font-size:12.5px;font-weight:700;margin-bottom:4px}
+.mdaicr{display:flex;gap:8px;align-items:center}.mdaicr input{flex:1;min-width:0}
+.mdaires{margin:8px 0 0;padding-left:0;list-style:none;display:grid;gap:3px;font-size:13px;max-height:260px;overflow:auto}
+.mdaires li{padding:4px 8px;border-radius:7px;background:var(--card)}.mdaires b{font-variant-numeric:tabular-nums;margin-right:6px}
+#mdaiInfo.bad{color:#c0392b}
+#mdaiAiW[hidden]{display:none!important}
 button.sm.danger{background:#e4572e;color:#fff;border-color:#e4572e}
 .mdtools{float:right;display:inline-flex;gap:6px;margin-left:8px}
 .mdtools button,.hidebtn{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--mute);border:1px solid var(--line);border-radius:9px;line-height:1;transition:color .15s,background .15s,border-color .15s}
@@ -686,7 +693,7 @@ body.secmaxed{overflow:hidden}
 #tvBar span{flex:1 1 220px}
 body.viewas .top{flex-wrap:wrap}body.viewas .menu .grip2{display:none}
 body.viewas .add,body.viewas [data-start],body.viewas [data-stop],body.viewas [data-del],body.viewas [data-delses],body.viewas [data-save],body.viewas [data-madd],body.viewas [data-mdel],
-body.viewas [data-mdnew],body.viewas [data-mdclr],body.viewas [data-mddist],body.viewas [data-tday],body.viewas .tkclr,body.viewas .savebar.bottom,body.viewas #s-settings input,body.viewas #undoBar{display:none!important}
+body.viewas [data-mdnew],body.viewas [data-mdai],body.viewas #mdAi,body.viewas [data-mdclr],body.viewas [data-mddist],body.viewas [data-tday],body.viewas .tkclr,body.viewas .savebar.bottom,body.viewas #s-settings input,body.viewas #undoBar{display:none!important}
 body.viewas #s-media .me input,body.viewas #s-media .me textarea,body.viewas #s-media .me select,body.viewas #s-tasks input,body.viewas #s-tasks select{pointer-events:none}
 @media(max-width:700px){#tmBtn span{display:none}}
 .mh[hidden],.mrow[hidden]{display:none}
@@ -901,13 +908,21 @@ html.adminonly .top{justify-content:flex-start}
   <div class="card">
     <h2>🗓 Media-reja<span class="mdtools"><button type="button" data-mdview="min" id="mdMinB"></button><button type="button" data-mdview="max" id="mdMaxB"></button></span></h2>
     <p class="note">Avval loyihani tanlang — pastda shu loyihaning oylik kontent rejasi chiqadi. Har kun uchun kontent turi (bir nechtasini tanlash mumkin) va mavzuni yozing. Sana va hafta kuni avtomatik qo‘yiladi.</p>
-    <div class="mdnav"><select id="mdProj" class="mdp" aria-label="Loyiha"></select><button class="sm" type="button" data-mdnew="1" title="Yangi loyiha qo‘shish">＋ Loyiha</button><button class="sm" type="button" data-mdclr="open" title="Oy rejasini bittada tozalash">🧹 Oyni tozalash</button><button class="sm" type="button" data-mddist="open" title="Kontent sonini oy kunlariga teng taqsimlash">🎲 Tarqatish</button><button class="sm" type="button" data-mm="-1" aria-label="Oldingi oy">‹</button><b id="mdTitle"></b><button class="sm" type="button" data-mm="1" aria-label="Keyingi oy">›</button><button class="sm" type="button" data-mm="0">Bugun</button><input type="month" id="mdPick" aria-label="Oyni tanlash"><label><input type="checkbox" id="mdOnly">Faqat to‘ldirilgan kunlar</label></div>
+    <div class="mdnav"><select id="mdProj" class="mdp" aria-label="Loyiha"></select><button class="sm" type="button" data-mdnew="1" title="Yangi loyiha qo‘shish">＋ Loyiha</button><button class="sm" type="button" data-mdclr="open" title="Oy rejasini bittada tozalash">🧹 Oyni tozalash</button><button class="sm" type="button" data-mddist="open" title="Kontent sonini oy kunlariga teng taqsimlash">🎲 Tarqatish</button><button class="sm" type="button" data-mdai="open" title="Ro‘yxatni joylang: kunlarga o‘zi tarqatadi">✨ Ro‘yxatdan</button><button class="sm" type="button" data-mm="-1" aria-label="Oldingi oy">‹</button><b id="mdTitle"></b><button class="sm" type="button" data-mm="1" aria-label="Keyingi oy">›</button><button class="sm" type="button" data-mm="0">Bugun</button><input type="month" id="mdPick" aria-label="Oyni tanlash"><label><input type="checkbox" id="mdOnly">Faqat to‘ldirilgan kunlar</label></div>
     <div class="mdnew" id="mdNewBox" hidden><input id="mdNewP" placeholder="Yangi loyiha nomi" autocomplete="off"><button class="sm save" type="button" data-mdnewok="1">Qo‘shish</button></div>
     <div class="mdclr" id="mdDist" hidden>
       <div class="mdd-h"><b id="mddT"></b><span class="note" id="mddD"></span></div>
       <div class="mdd-g" id="mddG"></div>
       <div class="mdd-o"><label class="rpc"><input type="checkbox" id="mddRep" checked>Shu turlarning eski belgilarini oldin tozalash</label><label class="rpc"><input type="checkbox" id="mddFut">Faqat bugundan boshlab (o‘tgan kunlarsiz)</label></div>
       <div class="savebar"><button type="button" class="sm save" data-mddist="go">🎲 Tarqatib yuborish</button><button type="button" class="sm" data-mddist="plan" title="Kontent reja bo‘limidagi oylik sonlarni olish">↧ Kontent rejadagi sonlarni olish</button><button type="button" class="sm" data-mddist="zero">Tozalash</button><button type="button" class="sm" data-mddist="x">Yopish</button><span class="note" id="mddInfo"></span></div>
+    </div>
+    <div class="mdclr" id="mdAi" hidden>
+      <div class="mdd-h"><b>✨ Ro‘yxatdan reja</b><span class="note">Tur nomi va raqamlangan mavzular yozing. Dastur ularni tanlangan loyihaning shu oyidagi ish kunlariga tekis tarqatadi.</span></div>
+      <textarea id="mdaiT" class="mdait" rows="6" aria-label="Kontent ro‘yxati" placeholder="Post - 1) Surxondaryo, Boysun, gips zavodi 2) Termiz sement 3) ...&#10;Story 1) Ish jarayoni 2) Mijoz fikri&#10;Reels 1) ... 2) ..."></textarea>
+      <div class="mdd-o"><label class="rpc"><input type="checkbox" id="mdaiRep" checked>Shu turlarning shu oydagi eski (tayyor emas) yozuvlarini almashtirish</label><label class="rpc"><input type="checkbox" id="mdaiFut">Faqat bugundan boshlab</label><label class="rpc"><input type="checkbox" id="mdaiSat">Shanbani ham hisobga olish</label><label class="rpc" id="mdaiAiW" hidden><input type="checkbox" id="mdaiAi" checked>🤖 AI bilan (murakkab matn uchun)</label></div>
+      <div class="savebar"><button type="button" class="sm save" data-mdai="go">✨ Tarqatib yuborish</button><button type="button" class="sm" data-mdai="x">Yopish</button><span class="note" id="mdaiInfo" role="status"></span></div>
+      <div class="mdaicmd"><label for="mdaiC">Tahrirlash buyrug‘i</label><div class="mdaicr"><input id="mdaiC" autocomplete="off" placeholder="Masalan: 5-sanadagi postni 12-sanaga ko‘chir · Reels 2 ni o‘chir · Story 1 mavzusini “Yangi mavzu” ga o‘zgartir"><button type="button" class="sm" data-mdai="cmd">Bajarish</button></div></div>
+      <div id="mdaiRes"></div>
     </div>
     <div class="mdclr" id="mdClr" hidden>
       <div class="rpf"><div><label for="mdcMonth">Qaysi oy</label><input type="month" id="mdcMonth"></div>
@@ -1947,7 +1962,7 @@ function mdInit(){
       if(mi!==""){var en=media[+mi];if(!mdEmpty(en))pushUndo("Media-reja qatori o‘chirildi"+(en.t?": "+en.t.slice(0,30):""));media.splice(+mi,1);saveMedia()}
       renderMedia()}});
   document.addEventListener("click",function(e){Array.prototype.forEach.call(root.querySelectorAll("details.ms[open]"),function(d){if(!d.contains(e.target))d.open=false})});
-  mxInit();renderMedia();mdClrInit();mdDistInit();
+  mxInit();renderMedia();mdClrInit();mdDistInit();mdaiInit();
   root.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mdview]");if(b)mdView(b.dataset.mdview)});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!e.mdEsc&&root.classList.contains("max"))mdView("max")});
   mdView("init");
@@ -1996,6 +2011,212 @@ function mdDistribute(proj,counts,replace){
       if(best<0)best=Math.max(0,Math.min(D-1,Math.round(ideal)));
       addType(days[best],t)}});
   return placed}
+/* --- Media-reja: ro'yxatdan avtomatik tarqatish va buyruq bilan tahrirlash --- */
+var MDAI_TYRX="youtube\\s*long|youtube|yt\\s*long|stories|story|storis|stori|reels|reel|shorts|short|oblojka|obloshka|cover|muqova|postlar|posts|post";
+function mdaiNorm(s){return String(s||"").toLowerCase().replace(/[ʻʼ’‘`´]/g,"'")}
+function mdaiType(w){w=mdaiNorm(w);
+  if(/^(youtube|yt)/.test(w))return"YouTube long";
+  if(/^stor/.test(w))return"Story";
+  if(/^reel/.test(w))return"Reels";
+  if(/^short/.test(w))return"Short";
+  if(/^(oblo|cover|muqova)/.test(w))return"Oblojka";
+  if(/^post/.test(w))return"Post";
+  return""}
+/* Matndan: [{c:"Post", t:"mavzu"}] ro'yxatini ajratadi */
+function mdaiParse(text){
+  var s=String(text||"").replace(/\r/g,"").replace(/\t+/g," ").replace(/ /g," ");
+  var re=new RegExp("(^|[\\s,;.])("+MDAI_TYRX+")(?![\\w'])(?:\\s*\\(\\s*\\d+\\s*(?:ta|dona)?\\s*\\))?[ \\t]*([-\\u2013\\u2014:]?)[ \\t]*","gi"),heads=[],m;
+  while((m=re.exec(s))){
+    var start=m.index+m[1].length,atLine=(m[1]===""||m[1]==="\n"),rest=s.slice(re.lastIndex),ok=false;
+    if(/^1\s*(\)|\.\s)/.test(rest))ok=true;
+    else if(/^\d{1,3}\s*(ta|dona)?\s*($|\n)/i.test(rest)&&m[3])ok=true;
+    else if(atLine&&(m[3]||/^\s*(\n|$)/.test(rest)))ok=true;
+    if(ok)heads.push({type:mdaiType(m[2]),start:start,end:re.lastIndex});
+    if(re.lastIndex===m.index)re.lastIndex++;
+  }
+  var out=[];
+  heads.forEach(function(h,i){
+    var c=s.slice(h.end,i+1<heads.length?heads[i+1].start:s.length).trim(),cm=/^(\d{1,3})\s*(?:ta|dona)?\s*$/i.exec(c),items=[];
+    if(cm){var n=Math.min(60,+cm[1]);for(var q=0;q<n;q++)items.push("")}
+    else{
+      var mk=/(^|\s)(\d{1,3})(?:\s*\)\s*|\.\s+)/g,exp=1,pos=[],x;
+      while((x=mk.exec(c))){if(+x[2]===exp){pos.push({a:x.index+x[1].length,b:mk.lastIndex});exp++}}
+      if(pos.length){pos.forEach(function(p,k){items.push(c.slice(p.b,k+1<pos.length?pos[k+1].a:c.length))})}
+      else c.split("\n").forEach(function(l){l=l.replace(/^\s*[-–•*·]\s*/,"");if(l.trim())items.push(l)});
+      items=items.map(function(t){return t.replace(/^[.\s]+/,"").replace(/\s*\n\s*/g," ").replace(/\s{2,}/g," ").replace(/[\s,;]+$/,"").trim()}).filter(function(t,k,a){return t||a.length>0&&false});
+    }
+    items.forEach(function(t){out.push({c:h.type,t:t})});
+  });
+  return out;
+}
+function mdaiDays(opt){
+  var t=ymd(Date.now());
+  return mdKeys(mMonth).filter(function(k){var w=new Date(k+"T12:00:00").getDay();return w>0&&(w<6||(opt.sat&&w===6))&&(!opt.fut||k>=t)})}
+/* Elementlarni oy kunlariga tekis taqsimlaydi; mavjud yuklamani hisobga oladi */
+function mdaiPlan(items,proj,opt){
+  var days=mdaiDays(opt),D=days.length,load={},ops=[],byT={},used={};
+  if(!D)return{err:"Tarqatish uchun mos ish kuni yo‘q (oy tugagan yoki ‘faqat bugundan’ belgilangan)."};
+  days.forEach(function(d){load[d]=0});
+  var drop={};
+  if(opt.rep){var tset={};items.forEach(function(it){tset[it.c]=1});
+    media.forEach(function(e){if(!e.x&&e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&e.c.length&&e.c.every(function(c){return tset[c]})&&(!opt.fut||e.d>=ymd(Date.now())))drop[e.k]=1})}
+  media.forEach(function(e){if(drop[e.k]||normK(e.p)!==normK(proj)||load[e.d]===undefined||mdEmpty(e))return;load[e.d]+=Math.max(1,e.c.length)});
+  items.forEach(function(it){(byT[it.c]||(byT[it.c]=[])).push(it)});
+  Object.keys(byT).forEach(function(tp){
+    var arr=byT[tp],n=arr.length,chosen=[];
+    for(var i=0;i<n;i++){
+      var ideal=(i+0.5)*D/n-0.5,w=Math.max(0,Math.floor(D/n/2)),best=-1,bs=1e9,tries=0;
+      while(best<0&&tries<=D){
+        var lo=Math.max(0,Math.round(ideal)-w-tries),hi=Math.min(D-1,Math.round(ideal)+w+tries),j;
+        for(j=lo;j<=hi;j++){var d=days[j];if(n<=D&&used[tp+"|"+d])continue;var sc=load[d]*1000+Math.abs(j-ideal);if(sc<bs){bs=sc;best=j}}
+        tries++}
+      if(best<0)best=Math.max(0,Math.min(D-1,Math.round(ideal)));
+      used[tp+"|"+days[best]]=1;load[days[best]]++;chosen.push(days[best])}
+    chosen.sort();
+    arr.forEach(function(it,i){ops.push({op:"add",d:chosen[i],c:[tp],t:it.t})});
+  });
+  Object.keys(drop).forEach(function(k){ops.push({op:"del",k:k})});
+  return{ops:ops,days:D,dropped:Object.keys(drop).length};
+}
+/* --- Buyruqlar: ko'chirish, o'chirish, matnni o'zgartirish, tayyor belgilash --- */
+var MDAI_MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
+function mdaiCmd(text,proj){
+  var raw=String(text||"").trim(),s=mdaiNorm(raw);if(!s)return{err:"Buyruqni yozing."};
+  var quoted=[],q=/["«“]([^"»”]+)["»”]/g,qm;
+  while((qm=q.exec(s)))quoted.push(qm[1].trim());
+  var rest=s.replace(q," ");
+  var verb="";
+  if(/ko'chir|o'tkaz|surib|surish|ko'chiring/.test(rest))verb="move";
+  else if(/o'chir|olib tashla|yo'q qil|bekor qil|tozala/.test(rest))verb="del";
+  else if(/tayyor/.test(rest))verb="done";
+  else if(/o'zgartir|almashtir|tahrirla|yangila|yoz\b|qilib qo'y/.test(rest))verb="set";
+  if(!verb)return{err:"Buyruq tushunilmadi. Masalan: «5-sanadagi postni 12-sanaga ko‘chir», «Reels 2 ni o‘chir»."};
+  /* kun belgilari */
+  var days=[],dre=new RegExp("(\\d{1,2})\\s*-?\\s*(?:(?:chi|inchi)\\s*)?(sana\\w*|kun\\w*|"+MDAI_MON.join("\\w*|")+"\\w*|(?=\\s*(?:-?ga|-?da|dagi|dan)\\b))(\\s*(?:ga|da|dagi|dan|ni|-ga|-da)\\b)?","g"),dm;
+  var tmp=rest;
+  while((dm=dre.exec(tmp))){
+    var num=+dm[1];if(num<1||num>31)continue;
+    var tail=(dm[0].replace(/\s+/g,"")),role="";
+    if(/(dagi|da|dan)$/.test(tail)&&!/ga$/.test(tail))role="from";else if(/ga$/.test(tail))role="to";
+    days.push({n:num,role:role,at:dm.index,len:dm[0].length});
+  }
+  var rest2=rest;days.slice().reverse().forEach(function(d){rest2=rest2.slice(0,d.at)+new Array(d.len+1).join(" ")+rest2.slice(d.at+d.len)});
+  var ds=function(n){var mm=mMonth;return mm+"-"+pad(n)};
+  var cur=media.filter(function(e){return e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&!mdEmpty(e)}).sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:0});
+  /* manba / manzil */
+  var from=null,to=null;
+  days.forEach(function(d){if(d.role==="from")from=d.n;else if(d.role==="to")to=d.n});
+  if(verb==="move"){
+    if(to===null&&days.length){var lastD=days[days.length-1];if(lastD.role!=="from"){to=lastD.n}}
+    if(from===null&&days.length>1){var f0=days[0];if(f0.n!==to)from=f0.n}
+  }else if(from===null&&days.length)from=days[0].n;
+  /* tur va tartib raqami */
+  var type="",idx=0,tm=new RegExp("(\\d+)?\\s*-?\\s*(?:chi\\s*)?\\b("+MDAI_TYRX+")\\w*\\s*(\\d+)?","i").exec(rest2);
+  if(tm){type=mdaiType(tm[2]);idx=+(tm[3]||tm[1]||0)}
+  var cand=cur.slice();
+  if(from!==null)cand=cand.filter(function(e){return e.d===ds(from)});
+  if(type)cand=cand.filter(function(e){return e.c.indexOf(type)>-1});
+  if(idx){var ofT=cur.filter(function(e){return !type||e.c.indexOf(type)>-1});cand=ofT[idx-1]&&cand.indexOf(ofT[idx-1])>-1?[ofT[idx-1]]:[]}
+  /* mavzu bo'laklari: qo'shtirnoqdagi birinchi matn yoki qolgan so'zlar */
+  var frag=[];
+  if(verb==="set"&&quoted.length>=2)frag=[mdaiNorm(quoted[0])];
+  else if(verb!=="set"&&quoted.length)frag=[mdaiNorm(quoted[0])];
+  else if(verb!=="set"){
+    var stop=/^(ni|ga|da|dan|dagi|sana\w*|kun\w*|ko'chir\w*|o'chir\w*|o'tkaz\w*|surib|tayyor\w*|belgila\w*|qil\w*|qo'y\w*|olib|tashla\w*|barcha|hamma\w*|narsa\w*|yozuv\w*|kontent\w*|mavzu\w*|shu|yana|iltimos)$/;
+    rest2.replace(/\d+\s*-?\s*\w*/g," ").split(/[^a-zЀ-ӿ']+/).forEach(function(w){if(w.length>=4&&!stop.test(w)&&!/^(post|stor|reel|short|oblo|cover|muqova|youtube)/.test(w)&&MDAI_MON.every(function(m){return w.indexOf(m)!==0}))frag.push(w)})}
+  if(frag.length)cand=cand.filter(function(e){var t=mdaiNorm(e.t);return frag.every(function(f){return t.indexOf(f)>-1})});
+  if(!cand.length)return{err:"Mos yozuv topilmadi. Sana, tur yoki mavzudan bir bo‘lakni aniqroq yozing."};
+  var ops=[];
+  if(verb==="move"){
+    if(to===null)return{err:"Qaysi sanaga ko‘chirish kerakligini yozing (masalan, «12-sanaga»)."};
+    if(to<1||to>new Date(+mMonth.slice(0,4),+mMonth.slice(5,7),0).getDate())return{err:"Bunday sana bu oyda yo‘q."};
+    cand.forEach(function(e){ops.push({op:"move",k:e.k,d:ds(to)})});
+  }else if(verb==="del"){cand.forEach(function(e){ops.push({op:"del",k:e.k})})}
+  else if(verb==="done"){cand.forEach(function(e){ops.push({op:"set",k:e.k,x:1})})}
+  else{
+    var nt=quoted.length?quoted[quoted.length-1]:"";
+    if(!nt)return{err:"Yangi matnni qo‘shtirnoq ichida yozing, masalan: «Reels 2 mavzusini “Yangi mavzu” ga o‘zgartir»."};
+    if(cand.length>1)return{err:"Matnni o‘zgartirish uchun bitta yozuvni aniq ko‘rsating ("+cand.length+" ta topildi)."};
+    ops.push({op:"set",k:cand[0].k,t:nt});
+  }
+  return{ops:ops};
+}
+/* --- AI (ixtiyoriy): Supabase Edge Function 'media-ai' --- */
+function mdaiAiOn(){return !!(window.TEAM&&TEAM.cfg&&TEAM.cfg.ai&&TEAM.api)}
+function mdaiAsk(mode,text,proj,opt){
+  var cur=media.filter(function(e){return e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&!mdEmpty(e)}).map(function(e){return{k:e.k,d:e.d,c:e.c,t:e.t,x:e.x?1:0}});
+  return TEAM.api("/functions/v1/"+(TEAM.cfg.aiFn||"media-ai"),{method:"POST",json:{mode:mode,month:mMonth,project:proj,types:CT,days:mdaiDays(opt||{}),text:text,current:cur}}).then(function(r){
+    var ops=mdaiClean(r&&r.ops);if(!ops.length)throw{message:"AI hech narsa topa olmadi."};return{ops:ops}});
+}
+function mdaiClean(ops){
+  var out=[],keys={},days={};media.forEach(function(e){keys[e.k]=1});mdKeys(mMonth).forEach(function(d){days[d]=1});
+  (Array.isArray(ops)?ops:[]).slice(0,200).forEach(function(o){
+    if(!o||typeof o!=="object")return;
+    var c=Array.isArray(o.c)?o.c.filter(function(t){return CT.indexOf(t)>-1}):[];
+    if(o.op==="add"&&days[o.d]&&c.length)out.push({op:"add",d:o.d,c:c,t:String(o.t||"").slice(0,500)});
+    else if(o.op==="move"&&keys[o.k]&&days[o.d])out.push({op:"move",k:o.k,d:o.d});
+    else if(o.op==="del"&&keys[o.k])out.push({op:"del",k:o.k});
+    else if(o.op==="set"&&keys[o.k]){var s={op:"set",k:o.k};if(typeof o.t==="string")s.t=o.t.slice(0,500);if(c.length)s.c=c;if(o.x!==undefined)s.x=o.x?1:0;if(s.t!==undefined||s.c||s.x!==undefined)out.push(s)}
+  });
+  return out}
+/* --- Amallarni qo'llash --- */
+function mdaiApply(ops,proj,label){
+  pushUndo(label);
+  var add=0,mv=0,del=0,set=0,byK={};media.forEach(function(e){byK[e.k]=e});
+  ops.forEach(function(o){
+    if(o.op==="add"){media.push({k:uid(),p:proj,d:o.d,c:o.c.slice().sort(function(a,b){return CT.indexOf(a)-CT.indexOf(b)}),t:o.t||"",x:0});add++}
+    else if(o.op==="move"&&byK[o.k]){byK[o.k].d=o.d;mv++}
+    else if(o.op==="del"&&byK[o.k]){media.splice(media.indexOf(byK[o.k]),1);del++}
+    else if(o.op==="set"&&byK[o.k]){var e=byK[o.k];if(o.t!==undefined)e.t=o.t;if(o.c)e.c=o.c;if(o.x!==undefined)e.x=o.x;set++}
+  });
+  mdNorm();saveMedia();renderMedia();
+  return{add:add,mv:mv,del:del,set:set};
+}
+function mdaiSummary(r){var a=[];if(r.add)a.push(r.add+" ta qo‘shildi");if(r.mv)a.push(r.mv+" ta ko‘chirildi");if(r.set)a.push(r.set+" ta o‘zgartirildi");if(r.del)a.push(r.del+" ta o‘chirildi");return a.join(", ")||"o‘zgarish yo‘q"}
+function mdaiShow(ops){
+  var box=$("mdaiRes");if(!box)return;
+  var rows=ops.filter(function(o){return o.op==="add"}).sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:0}).map(function(o){return'<li><b>'+o.d.slice(8)+'.'+o.d.slice(5,7)+'</b> '+esc(o.c.join(", "))+(o.t?' — '+esc(o.t):'')+'</li>'});
+  box.innerHTML=rows.length?'<ol class="mdaires">'+rows.join("")+'</ol>':"";
+}
+function mdaiOpt(){return{rep:$("mdaiRep").checked,fut:$("mdaiFut").checked,sat:$("mdaiSat").checked}}
+function mdaiRun(kind){
+  var info=$("mdaiInfo"),proj=mdSelVal();
+  var say=function(t,bad){info.textContent=t;info.className="note"+(bad?" bad":"")};
+  if(!proj){say("Avval yuqoridan bitta loyihani tanlang (‘Barcha loyihalar’ emas).",true);return}
+  var useAi=mdaiAiOn()&&$("mdaiAi")&&$("mdaiAi").checked;
+  if(kind==="list"){
+    var txt=$("mdaiT").value;if(!txt.trim()){say("Ro‘yxatni yozing yoki joylang.",true);return}
+    var opt=mdaiOpt();
+    var done=function(plan,via){
+      if(plan.err){say(plan.err,true);return}
+      var r=mdaiApply(plan.ops,proj,"Ro‘yxatdan tarqatildi: "+monthLabel(mMonth)+" · "+proj);
+      say("✓ "+mdaiSummary(r)+(via?" ("+via+")":"")+". Bekor qilish uchun pastdagi tugma 10 soniya turadi.");mdaiShow(plan.ops);
+    };
+    if(useAi){say("AI o‘ylamoqda…");
+      mdaiAsk("parse",txt,proj,opt).then(function(r){
+        if(opt.rep){var d={},tset={};r.ops.forEach(function(o){if(o.op==="add")o.c.forEach(function(c){tset[c]=1})});
+          media.forEach(function(e){if(!e.x&&e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&e.c.length&&e.c.every(function(c){return tset[c]}))r.ops.push({op:"del",k:e.k})})}
+        done(r,"AI")},function(e){say("AI ishlamadi: "+((e&&e.message)||"xato")+" Oddiy usulga o‘tdim.",true);var it=mdaiParse(txt);if(!it.length)return;done(mdaiPlan(it,proj,opt),"")});
+      return}
+    var items=mdaiParse(txt);
+    if(!items.length){say("Ro‘yxat tushunilmadi. Format: «Post - 1) mavzu 2) mavzu   Story 1) mavzu 2) mavzu».",true);return}
+    done(mdaiPlan(items,proj,opt),"");return}
+  var c=$("mdaiC").value;
+  var local=mdaiCmd(c,proj);
+  var fin=function(r,via){var k=mdaiApply(r.ops,proj,"Tahrirlandi: "+String(c).slice(0,40));say("✓ "+mdaiSummary(k)+(via?" ("+via+")":"")+".");$("mdaiC").value=""};
+  if(local.ops&&!useAi){fin(local,"");return}
+  if(useAi||(!local.ops&&mdaiAiOn())){say("AI o‘ylamoqda…");mdaiAsk("edit",c,proj,mdaiOpt()).then(function(r){fin(r,"AI")},function(e){if(local.ops)fin(local,"");else say((e&&e.message)||local.err,true)});return}
+  if(local.ops)fin(local,"");else say(local.err,true);
+}
+function mdaiInit(){
+  var root=$("mdAi");if(!root)return;
+  if(mdaiAiOn()){var w=$("mdaiAiW");if(w)w.hidden=false}
+  document.getElementById("s-media").addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mdai]");if(!b)return;var a=b.dataset.mdai;
+    if(a==="open"){root.hidden=!root.hidden;if(!root.hidden){var ta=$("mdaiT");try{ta.focus()}catch(x){}}return}
+    if(a==="x"){root.hidden=true;return}
+    if(a==="go")mdaiRun("list");else if(a==="cmd")mdaiRun("cmd")});
+  $("mdaiC").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();mdaiRun("cmd")}});
+}
 function mdDistInit(){
   var root=$("mdDist");if(!root)return;
   root.addEventListener("input",mddUi);root.addEventListener("change",mddUi);
