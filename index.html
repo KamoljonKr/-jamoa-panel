@@ -532,6 +532,8 @@ label.rpc .rd{width:10px;height:10px;border-radius:50%;display:inline-block}
 .mdaires li{padding:4px 8px;border-radius:7px;background:var(--card)}.mdaires b{font-variant-numeric:tabular-nums;margin-right:6px}
 #mdaiInfo.bad{color:#c0392b}
 #mdaiAiW[hidden]{display:none!important}
+.mdaih{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;margin-top:12px}.mdaih b{font-size:14px}
+.mdaires li.dn{opacity:.6}
 button.sm.danger{background:#e4572e;color:#fff;border-color:#e4572e}
 .mdtools{float:right;display:inline-flex;gap:6px;margin-left:8px}
 .mdtools button,.hidebtn{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--mute);border:1px solid var(--line);border-radius:9px;line-height:1;transition:color .15s,background .15s,border-color .15s}
@@ -1899,7 +1901,7 @@ function renderMedia(){
     var rows=idx.length?idx.map(function(i){return mdRow(media[i],i,k,names,all,ps)}).join(""):(all?'<div class="mnone">—</div>':mdRow(null,"",k,names,false,ps));
     return'<div class="md'+(k===today?" today":"")+(k<today?" past":"")+(wk?" wk":"")+'" data-day="'+k+'"><div class="mdl"><b>'+k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4)+'</b><span>'+WDN[wd]+'</span><button type="button" class="sm" data-madd="'+k+'"'+(all?' disabled title="Avval yuqoridan loyihani tanlang"':' title="Shu kunga yana kontent qo‘shish"')+'>＋</button></div><div class="mde">'+rows+'</div></div>'}).join("");
   body.innerHTML=h||'<p class="note">Bu oyda to‘ldirilgan kun yo‘q.</p>';
-  mdStatsRender();mxProjUi();if($("mdDist")&&!$("mdDist").hidden)mddUi();
+  mdStatsRender();mxProjUi();if($("mdDist")&&!$("mdDist").hidden)mddUi();if(typeof mdaiShow==="function")mdaiShow();
 }
 function mdStatsRender(){
   var all=!mdSelVal(),keys=mdKeys(mMonth),names=projNames(),filled=0,done=0,tot=0,tc={},pc={},days={};
@@ -2199,10 +2201,12 @@ function mdaiApply(ops,proj,label){
   return{add:add,mv:mv,del:del,set:set};
 }
 function mdaiSummary(r){var a=[];if(r.add)a.push(r.add+" ta qo‘shildi");if(r.mv)a.push(r.mv+" ta ko‘chirildi");if(r.set)a.push(r.set+" ta o‘zgartirildi");if(r.del)a.push(r.del+" ta o‘chirildi");return a.join(", ")||"o‘zgarish yo‘q"}
-function mdaiShow(ops){
+function mdaiShow(){
   var box=$("mdaiRes");if(!box)return;
-  var rows=ops.filter(function(o){return o.op==="add"}).sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:0}).map(function(o){return'<li><b>'+o.d.slice(8)+'.'+o.d.slice(5,7)+'</b> '+esc(o.c.join(", "))+(o.t?' — '+esc(o.t):'')+'</li>'});
-  box.innerHTML=rows.length?'<ol class="mdaires">'+rows.join("")+'</ol>':"";
+  var all=!mdSelVal(),rows=media.filter(function(e){return e.d.slice(0,7)===mMonth&&mdMatch(e)&&!mdEmpty(e)}).sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:0});
+  if(!rows.length){box.innerHTML='<p class="note">'+monthLabel(mMonth)+' uchun reja hali bo‘sh.</p>';return}
+  box.innerHTML='<div class="mdaih"><b>'+monthLabel(mMonth)+' rejasi'+(all?'':' · '+esc(mdSelVal()))+'</b><span class="note">'+rows.length+' ta yozuv (saqlangan, sahifani yangilasangiz ham turadi)</span></div><ol class="mdaires">'+rows.map(function(e){
+    return'<li'+(e.x?' class="dn"':'')+'><b>'+e.d.slice(8)+'.'+e.d.slice(5,7)+'</b> '+(all&&e.p?esc(e.p)+' · ':'')+esc(e.c.join(", ")||"—")+(e.t?' — '+esc(e.t):'')+(e.x?' ✓':'')+'</li>'}).join("")+'</ol>';
 }
 function mdaiOpt(){return{rep:$("mdaiRep").checked,fut:$("mdaiFut").checked,sat:$("mdaiSat").checked}}
 function mdaiRun(kind){
@@ -2216,7 +2220,7 @@ function mdaiRun(kind){
     var done=function(plan,via){
       if(plan.err){say(plan.err,true);return}
       var r=mdaiApply(plan.ops,proj,"Ro‘yxatdan tarqatildi: "+monthLabel(mMonth)+" · "+proj);
-      say("✓ "+mdaiSummary(r)+(via?" ("+via+")":"")+". Bekor qilish uchun pastdagi tugma 10 soniya turadi.");mdaiShow(plan.ops);
+      say("✓ "+mdaiSummary(r)+(via?" ("+via+")":"")+". Bekor qilish uchun pastdagi tugma 10 soniya turadi.");
     };
     if(useAi){say("AI o‘ylamoqda…");
       mdaiAsk("parse",txt,proj,opt).then(function(r){
@@ -2243,10 +2247,11 @@ function mdaiRun(kind){
 }
 function mdaiInit(){
   var root=$("mdAi");if(!root)return;
+  root.hidden=getPref("kd_mdai","0")!=="1";mdaiShow();
   if(mdaiAiOn()){var w=$("mdaiAiW");if(w)w.hidden=false}
   document.getElementById("s-media").addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mdai]");if(!b)return;var a=b.dataset.mdai;
-    if(a==="open"){root.hidden=!root.hidden;if(!root.hidden){var ta=$("mdaiT");try{ta.focus()}catch(x){}}return}
-    if(a==="x"){root.hidden=true;return}
+    if(a==="open"){root.hidden=!root.hidden;setPref("kd_mdai",root.hidden?"0":"1");if(!root.hidden){var ta=$("mdaiT");try{ta.focus()}catch(x){}}return}
+    if(a==="x"){root.hidden=true;setPref("kd_mdai","0");return}
     if(a==="go")mdaiRun("list");else if(a==="cmd")mdaiRun("cmd")});
   $("mdaiC").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();mdaiRun("cmd")}});
 }
