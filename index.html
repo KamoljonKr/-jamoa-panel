@@ -1066,6 +1066,124 @@ select{max-width:100%}
   #hsPanel .hsc2 label:nth-child(3){grid-column:1/-1}
 }
 @media (prefers-reduced-motion:no-preference){:is(#s-team,#mHeroWrap) .tmhero{transition:background .3s}}
+/* ===== MENYU: zamonaviy ko'rinish + barcha panellar uchun ochilish animatsiyalari ===== */
+:root{--ease:cubic-bezier(.22,1,.36,1)}
+.menubtn{border-radius:12px;font-weight:700;transition:background .2s,border-color .2s,box-shadow .2s,transform .15s var(--ease)}
+.menubtn:hover{border-color:var(--cool)}.menubtn:active{transform:scale(.96)}
+.menubtn[aria-expanded="true"]{border-color:var(--cool);box-shadow:0 0 0 3px rgba(31,138,138,.18)}
+.menu{top:calc(100% + 8px);left:10px;width:min(376px,calc(100vw - 20px));max-height:calc(100vh - 84px);max-height:calc(100dvh - 84px);padding:10px 10px 12px;border-radius:22px;background:var(--card);border:1px solid var(--line);box-shadow:0 28px 64px -16px rgba(15,25,50,.42),0 8px 22px -10px rgba(15,25,50,.22);overscroll-behavior:contain;scrollbar-width:thin;transform-origin:34px -6px}
+@supports (background:color-mix(in srgb,red,blue)){.menu{background:color-mix(in srgb,var(--card) 95%,transparent)}}
+@supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){.menu{-webkit-backdrop-filter:saturate(1.5) blur(18px);backdrop-filter:saturate(1.5) blur(18px)}}
+.mgrab{display:none}
+.menu .msec[hidden],.menu .mprof[hidden]{display:none}
+.menu .mh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:16px 8px 8px;font-size:11px;letter-spacing:.09em}
+.menu .mcnt{font-size:11.5px;font-weight:700;letter-spacing:0;text-transform:none;color:var(--mute);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:1px 9px}
+.menu .mcnt:empty{display:none}
+/* hisob kartasi */
+.mprof{display:flex;flex-direction:column;gap:12px;margin:2px 0 4px;padding:12px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(31,138,138,.16),rgba(79,124,255,.10) 60%,rgba(242,163,58,.08))}
+.mp-top{display:flex;align-items:center;gap:12px;min-width:0}
+.mp-av{flex:none;width:48px;height:48px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;background:hsl(var(--h,180) 38% 38%);color:#fff;font-weight:800;font-size:16px;box-shadow:0 0 0 2px var(--card),0 0 0 4px rgba(31,138,138,.5)}
+.mp-av img{width:100%;height:100%;object-fit:cover;display:block}
+.mprof .tmu{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:0}
+.mprof .tmu b{font-size:15.5px;line-height:1.2;max-width:100%;overflow-wrap:anywhere}
+.mprof .tmu span{font-size:10.5px;background:var(--card)}
+.mp-acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:8px}
+.mact{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;padding:10px 4px 9px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:12px;font-weight:700;line-height:1.15;text-align:center;cursor:pointer;transition:transform .18s var(--ease),box-shadow .2s,border-color .2s}
+.mact .ic{font-style:normal;font-size:20px;line-height:1}
+.mact:hover{border-color:var(--cool);transform:translateY(-2px);box-shadow:0 10px 18px -10px rgba(31,138,138,.6)}
+.mact:active{transform:scale(.95)}
+.mact.out{color:#d1432a}.mact.out:hover{border-color:#d1432a;box-shadow:0 10px 18px -10px rgba(209,67,42,.55)}
+.mact[hidden]{display:none}
+.mprof #tmPwBox{gap:8px}
+.mprof #tmPwBox input{border-radius:12px;padding:10px 12px}
+.mprof #tmPwBox .sm{border-radius:12px;padding:10px}
+.mprof #tmPwBox small{color:var(--mute)}
+/* bo'limlar ro'yxati */
+.menu nav{display:flex;flex-direction:column;gap:3px}
+.menu nav .mi{display:flex;align-items:center;gap:0;padding:2px 4px 2px 0;border-radius:15px;transition:background .18s}
+.menu nav .mi:hover{background:var(--bg)}
+.menu nav .mi.cur{background:var(--bg);background:hsl(var(--c) 70% 50% / .11)}
+.menu nav .mi.cur::before{content:"";position:absolute;left:-3px;top:13px;bottom:13px;width:3px;border-radius:3px;background:hsl(var(--c) 70% 46%)}
+.menu nav .mi a{flex:1;min-width:0;display:flex;align-items:center;gap:11px;padding:6px 6px 6px 2px;border-radius:12px;font-size:14px;font-weight:650;line-height:1.25}
+.menu nav .mi a:hover,.menu nav .mi a:focus-visible{background:transparent}
+.menu nav .mi .mic{flex:none;width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:18px;background:var(--bg);background:hsl(var(--c) 85% 55% / .17);transition:transform .25s var(--ease)}
+.menu nav .mi:hover .mic{transform:scale(1.1) rotate(-5deg)}
+.menu nav .mi .mtx{flex:1;min-width:0;overflow-wrap:anywhere}
+.menu nav .mi .moff{flex:none;font-style:normal;font-size:10.5px;font-weight:700;color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:1px 8px;white-space:nowrap}
+.menu nav .mi.off a{opacity:1;text-decoration:none}
+.menu nav .mi.off .mtx{color:var(--mute);font-weight:600}
+.menu nav .mi.off .mic{filter:grayscale(1);opacity:.55;background:var(--bg)}
+.menu nav .mi .grip2{width:22px;height:36px}
+.menu nav .mi .eye{flex:none;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;border:0;border-radius:11px;background:transparent;color:var(--mute);transition:background .15s,color .15s,transform .15s var(--ease)}
+.menu nav .mi .eye:hover{background:var(--card);color:var(--ink)}
+.menu nav .mi .eye:active{transform:scale(.88)}
+.menu nav .mi.off .eye{color:var(--mute);opacity:.8}
+.menu nav .mi.dragging{border-radius:15px}
+/* mavzu kartalari */
+.menu .mrow{margin:6px 4px}
+.menu .seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%}
+.menu .seg button{position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;padding:7px 4px 8px;border-radius:14px!important;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-size:11.5px;font-weight:700;transition:border-color .2s,box-shadow .2s,transform .18s var(--ease)}
+.menu .seg button:hover{transform:translateY(-2px)}
+.menu .seg button.on{background:var(--card);color:var(--ink);border-color:var(--cool);box-shadow:0 0 0 3px rgba(31,138,138,.2)}
+.menu .seg button.on::after{content:"✓";position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--cool);color:#fff;font-size:11px;line-height:18px;text-align:center}
+.thm{position:relative;display:block;width:100%;height:36px;border-radius:9px;overflow:hidden;border:1px solid rgba(120,130,150,.35)}
+.thm::before{content:"";position:absolute;left:6px;top:7px;width:48%;height:6px;border-radius:3px;background:var(--tc,#14213d);opacity:.8}
+.thm::after{content:"";position:absolute;left:6px;top:19px;width:30%;height:7px;border-radius:4px;background:#1f8a8a}
+.thm.l{background:#fff;--tc:#14213d}
+.thm.c{background:#f3ead6;--tc:#3a2e1f}
+.thm.d{background:#16213a;--tc:#e9eefb}
+.thm.a{background:linear-gradient(115deg,#fff 0 50%,#16213a 50%);--tc:#7a8499}
+/* shrift tanlash */
+.selw{position:relative;flex:1 1 100%;min-width:0}
+.selw::after{content:"";position:absolute;right:15px;top:50%;width:7px;height:7px;border-right:2px solid var(--mute);border-bottom:2px solid var(--mute);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.selw select{-webkit-appearance:none;appearance:none;width:100%;padding:11px 36px 11px 14px;border-radius:13px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;transition:border-color .2s,box-shadow .2s}
+.selw select:hover{border-color:var(--cool)}
+.menu #lyR .sm{flex:1;padding:10px 12px;border-radius:12px;border:1.5px dashed var(--mute);background:transparent;color:var(--ink);font-weight:700;transition:border-color .2s,background .2s}
+.menu #lyR .sm:hover{border-color:var(--cool);background:var(--bg)}
+.menu .lyhint{margin:0 8px 8px}
+
+/* telefon: pastdan chiqadigan panel */
+@media(max-width:700px){
+  .menu{position:fixed;left:0;right:0;top:auto;bottom:0;width:auto;max-width:none;max-height:86vh;max-height:86dvh;padding:6px 12px calc(16px + env(safe-area-inset-bottom,0px));border-radius:26px 26px 0 0;z-index:60;transform-origin:50% 100%;box-shadow:0 -18px 50px -10px rgba(10,18,34,.45)}
+  .mgrab{display:block;width:42px;height:5px;border-radius:5px;background:var(--line);margin:4px auto 8px;position:sticky;top:0}
+  .menu .mrow{margin:6px 2px}
+  .top:has(.menu:not([hidden]))::after{content:"";position:fixed;inset:0;z-index:-1;background:rgba(10,18,34,.5)}
+}
+@media(max-width:340px){.menu .seg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ===== Ochilish animatsiyalari (barcha panellar) ===== */
+@media (prefers-reduced-motion:no-preference){
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes riseIn{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
+  @keyframes dropIn{from{opacity:0;translate:0 -10px;scale:.97}to{opacity:1;translate:0 0;scale:1}}
+  @keyframes popIn{from{opacity:0;scale:.93}to{opacity:1;scale:1}}
+  @keyframes mnPop{from{opacity:0;translate:-6px -12px;scale:.94}to{opacity:1;translate:0 0;scale:1}}
+  @keyframes sheetUp{from{translate:0 100%}to{translate:0 0}}
+  @keyframes slideDown{from{opacity:0;translate:0 -22px}to{opacity:1;translate:0 0}}
+  .menu:not([hidden]){animation:mnPop .3s var(--ease) backwards}
+  .menu:not([hidden])>*{animation:riseIn .42s var(--ease) backwards}
+  .menu>:nth-child(2){animation-delay:.04s}.menu>:nth-child(3){animation-delay:.08s}.menu>:nth-child(4){animation-delay:.11s}
+  .menu>:nth-child(5){animation-delay:.14s}.menu>:nth-child(6){animation-delay:.17s}.menu>:nth-child(7){animation-delay:.2s}
+  .menu>:nth-child(8){animation-delay:.23s}.menu>:nth-child(9){animation-delay:.26s}.menu>:nth-child(10){animation-delay:.29s}
+  .mgrab{animation:none!important}
+  .top:has(.menu:not([hidden]))::after{animation:fadeIn .3s}
+  #gsRes:not([hidden]){animation:dropIn .26s var(--ease) backwards;transform-origin:50% 0}
+  #hsPanel:not([hidden]){animation:dropIn .34s var(--ease) backwards;transform-origin:50% 0}
+  #tip:not([hidden]){animation:popIn .18s var(--ease) backwards;transform-origin:50% 0}
+  .mdclr:not([hidden]),.mdnew:not([hidden]),.tmd:not([hidden]),#tmPwBox:not([hidden]){animation:dropIn .3s var(--ease) backwards;transform-origin:50% 0}
+  .undobar:not([hidden]){animation:slideDown .35s var(--ease) backwards}
+  details.ms[open]>.mso{animation:dropIn .2s var(--ease) backwards;transform-origin:50% 0}
+  details#hist[open]>:not(summary){animation:riseIn .35s var(--ease) backwards}
+  .sec.maxd,#s-media.max{animation:popIn .3s var(--ease) backwards}
+  .sec.sec-pop{animation:riseIn .5s var(--ease) backwards}
+  #tauth{animation:fadeIn .3s}
+  #tauth>*{animation:riseIn .55s .05s var(--ease) backwards}
+  .mact,.menu .seg button,.menu nav .mi{will-change:auto}
+}
+@media (prefers-reduced-motion:no-preference) and (max-width:700px){
+  .menu:not([hidden]){animation:sheetUp .42s var(--ease) backwards}
+  #hsPanel:not([hidden]){animation:sheetUp .42s var(--ease) backwards}
+}
 </style>
 </head>
 <body>
@@ -1082,22 +1200,33 @@ select{max-width:100%}
     <div class="gsr" id="gsRes" hidden><div class="gsf" id="gsF"></div><div class="gsl" id="gsL"></div></div>
   </div>
   <span class="topst" id="topSt"></span>
-  <div class="menu" id="menuPanel" hidden>
-    <div class="mh">Bo‘limlar</div>
+  <div class="menu" id="menuPanel" hidden role="dialog" aria-label="Menyu">
+    <span class="mgrab" aria-hidden="true"></span>
+    <div class="msec" id="tmAcc">
+      <div class="mprof" id="tmAcc2">
+        <div class="mp-top"><span class="mp-av" id="mpAv" aria-hidden="true"></span><div class="tmu"><b id="tmName"></b><span id="tmRole"></span></div></div>
+        <div class="mp-acts">
+          <button class="mact" type="button" data-tm="avpick" title="Rasm yuklash" aria-label="Rasm yuklash"><i class="ic">📷</i><span>Rasm</span></button>
+          <button class="mact" type="button" data-tm="avdel" id="tmAvDel" hidden title="Rasmni olib tashlash" aria-label="Rasmni olib tashlash"><i class="ic">🗑</i><span>Olib tashlash</span></button>
+          <button class="mact" type="button" data-tm="pw" title="Parolni o‘zgartirish" aria-label="Parolni o‘zgartirish"><i class="ic">🔑</i><span>Parol</span></button>
+          <button class="mact out" type="button" data-tm="out" title="Chiqish" aria-label="Chiqish"><i class="ic">⎋</i><span>Chiqish</span></button>
+        </div>
+        <div id="tmPwBox" hidden><input id="tmPw1" type="password" autocomplete="new-password" placeholder="Yangi parol (kamida 6 belgi)" aria-label="Yangi parol"><button class="sm" type="button" data-tm="pwok">Saqlash</button><small id="tmPwSt"></small></div>
+      </div>
+    </div>
+    <div class="mh">Bo‘limlar<span class="mcnt" id="mCnt"></span></div>
     <nav id="menuNav" aria-label="Bo‘limlar"></nav>
-        <div class="mh" id="tmAcc">Hisob</div>
-    <div class="mrow tmacc" id="tmAcc2"><div class="tmu"><b id="tmName"></b><span id="tmRole"></span></div>
-      <button class="sm" type="button" data-tm="avpick">📷 Rasm yuklash</button>
-      <button class="sm" type="button" data-tm="avdel" id="tmAvDel" hidden>🗑 Rasmni olib tashlash</button>
-      <button class="sm" type="button" data-tm="pw">🔑 Parolni o‘zgartirish</button>
-      <div id="tmPwBox" hidden><input id="tmPw1" type="password" autocomplete="new-password" placeholder="Yangi parol (kamida 6 belgi)" aria-label="Yangi parol"><button class="sm" type="button" data-tm="pwok">Saqlash</button><small id="tmPwSt"></small></div>
-      <button class="sm" type="button" data-tm="out">⎋ Chiqish</button></div>
     <div class="mh">Mavzu</div>
-    <div class="mrow"><div class="seg" role="group" aria-label="Mavzu"><button data-theme-set="light">☀ Kunduzgi</button><button data-theme-set="cream">🥛 Qaymoq</button><button data-theme-set="dark">🌙 Kechki</button><button data-theme-set="auto">Avto</button></div></div>
+    <div class="mrow"><div class="seg" role="group" aria-label="Mavzu">
+      <button type="button" data-theme-set="light"><i class="thm l"></i><span>Kunduzgi</span></button>
+      <button type="button" data-theme-set="cream"><i class="thm c"></i><span>Qaymoq</span></button>
+      <button type="button" data-theme-set="dark"><i class="thm d"></i><span>Kechki</span></button>
+      <button type="button" data-theme-set="auto"><i class="thm a"></i><span>Avto</span></button>
+    </div></div>
     <div class="mh">Shrift</div>
-    <div class="mrow"><select id="fontSel" aria-label="Shrift"></select></div>
+    <div class="mrow"><div class="selw"><select id="fontSel" aria-label="Shrift"></select></div></div>
     <div class="mh" id="lyH">Joylashuv</div><p class="lyhint" id="lyHint">Bo‘limlarni yuqoridagi ro‘yxatda chap tarafdagi ⠿ belgisidan ushlab sudrang.</p>
-    <div class="mrow" id="lyR"><button class="sm" data-layout="reset">Tartibni tiklash</button></div>
+    <div class="mrow" id="lyR"><button class="sm" data-layout="reset">↺ Tartibni tiklash</button></div>
   </div>
 </header>
 <div class="recbar" id="rec" role="status"><span class="rdot" id="recDot"></span><b>REC</b><span id="recName"></span><textarea id="recNote" class="nt" rows="1" placeholder="Natija / izoh (ixtiyoriy)" aria-label="Natija"></textarea><span class="rtime" id="recTime">00:00</span><span class="since" id="recSince"></span><button class="stop" data-stop="1"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>Finish</button><button class="save" data-save="1"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Saqlash</button></div>
@@ -1508,8 +1637,19 @@ var hiddenSecs=[];try{var hs0=JSON.parse(localStorage.getItem("kd_hidden")||"[]"
 function hdefApply(){HDEF.forEach(function(i){if(hiddenSecs.indexOf(i)<0)hiddenSecs.push(i)})}
 try{if(localStorage.getItem("kd_hdef")!=="1"){hdefApply();localStorage.setItem("kd_hdef","1");localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}}catch(e){hdefApply()}
 function applyHidden(){SECS.forEach(function(x){var el=$("s-"+x.id);if(el)el.classList.toggle("sec-off",hiddenSecs.indexOf(x.id)>-1)});buildMenu()}
-function toggleSec(id,show){var i=hiddenSecs.indexOf(id);if(show===undefined)show=i>-1;if(show&&i>-1)hiddenSecs.splice(i,1);if(!show&&i<0)hiddenSecs.push(id);try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}touch();applyHidden();queueDb()}
-function buildMenu(){$("menuNav").innerHTML=order.filter(function(id){return !(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)||id==="team"}).map(function(id){var x=secById(id);var off=hiddenSecs.indexOf(id)>-1;return '<div class="mi'+(off?' off':'')+'" data-mid="'+id+'"><button type="button" class="grip2" data-grip="'+id+'" title="Sudrab joyini o‘zgartiring (yoki ↑ ↓ tugmalari)" aria-label="'+esc(x.t)+': joyini o‘zgartirish, ↑ ↓ tugmalari"><svg width="12" height="16" viewBox="0 0 12 16" aria-hidden="true"><g fill="currentColor"><circle cx="3" cy="3" r="1.4"/><circle cx="9" cy="3" r="1.4"/><circle cx="3" cy="8" r="1.4"/><circle cx="9" cy="8" r="1.4"/><circle cx="3" cy="13" r="1.4"/><circle cx="9" cy="13" r="1.4"/></g></svg></button><a href="#s-'+id+'" data-go="'+id+'"><span>'+x.ico+'</span>'+esc(x.t)+'</a><button type="button" class="eye" data-hide="'+id+'" title="'+(off?'Ko‘rsatish':'Yashirish')+'" aria-label="'+(off?'Bo‘limni ko‘rsatish':'Bo‘limni yashirish')+'">'+(off?'🚫':'👁')+'</button></div>'}).join("")}
+function toggleSec(id,show){var i=hiddenSecs.indexOf(id);if(show===undefined)show=i>-1;if(show&&i>-1)hiddenSecs.splice(i,1);if(!show&&i<0)hiddenSecs.push(id);try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}touch();applyHidden();queueDb();if(show){var pe=$("s-"+id);if(pe){pe.classList.remove("sec-pop");void pe.offsetWidth;pe.classList.add("sec-pop");setTimeout(function(){pe.classList.remove("sec-pop")},800)}}}
+var SEC_HUE={team:175,hero:16,kpis:212,timeline:262,charts:330,tasks:150,plan:6,media:38,mediaxl:190,journal:284,history:28,report:0};
+var EYE_ON='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+var EYE_OFF='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.9 17.9A10.9 10.9 0 0 1 12 19c-6.4 0-10-7-10-7a18.5 18.5 0 0 1 4.1-5.1M9.9 5.2A10 10 0 0 1 12 5c6.4 0 10 7 10 7a18.6 18.6 0 0 1-2.2 3.2M1 1l22 22"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+function buildMenu(){var adm=!!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as),shown=0,tot=0;
+  $("menuNav").innerHTML=order.filter(function(id){return !adm||id==="team"}).map(function(id){var x=secById(id);var off=hiddenSecs.indexOf(id)>-1;tot++;if(!off)shown++;return '<div class="mi'+(off?' off':'')+'" data-mid="'+id+'" style="--c:'+(SEC_HUE[id]||200)+'"><button type="button" class="grip2" data-grip="'+id+'" title="Sudrab joyini o‘zgartiring (yoki ↑ ↓ tugmalari)" aria-label="'+esc(x.t)+': joyini o‘zgartirish, ↑ ↓ tugmalari"><svg width="12" height="16" viewBox="0 0 12 16" aria-hidden="true"><g fill="currentColor"><circle cx="3" cy="3" r="1.4"/><circle cx="9" cy="3" r="1.4"/><circle cx="3" cy="8" r="1.4"/><circle cx="9" cy="8" r="1.4"/><circle cx="3" cy="13" r="1.4"/><circle cx="9" cy="13" r="1.4"/></g></svg></button><a href="#s-'+id+'" data-go="'+id+'"><i class="mic">'+x.ico+'</i><span class="mtx">'+esc(x.t)+'</span>'+(off?'<em class="moff">yashirin</em>':'')+'</a><button type="button" class="eye" data-hide="'+id+'" title="'+(off?'Ko‘rsatish':'Yashirish')+'" aria-label="'+(off?'Bo‘limni ko‘rsatish':'Bo‘limni yashirish')+'">'+(off?EYE_OFF:EYE_ON)+'</button></div>'}).join("");
+  var cn=$("mCnt");if(cn)cn.textContent=adm?"":shown+" / "+tot+" ko‘rinadi";
+  try{menuCur()}catch(e){}}
+function menuCur(){var nav=$("menuNav");if(!nav)return;var lim=(($("top")||{}).offsetHeight||56)+60,cur="",first="";
+  order.forEach(function(id){if(hiddenSecs.indexOf(id)>-1)return;var el=$("s-"+id);if(!el||!el.getClientRects().length)return;if(!first)first=id;if(el.getBoundingClientRect().top<=lim)cur=id});
+  cur=cur||first;Array.prototype.forEach.call(nav.querySelectorAll(".mi"),function(m){m.classList.toggle("cur",m.dataset.mid===cur)})}
+function mpAv(){var el=$("mpAv");if(!el)return;var T=window.TEAM||{},uid=avUid(),im=uid?avImg(uid):"",nm=T.as?T.as.name:T.name;
+  el.style.setProperty("--h",tmHue(nm||""));el.innerHTML=im?'<img alt="" src="'+im+'">':esc(tmIni(nm||"?"))}
 function applyOrder(){var c=$("sections");order.forEach(function(id){var el=$("s-"+id);if(el)c.appendChild(el)});buildMenu()}
 function moveSec(id,dir){var i=order.indexOf(id),j=i+dir;if(i<0||j<0||j>=order.length)return;order.splice(i,1);order.splice(j,0,id);saveOrder();applyOrder();queueDb();
   var el=$("s-"+id);if(el){el.classList.remove("flash-sec");void el.offsetWidth;el.classList.add("flash-sec");try{el.scrollIntoView({block:"center",behavior:"smooth"})}catch(x){}}}
@@ -2913,6 +3053,7 @@ function tmAccount(){
   var T=window.TEAM;if(!T)return;
   var n=$("tmName");if(n)n.textContent=T.as?T.as.name:T.name||"—";
   var r=$("tmRole");if(r)r.textContent=T.as?"ko‘rish rejimi":(T.role==="admin"?"admin":"xodim");
+  try{mpAv()}catch(e){}
   var b=$("tmBtn");if(b)b.hidden=!tmAdmin();
   if(T.as){["tmAcc","tmAcc2"].forEach(function(i){var o=$(i);if(o)o.hidden=true})}
 }
@@ -3181,6 +3322,7 @@ function avPaint(){
   if(el)el.innerHTML=im?'<img alt="" src="'+im+'">':esc(tmIni(nm||"?"));
   if(btn){btn.style.setProperty("--h",tmHue(nm||""));btn.disabled=!!T.as;btn.title=T.as?"":"Rasmni yuklash yoki almashtirish"}
   var d=$("tmAvDel");if(d)d.hidden=!im||!!T.as;
+  mpAv();
 }
 function avCache(uid,img,at){if(window.TEAM&&TEAM.as)return;try{if(img)localStorage.setItem("kd_avatar",JSON.stringify({uid:uid,img:img,at:at||0}));else localStorage.removeItem("kd_avatar")}catch(e){}}
 function avLoadOwn(){
@@ -3511,7 +3653,7 @@ document.addEventListener("focusin",function(e){var t=e.target;if(t.classList&&t
 document.addEventListener("click",function(e){try{clickH(e)}catch(x){showErr("tugma",x)}});
 function clickH(e){var t=e.target,c=t.closest?function(s){return t.closest(s)}:function(){return null},b;
   if(!$("menuPanel").hidden&&!c("#menuPanel")&&!c("[data-menu]"))closeMenu();
-  if(c("[data-menu]")){var mp=$("menuPanel");mp.hidden=!mp.hidden;$("menuBtn").setAttribute("aria-expanded",String(!mp.hidden));setHH()}
+  if(c("[data-menu]")){var mp=$("menuPanel");mp.hidden=!mp.hidden;$("menuBtn").setAttribute("aria-expanded",String(!mp.hidden));setHH();if(!mp.hidden)menuCur()}
   if(b=c("[data-hide]")){e.preventDefault();e.stopPropagation();toggleSec(b.dataset.hide);return}
   if(b=c("[data-go]")){e.preventDefault();goSec(b.dataset.go)}
   if(b=c("[data-layout]"))layoutAct(b.dataset.layout);
