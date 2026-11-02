@@ -921,7 +921,7 @@ html.adminonly .top{justify-content:flex-start}
     <div class="mdclr" id="mdAi" hidden>
       <div class="mdd-h"><b>✨ Ro‘yxatdan reja</b><span class="note">Tur nomi va raqamlangan mavzular yozing. Dastur ularni tanlangan loyihaning shu oyidagi ish kunlariga tekis tarqatadi.</span></div>
       <textarea id="mdaiT" class="mdait" rows="6" aria-label="Kontent ro‘yxati" placeholder="Post - 1) Surxondaryo, Boysun, gips zavodi 2) Termiz sement 3) ...&#10;Story 1) Ish jarayoni 2) Mijoz fikri&#10;Reels 1) ... 2) ..."></textarea>
-      <div class="mdd-o"><label class="rpc"><input type="checkbox" id="mdaiRep" checked>Shu turlarning shu oydagi eski (tayyor emas) yozuvlarini almashtirish</label><label class="rpc"><input type="checkbox" id="mdaiFut">Faqat bugundan boshlab</label><label class="rpc"><input type="checkbox" id="mdaiSat">Shanbani ham hisobga olish</label><label class="rpc" id="mdaiAiW" hidden><input type="checkbox" id="mdaiAi" checked>🤖 AI bilan (murakkab matn uchun)</label></div>
+      <div class="mdd-o"><label class="rpc" title="Belgilanmasa, yangilar mavjud yozuvlar ustiga qo‘shiladi"><input type="checkbox" id="mdaiRep">Eskilarini o‘chirib, yangisi bilan almashtirish (belgilanmasa, ustiga qo‘shiladi)</label><label class="rpc"><input type="checkbox" id="mdaiFut">Faqat bugundan boshlab</label><label class="rpc"><input type="checkbox" id="mdaiSat">Shanbani ham hisobga olish</label><label class="rpc" id="mdaiAiW" hidden><input type="checkbox" id="mdaiAi" checked>🤖 AI bilan (murakkab matn uchun)</label></div>
       <div class="savebar"><button type="button" class="sm save" data-mdai="go">✨ Tarqatib yuborish</button><button type="button" class="sm" data-mdai="x">Yopish</button><span class="note" id="mdaiInfo" role="status"></span></div>
       <div class="mdaicmd"><label for="mdaiC">Tahrirlash buyrug‘i</label><div class="mdaicr"><input id="mdaiC" autocomplete="off" placeholder="Masalan: 5-sanadagi postni 12-sanaga ko‘chir · Reels 2 ni o‘chir · Story 1 mavzusini “Yangi mavzu” ga o‘zgartir"><button type="button" class="sm" data-mdai="cmd">Bajarish</button></div></div>
       <div id="mdaiRes"></div>
@@ -2069,7 +2069,8 @@ function mdaiLoose(text){
 /* Tur nomisiz ro'yxatni boshqa tur (masalan Post) turgan kunlarga qo'yadi */
 function mdaiPlanSame(L,proj,opt){
   var ref=media.filter(function(e){return e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&e.c.indexOf(L.ref)>-1&&(!opt.fut||e.d>=ymd(Date.now()))}).map(function(e){return e.d}).sort().filter(function(d,i,a){return a.indexOf(d)===i});
-  if(!ref.length)return{err:"Bu oyda "+L.ref+" yozuvlari yo‘q. Avval "+L.ref+" larni tarqating, keyin "+L.target+" larni shu kunlarga qo‘ying."};
+  if(!opt.rep){var hv={};media.forEach(function(e){if(e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&e.c.indexOf(L.target)>-1)hv[e.d]=1});ref=ref.filter(function(d){return !hv[d]})}
+  if(!ref.length)return{err:"Bu oyda "+L.ref+" yozuvi yo‘q yoki barcha "+L.ref+" kunlarida "+L.target+" allaqachon bor. Avval "+L.ref+" larni tarqating, keyin "+L.target+" larni shu kunlarga qo‘ying."};
   var ops=[],n=Math.min(ref.length,L.items.length),rest=L.items.slice(n);
   if(opt.rep)media.forEach(function(e){if(!e.x&&e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&e.c.length&&e.c.every(function(c){return c===L.target}))ops.push({op:"del",k:e.k})});
   for(var i=0;i<n;i++)ops.push({op:"add",d:ref[i],c:[L.target],t:L.items[i].t});
@@ -2080,31 +2081,43 @@ function mdaiPlanSame(L,proj,opt){
 function mdaiDays(opt){
   var t=ymd(Date.now());
   return mdKeys(mMonth).filter(function(k){var w=new Date(k+"T12:00:00").getDay();return w>0&&(w<6||(opt.sat&&w===6))&&(!opt.fut||k>=t)})}
-/* Elementlarni oy kunlariga tekis taqsimlaydi; mavjud yuklamani hisobga oladi */
+/* Elementlarni oy kunlariga tekis taqsimlaydi; mavjud yozuvlar ustiga qo'shadi (almashtirish belgilangan bo'lsa, eskilarini o'chiradi) */
 function mdaiPlan(items,proj,opt){
-  var days=mdaiDays(opt),D=days.length,load={},ops=[],byT={},used={};
+  var days=mdaiDays(opt),D=days.length,load={},ops=[],byT={},used={},skipped=0;
   if(!D)return{err:"Tarqatish uchun mos ish kuni yo‘q (oy tugagan yoki ‘faqat bugundan’ belgilangan)."};
   days.forEach(function(d){load[d]=0});
-  var drop={};
+  var drop={},mine=media.filter(function(e){return e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&!mdEmpty(e)});
   if(opt.rep){var tset={};items.forEach(function(it){tset[it.c]=1});
-    media.forEach(function(e){if(!e.x&&e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&e.c.length&&e.c.every(function(c){return tset[c]})&&(!opt.fut||e.d>=ymd(Date.now())))drop[e.k]=1})}
-  media.forEach(function(e){if(drop[e.k]||normK(e.p)!==normK(proj)||load[e.d]===undefined||mdEmpty(e))return;load[e.d]+=Math.max(1,e.c.length)});
+    mine.forEach(function(e){if(!e.x&&e.c.length&&e.c.every(function(c){return tset[c]})&&(!opt.fut||e.d>=ymd(Date.now())))drop[e.k]=1})}
+  else{ /* aynan bir xil (tur + mavzu) yozuv bor bo'lsa, ikkilamaymiz */
+    var have={};mine.forEach(function(e){e.c.forEach(function(c){if(e.t.trim())have[c+"|"+normK(e.t)]=1})});
+    items=items.filter(function(it){if(it.t.trim()&&have[it.c+"|"+normK(it.t)]){skipped++;return false}return true});
+    if(!items.length)return{ops:[],days:D,dropped:0,skipped:skipped}}
+  mine.forEach(function(e){if(drop[e.k])return;if(load[e.d]!==undefined)load[e.d]+=Math.max(1,e.c.length);e.c.forEach(function(c){used[c+"|"+e.d]=1})});
   items.forEach(function(it){(byT[it.c]||(byT[it.c]=[])).push(it)});
   Object.keys(byT).forEach(function(tp){
-    var arr=byT[tp],n=arr.length,chosen=[];
+    var arr=byT[tp],n=arr.length,chosen=[],exist=[];
+    days.forEach(function(d,j){if(used[tp+"|"+d])exist.push(j)});
     for(var i=0;i<n;i++){
-      var ideal=(i+0.5)*D/n-0.5,w=Math.max(0,Math.floor(D/n/2)),best=-1,bs=1e9,tries=0;
-      while(best<0&&tries<=D){
-        var lo=Math.max(0,Math.round(ideal)-w-tries),hi=Math.min(D-1,Math.round(ideal)+w+tries),j;
-        for(j=lo;j<=hi;j++){var d=days[j];if(n<=D&&used[tp+"|"+d])continue;var sc=load[d]*1000+Math.abs(j-ideal);if(sc<bs){bs=sc;best=j}}
-        tries++}
-      if(best<0)best=Math.max(0,Math.min(D-1,Math.round(ideal)));
-      used[tp+"|"+days[best]]=1;load[days[best]]++;chosen.push(days[best])}
+      var best=-1,bs=-1e9,j;
+      if(!exist.length){ /* bo'sh: kunlar bo'ylab tekis */
+        var ideal=(i+0.5)*D/n-0.5,w=Math.max(0,Math.floor(D/n/2)),tries=0;bs=1e9;
+        while(best<0&&tries<=D){
+          var lo=Math.max(0,Math.round(ideal)-w-tries),hi=Math.min(D-1,Math.round(ideal)+w+tries);
+          for(j=lo;j<=hi;j++){var d=days[j];if(n<=D&&used[tp+"|"+d])continue;var sc=load[d]*1000+Math.abs(j-ideal);if(sc<bs){bs=sc;best=j}}
+          tries++}
+      }else{ /* eskilari bor: mavjud kunlardan eng uzoqdagi, yuklamasi kamroq kunni tanlaymiz */
+        for(j=0;j<D;j++){var dd=days[j];if(used[tp+"|"+dd]&&exist.length<D)continue;
+          var md=1e9;exist.forEach(function(x){md=Math.min(md,Math.abs(x-j))});
+          var sc2=md*10-load[dd]*25-j*0.001;if(sc2>bs){bs=sc2;best=j}}
+      }
+      if(best<0)best=Math.max(0,Math.min(D-1,Math.round((i+0.5)*D/n-0.5)));
+      used[tp+"|"+days[best]]=1;load[days[best]]++;exist.push(best);chosen.push(days[best])}
     chosen.sort();
     arr.forEach(function(it,i){ops.push({op:"add",d:chosen[i],c:[tp],t:it.t})});
   });
   Object.keys(drop).forEach(function(k){ops.push({op:"del",k:k})});
-  return{ops:ops,days:D,dropped:Object.keys(drop).length};
+  return{ops:ops,days:D,dropped:Object.keys(drop).length,skipped:skipped};
 }
 /* --- Buyruqlar: ko'chirish, o'chirish, matnni o'zgartirish, tayyor belgilash --- */
 var MDAI_MON=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"];
@@ -2220,7 +2233,7 @@ function mdaiRun(kind){
     var done=function(plan,via){
       if(plan.err){say(plan.err,true);return}
       var r=mdaiApply(plan.ops,proj,"Ro‘yxatdan tarqatildi: "+monthLabel(mMonth)+" · "+proj);
-      say("✓ "+mdaiSummary(r)+(via?" ("+via+")":"")+". Bekor qilish uchun pastdagi tugma 10 soniya turadi.");
+      say("✓ "+mdaiSummary(r)+(plan.skipped?", "+plan.skipped+" tasi allaqachon bor edi, o‘tkazib yuborildi":"")+(via?" ("+via+")":"")+". Bekor qilish uchun pastdagi tugma 10 soniya turadi.");
     };
     if(useAi){say("AI o‘ylamoqda…");
       mdaiAsk("parse",txt,proj,opt).then(function(r){
