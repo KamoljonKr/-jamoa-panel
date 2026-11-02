@@ -91,7 +91,7 @@ function ymd(ts){var d=new Date(ts);return d.getFullYear()+"-"+pad(d.getMonth()+
 function summarize(st){
   var S=Array.isArray(st.sessions)?st.sessions:[],dm={},last=0,cut=Date.now()-70*864e5;
   S.forEach(function(s){if(!s||!s.s||!s.e)return;if(s.e>last)last=s.e;if(s.s<cut)return;var k=ymd(s.s);dm[k]=Math.round(((dm[k]||0)+(s.e-s.s)/60000)*100)/100});
-  var se=st.settings||{},sp=Math.max(.5,(+se.en||0)-(+se.st||0)),av=Math.max(.5,sp-(+se.lu||0)),run=null;
+  var av=8,run=null; /* kunlik sof ish vaqti: 9:00-18:00, tushlik 13:30-14:30 chiqarilgan = 8 soat */
   if(st.run&&st.run.id){var tk=(st.tasks||[]).filter(function(x){return x.id===st.run.id})[0]||{};run={p:tk.p||"",t:tk.t||"",s:st.run.s}}
   var td=ymd(Date.now()),tn=0,lt=null;
   S.forEach(function(s){if(!s||!s.s||!s.e)return;if(ymd(s.s)===td)tn++;if(!lt||s.e>lt.e){var t=(st.tasks||[]).filter(function(x){return x.id===s.id})[0]||{};lt={e:s.e,p:t.p||s.p||"",t:t.t||s.t||""}}});
@@ -683,6 +683,54 @@ html.adminonly #sections>.sec:not(#s-team),html.adminonly #rec,html.adminonly #g
 html.adminonly .wrap>*:not(#sections),html.adminonly #lyH,html.adminonly #lyR,html.adminonly .menu .mi .eye,html.adminonly #s-team .hidebtn,
 html.adminonly #s-team .mvbar,html.adminonly #undoBar{display:none!important}
 html.adminonly .top{justify-content:flex-start}
+/* === Admin: xush kelibsiz bloki va yangilangan jadval === */
+#s-team .tmhero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 32px;align-items:start;padding:28px 30px 22px;margin:0 0 14px;border-radius:20px;background:#0f3a3c;color:#f2fbfa}
+#s-team .tmh-hi{margin:0;font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:-.028em;line-height:1.08;color:#fff;overflow-wrap:anywhere}
+#s-team .tmh-date{margin:10px 0 0;font-size:17px;font-weight:600;color:#d8f0ed}
+#s-team .tmh-sub{margin:4px 0 0;font-size:14px;color:#9fcfca}
+#s-team .tmh-side{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+#s-team .tmh-clock{font-size:clamp(36px,5.4vw,56px);font-weight:700;letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums;color:#fff}
+#s-team .tmh-clock small{font-size:.36em;font-weight:600;margin-left:6px;color:#7fbab4;letter-spacing:0}
+#s-team .tmh-city{margin-top:4px;font-size:13px;color:#9fcfca}
+#s-team .tmh-wx{display:flex;align-items:center;gap:12px;margin-top:14px;padding:9px 14px;border-radius:14px;background:rgba(255,255,255,.09);text-align:left}
+#s-team .tmh-wx .i{font-size:30px;line-height:1}
+#s-team .tmh-wx b{font-size:28px;font-weight:800;letter-spacing:-.02em;color:#fff}
+#s-team .tmh-wx .d{display:flex;flex-direction:column;gap:1px;font-size:12.5px;color:#a8d6d1;line-height:1.35}
+#s-team .tmh-wx .d em{font-style:normal;font-weight:700;font-size:14px;color:#fff}
+#s-team .tmh-wx .tmwr{align-self:flex-start;margin-top:3px;padding:3px 10px;font-size:12.5px;border-radius:999px;background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45)}
+#s-team .tmh-day{grid-column:1/-1;margin-top:20px}
+#s-team .tmd-bar{position:relative;display:flex;height:12px;border-radius:6px;background:rgba(255,255,255,.1)}
+#s-team .tmd-bar i{display:block;height:100%;background:rgba(255,255,255,.34)}
+#s-team .tmd-bar i.a{width:50%;border-radius:6px 0 0 6px}
+#s-team .tmd-bar i.l{width:11.111%;background:repeating-linear-gradient(135deg,rgba(255,255,255,.2) 0 4px,transparent 4px 8px);margin:0 2px}
+#s-team .tmd-bar i.b{flex:1;border-radius:0 6px 6px 0}
+#s-team .tmd-now{position:absolute;top:-6px;bottom:-6px;width:4px;margin-left:-2px;border-radius:2px;background:#f2a33a;box-shadow:0 0 0 3px rgba(242,163,58,.25)}
+#s-team .tmd-now[hidden]{display:none}
+#s-team .tmd-lab{position:relative;display:flex;justify-content:space-between;margin-top:7px;font-size:12px;color:#7fbab4;font-variant-numeric:tabular-nums}
+#s-team .tmd-lab .lu{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap}
+#s-team .tmd-txt{margin-top:8px;font-size:14px;font-weight:600;color:#e6f6f4}
+#s-team .tmband{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;margin:2px 0 16px;border:1px solid var(--line);border-radius:14px;background:var(--line);overflow:hidden}
+#s-team .tmbi{background:var(--card);padding:12px 16px}
+#s-team .tmbi b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+#s-team .tmbi b small{font-size:14px;font-weight:600;color:var(--mute)}
+#s-team .tmbi span{font-size:12.5px;color:var(--mute)}
+#s-team .tmt{min-width:820px}
+#s-team .tmt th{text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:700;color:var(--mute);padding:8px 12px}
+#s-team .tmt td{padding:12px;vertical-align:middle}
+#s-team .tmt tbody tr:hover td{background:rgba(31,138,138,.05)}
+#s-team .tmt tr.sel td{background:rgba(31,138,138,.1)}
+#s-team .tmwho{display:flex;align-items:center;gap:12px}
+#s-team .tmwho b{font-size:14.5px}
+#s-team .tmav{flex:none;width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:hsl(var(--h,180) 36% 36%)}
+#s-team .tmpill{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;border-radius:999px;font-size:12.5px;font-weight:700;background:var(--bg);color:var(--mute)}
+#s-team .tmpill.on{background:rgba(31,138,138,.15);color:var(--cool)}
+#s-team .tmtask{margin-top:5px;font-size:13px}
+#s-team .tmago{margin-top:4px}
+#s-team .tmlv{display:inline}
+#s-team .tmt td.tma{white-space:nowrap}
+#s-team .tmbar{height:8px;width:130px;background:var(--bg)}
+@media(max-width:720px){#s-team .tmhero{grid-template-columns:1fr;padding:22px 20px 18px}#s-team .tmh-side{align-items:flex-start;text-align:left;margin-top:10px}#s-team .tmd-lab .lu{display:none}}
+@media (prefers-reduced-motion:reduce){#s-team .tmrun{animation:none}}
 </style>
 </head>
 <body>
@@ -721,9 +769,26 @@ html.adminonly .top{justify-content:flex-start}
 
   <div id="sections">
   <section class="sec" id="s-team" data-sec="team">
+  <div class="tmhero" id="tmHero">
+    <div class="tmh-main">
+      <h2 class="tmh-hi" id="tmHi">Xush kelibsiz!</h2>
+      <p class="tmh-date" id="tmDate"></p>
+      <p class="tmh-sub" id="tmSub"></p>
+    </div>
+    <div class="tmh-side">
+      <div class="tmh-clock" id="tmClock" role="timer" aria-label="Toshkent vaqti"></div>
+      <div class="tmh-city">Toshkent vaqti</div>
+      <div class="tmh-wx" id="tmWx" aria-live="polite"></div>
+    </div>
+    <div class="tmh-day" id="tmDay">
+      <div class="tmd-bar" aria-hidden="true"><i class="a"></i><i class="l"></i><i class="b"></i><span class="tmd-now" id="tmNow"></span></div>
+      <div class="tmd-lab" aria-hidden="true"><span>09:00</span><span class="lu">tushlik 13:30–14:30</span><span>18:00</span></div>
+      <div class="tmd-txt" id="tmDayTxt"></div>
+    </div>
+  </div>
   <div class="card">
     <h2>👥 Jamoa (admin)</h2>
-    <p class="note">Xodimlar o‘z login va paroli bilan kiradi. Bu yerda ularning holati, jurnali va natijalari ko‘rinadi. Siz ma’lumotni faqat ko‘ra olasiz, o‘zgartira olmaysiz.</p>
+    <div class="tmband" id="tmBand" aria-live="polite"></div>
     <div class="tmtool"><label>Davr <select id="tmPer"><option value="1">Bugun</option><option value="7" selected>Oxirgi 7 kun</option><option value="30">Oxirgi 30 kun</option><option value="0">Shu oy</option></select></label>
       <button class="sm" type="button" data-tmact="refresh">⟳ Yangilash</button>
       <span class="tmx"><label>Excel davri <input type="date" id="tmXf" aria-label="Excel: dan"> — <input type="date" id="tmXt" aria-label="Excel: gacha"></label><button class="sm" type="button" data-tmact="xall">⬇ Butun jamoa Excel</button></span>
@@ -734,7 +799,7 @@ html.adminonly .top{justify-content:flex-start}
   </section>
   <script>if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)){var __t=document.getElementById("s-team");if(__t)__t.remove()}</script>
 
-  <div id="cfgHidden" hidden aria-hidden="true"><input id="days" type="number" value="22"><input id="st" type="number" value="9"><input id="en" type="number" value="18"><input id="lu" type="number" value="0"></div>
+  <div id="cfgHidden" hidden aria-hidden="true"><input id="days" type="number" value="22"><input id="st" type="number" value="9"><input id="en" type="number" value="18"><input id="lu" type="number" value="1"></div>
 
   <section class="sec" id="s-hero" data-sec="hero">
   <div class="card hero">
@@ -961,8 +1026,9 @@ function daySess(day){var o=[];sessions.forEach(function(s,i){if(ymd(s.s)===day)
 function actual(id){var m=0,n=0;sessions.forEach(function(s){if(s.id===id){m+=(s.e-s.s)/60000;n++}});return{m:m,n:n}}
 function todayMs(){var t=ymd(Date.now()),ms=0;sessions.forEach(function(s){if(ymd(s.s)===t)ms+=s.e-s.s});if(run)ms+=Date.now()-run.s;return ms}
 
+function tmWorkDays(){var n=new Date(),y=n.getFullYear(),m=n.getMonth(),t=new Date(y,m+1,0).getDate(),su=0,i;for(i=1;i<=t;i++)if(new Date(y,m,i).getDay()===0)su++;return t-su}
 function calc(){
-  var days=Math.max(1,+$("days").value||1),st=+$("st").value||0,en=+$("en").value||0,lu=+$("lu").value||0;
+  var days=tmWorkDays(),st=+$("st").value||0,en=+$("en").value||0,lu=+$("lu").value||0;
   var span=Math.max(0.5,en-st),avail=Math.max(0.5,span-lu),total=0,dset={};
   sessions.forEach(function(s){dset[ymd(s.s)]=1;total+=(s.e-s.s)/3600000});
   var nDays=Object.keys(dset).length;
@@ -1051,7 +1117,7 @@ function renderHist(){
     var tk_=Object.keys(tmap).sort(function(a,b){return tmap[b]-tmap[a]}).slice(0,10),mx=tmap[tk_[0]];
     st='<div class="hst"><div class="kpi"><b>'+hmTxt(tot)+'</b><span>Jami davomiylik ('+days.length+' kun)</span></div>'
       +'<div class="kpi"><b>'+hmTxt(tot/days.length)+'</b><span>O‘rtacha / kun</span></div>'
-      +'<div class="kpi"><b>'+Math.round(tot/(days.length*availMin)*100)+'%</b><span>Ish vaqtining ulushi (kuniga '+hmTxt(availMin)+')</span></div></div>'
+      +'<div class="kpi"><b>'+Math.round(tot/(days.length*availMin)*100)+'%</b><span'+' title=\"Hisob: 13:30–14:30 tushlik chiqarilgan, 8 soatlik sof ish vaqti bo‘yicha\"'+'>Ish vaqtining ulushi (kuniga '+hmTxt(calc().span*60)+')</span></div></div>'
       +'<div class="pb"><i style="width:'+Math.min(100,tot/(days.length*availMin)*100)+'%"></i></div>'
       +'<h2 style="margin:14px 0 6px;font-size:14px">Vazifalar bo‘yicha jami vaqt</h2>'
       +tk_.map(function(n){return '<div class="bar"><span>'+esc(n)+'</span><div class="track"><i style="width:'+(tmap[n]/mx*100)+'%;background:var(--cool)"></i></div><b>'+hmTxt(tmap[n])+'</b></div>'}).join("");
@@ -1230,7 +1296,7 @@ function renderDayLoad(d){
   if(run){var rk=ymd(run.s);mins[rk]=(mins[rk]||0)+(Date.now()-run.s)/60000}
   for(i=N-1;i>=0;i--){var ts=Date.now()-i*864e5,k=ymd(ts),m=mins[k]||0;days.push({k:k,m:m,pct:m/avM*100,wd:WD[new Date(ts).getDay()],today:i===0})}
   var mx=Math.max(100,Math.max.apply(null,days.map(function(z){return z.pct}))),H=100;
-  var h='<h3>Har kunlik kuchlanish <span>— oxirgi '+N+' kun, kunlik sof ish vaqtiga ('+hm(d.avail)+') nisbatan. Katta diagrammada shu kunlarning o‘rtachasi.</span></h3><div class="cols">';
+  var h='<h3>Har kunlik kuchlanish <span'+' title=\"Hisob: 13:30–14:30 tushlik chiqarilgan, 8 soatlik sof ish vaqti bo‘yicha\"'+'>— oxirgi '+N+' kun, kunlik ish vaqtiga ('+hm(d.span)+') nisbatan. Katta diagrammada shu kunlarning o‘rtachasi.</span></h3><div class="cols">';
   h+='<div class="ln" style="bottom:'+(24+H*100/mx)+'px" title="100%"></div>';
   days.forEach(function(z){
     var lv=0;LV.forEach(function(l,j){if(z.pct>=l[2])lv=j});
@@ -1254,7 +1320,7 @@ function renderHero(d){
    [hms(todayMs()),"Vazifalar / kun (bugun, taymer)","kToday"],
    [d.nDays?hm(d.avgDay):D,"Real o‘rtacha / kun ("+d.nDays+" kun)"],
    [d.has?hm(d.fMonth):D,"Prognoz / oy"],
-   [d.has?hm(d.fMonth/(d.days/5)):D,"Prognoz / hafta"],
+   [d.has?hm(d.fMonth/(d.days/6)):D,"Prognoz / hafta"],
    [hm(d.monthAvail),"Sof ish vaqti / oy"],
    [d.has?hm(Math.max(0,d.monthAvail-d.fMonth)):D,"Hisobga olinmagan vaqt"],
    ];
@@ -1529,7 +1595,7 @@ function rpBlocks(D){
     K.push([esc(tp)+" · "+Math.round(D.proj[tp].m/D.total*100)+"%","Eng ko‘p vaqt ketgan loyiha"]);
     K.push([D.withNote+" / "+D.recs.length+" ("+Math.round(D.withNote/D.recs.length*100)+"%)","Natijasi yozilgan yozuvlar"]);
     blk(st("Umumiy ko‘rsatkichlar")+'<div class="kg">'+K.map(function(k){return'<div class="kc"><b>'+k[0]+'</b><span>'+k[1]+'</span></div>'}).join("")+'</div>'
-      +'<div class="lvn" style="border-color:'+LC[li]+'"><b style="color:'+LC[li]+'">'+LV[li][0]+'</b> — '+esc(LV[li][1])+' Kunlik sof ish vaqti: '+hmTxt(D.availMin)+'.</div>');
+      +'<div class="lvn" style="border-color:'+LC[li]+'"><b style="color:'+LC[li]+'">'+LV[li][0]+'</b> — '+esc(LV[li][1])+' Kunlik ish vaqti: '+hmTxt(calc().span*60)+'.</div>');
   }
   if(RP.sec.days&&!single){
     var rows=D.keys.filter(function(k){return D.keys.length<=31||D.days[k]}).map(function(k){var d=D.days[k],m=d?d.m:0,p=m/D.availMin*100,l=rpLvl(p);
@@ -2204,7 +2270,7 @@ function tmViewAs(){
 /* ---- Admin: jamoa jadvali ---- */
 function tmRange(){var now=new Date(),d=TM.days;if(d===0)d=now.getDate();return d}
 function tmStat(r,days){
-  var dm=(r.sum&&r.sum.dm)||{},av=(r.sum&&r.sum.av)||480,tot=0,act=0,i,now=new Date();
+  var dm=(r.sum&&r.sum.dm)||{},av=480,tot=0,act=0,i,now=new Date();
   for(i=0;i<days;i++){var k=ymd(new Date(now.getFullYear(),now.getMonth(),now.getDate()-i).getTime()),m=dm[k]||0;if(m>0){tot+=m;act++}}
   return{tot:tot,act:act,avg:act?tot/act:0,pct:act?tot/act/av*100:0,av:av,today:dm[ymd(Date.now())]||0};
 }
@@ -2234,28 +2300,99 @@ function tmFresh(){
     TM.fetching=false;if(rows&&rows[0]){TM.full[id]=rows[0].state||{};TM.seen[id]=rows[0].saved_at}if(TM.sel===id)tmDetail();
   },function(){TM.fetching=false});
 }
+function tmHue(t){var h=0,i;t=String(t||"");for(i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))%360;return h}
+function tmIni(n){var p=String(n||"?").trim().split(/\s+/);return((p[0]||"?").charAt(0)+(p.length>1?p[1].charAt(0):"")).toUpperCase()}
 function tmRender(){
   var box=$("tmBody");if(!box)return;
   var days=tmRange(),lbl=TM.days===1?"Bugun":TM.days===0?"Shu oy":"Oxirgi "+TM.days+" kun",h="",totAll=0,runN=0;
+  tmBand();tmHeroTick();
   if(!TM.rows.length){box.innerHTML='<p class="note">Hali xodim yo‘q. Supabase → Authentication → Users bo‘limida foydalanuvchi qo‘shing.</p>';return}
-  h='<div class="tw"><table class="tmt"><thead><tr><th>Xodim</th><th>Hozir ishlayapti</th><th>Bugun</th><th>'+esc(lbl)+' (o‘rtacha / faol kun)</th><th>Kuchlanish</th><th>Oxirgi saqlash</th><th></th></tr></thead><tbody>';
+  h='<div class="tw"><table class="tmt"><thead><tr><th>Xodim</th><th>Holat</th><th>Bugun</th><th>'+esc(lbl)+' (o‘rtacha / faol kun)</th><th>Yuklama</th><th></th></tr></thead><tbody>';
   TM.rows.forEach(function(r){
     var s=tmStat(r,days),lv=tmLevel(s.pct),run=r.sum&&r.sum.run;totAll+=s.tot;if(run)runN++;
-    h+='<tr data-tmr="'+esc(r.id)+'"'+(TM.sel===r.id?' class="sel"':'')+'><td><b>'+esc(r.name)+'</b><small>'+esc(r.login)+(r.role==="admin"?' · admin':'')+'</small></td>'
-     +'<td>'+(run?'<span class="tmrun">●</span> '+esc((run.p||"")+" — "+(run.t||""))+' <b class="tmel" data-s="'+(+run.s||0)+'"></b>':'<span class="tmoff">—</span>')+'</td>'
-     +'<td>'+(s.today?hmTxt(s.today):'<span class="tmoff">—</span>')+tmDone(r)+'</td>'
+    h+='<tr data-tmr="'+esc(r.id)+'"'+(TM.sel===r.id?' class="sel"':'')+'><td><div class="tmwho"><span class="tmav" style="--h:'+tmHue(r.login)+'" aria-hidden="true">'+esc(tmIni(r.name))+'</span><div><b>'+esc(r.name)+'</b><small>'+esc(r.login)+'</small></div></div></td>'
+     +'<td>'+(run?'<span class="tmpill on"><span class="tmrun">●</span> Ishlayapti</span><div class="tmtask">'+esc((run.p||"")+" — "+(run.t||""))+' <b class="tmel" data-s="'+(+run.s||0)+'"></b></div>'
+        :'<span class="tmpill">Oflayn</span><small class="tmago">'+(r.saved?'oxirgi saqlash: '+esc(tmAgo(r.saved)):'hali kirmagan')+'</small>')+'</td>'
+     +'<td>'+(s.today?'<b>'+hmTxt(s.today)+'</b>':'<span class="tmoff">—</span>')+tmDone(r)+'</td>'
      +'<td>'+(s.act?hmTxt(s.avg)+' <small>('+s.act+' faol kun, jami '+hmTxt(s.tot)+')</small>':'<span class="tmoff">ma’lumot yo‘q</span>')+'</td>'
-     +'<td>'+(s.act?'<div class="tmbar"><i style="width:'+Math.min(100,s.pct)+'%;background:'+LC[lv]+'"></i></div><b style="color:'+LC[lv]+'">'+Math.round(s.pct)+'%</b> <small>'+LV[lv][0]+'</small>':'<span class="tmoff">—</span>')+'</td>'
-     +'<td>'+(r.saved?'<small>'+esc(tmAgo(r.saved))+'</small>':'<span class="tmoff">hali kirmagan</span>')+'</td>'
+     +'<td>'+(s.act?'<div class="tmbar"><i style="width:'+Math.min(100,s.pct)+'%;background:'+LC[lv]+'"></i></div><b style="color:'+LC[lv]+'">'+Math.round(s.pct)+'%</b> <small class="tmlv">'+LV[lv][0]+'</small>':'<span class="tmoff">—</span>')+'</td>'
      +'<td class="tma"><button class="sm" type="button" data-tmact="open" data-id="'+esc(r.id)+'">Jurnal</button><button class="sm" type="button" data-tmact="panel" data-id="'+esc(r.id)+'" data-n="'+esc(r.name)+'">Panel</button></td></tr>';
   });
-  h+='</tbody></table></div><p class="note">Hozir ishlayotgan: <b>'+runN+'</b> · '+esc(lbl)+' bo‘yicha jamoa jami: <b>'+hmTxt(totAll)+'</b> · Kuchlanish: faol kunlardagi o‘rtacha vaqtning xodim ish kuni sig‘imiga nisbati.</p>';
+  h+='</tbody></table></div><p class="note">'+esc(lbl)+' bo‘yicha jamoa jami: <b>'+hmTxt(totAll)+'</b> Yuklama faol kunlardagi o‘rtacha vaqtning kunlik sof ish vaqtiga nisbati.</p>';
   box.innerHTML=h;tmLive();
+}
+/* ---- Xush kelibsiz bloki: sana, soat, ob-havo (Toshkent) ---- */
+function tmTz(){
+  try{var o={};new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Tashkent",hourCycle:"h23",year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"numeric",second:"numeric",weekday:"short"}).formatToParts(new Date()).forEach(function(p){o[p.type]=p.value});
+    return{y:+o.year,m:+o.month,d:+o.day,hh:(+o.hour)%24,mm:+o.minute,ss:+o.second,wd:{Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6}[o.weekday]}}
+  catch(e){var n=new Date();return{y:n.getFullYear(),m:n.getMonth()+1,d:n.getDate(),hh:n.getHours(),mm:n.getMinutes(),ss:n.getSeconds(),wd:n.getDay()}}
+}
+function tmAdminName(){var T=window.TEAM||{},n=String(T.name||"").trim();if(!n)return "";n=n.split(/\s+/)[0];return n.charAt(0).toUpperCase()+n.slice(1)}
+var TMW={d:null,at:0,err:false,busy:false};
+var WXC=function(c,day){
+  if(c===0)return day?["☀️","Musaffo"]:["🌙","Musaffo tun"];
+  if(c===1)return day?["🌤️","Asosan ochiq"]:["🌙","Asosan ochiq"];
+  if(c===2)return["⛅","Qisman bulutli"];if(c===3)return["☁️","Bulutli"];
+  if(c===45||c===48)return["🌫️","Tuman"];
+  if(c>=51&&c<=57)return["🌦️","Mayda yomg‘ir"];
+  if(c>=61&&c<=67)return["🌧️","Yomg‘ir"];
+  if(c>=71&&c<=77)return["❄️","Qor"];
+  if(c>=80&&c<=82)return["🌧️","Jala"];
+  if(c===85||c===86)return["🌨️","Qor shitirlashi"];
+  if(c===95)return["⛈️","Momaqaldiroq"];
+  if(c===96||c===99)return["⛈️","Do‘l bilan momaqaldiroq"];
+  return["🌡️","Ob-havo"]};
+function tmWxPaint(){
+  var el=$("tmWx");if(!el)return;var w=TMW.d;
+  if(!w){el.innerHTML=TMW.err?'<span class="i">🌡️</span><div class="d"><em>Ob-havo yuklanmadi</em><button type="button" class="tmwr" data-tmact="wx">Qayta urinish</button></div>':'<span class="i">🌡️</span><div class="d"><em>Ob-havo yuklanmoqda…</em></div>';return}
+  var c=WXC(w.c,w.day===1),R=function(x){return Math.round(x)};
+  el.innerHTML='<span class="i" aria-hidden="true">'+c[0]+'</span><b>'+R(w.t)+'°</b><div class="d"><em>'+c[1]+'</em><span>Bugun '+R(w.min)+'° … '+R(w.max)+'°, his qilinishi '+R(w.f)+'°</span><span>Namlik '+R(w.h)+'%, shamol '+(Math.round(w.w*10)/10).toString().replace(".",",")+' m/s</span></div>';
+}
+function tmWxLoad(force){
+  if(TMW.busy)return;if(!force&&TMW.d&&Date.now()-TMW.at<10*60000)return;
+  TMW.busy=true;
+  fetch("https://api.open-meteo.com/v1/forecast?latitude=41.31&longitude=69.28&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code,wind_speed_10m,is_day&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FTashkent&forecast_days=1&wind_speed_unit=ms")
+    .then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+      var c=j&&j.current,d=j&&j.daily;if(!c||typeof c.temperature_2m!=="number"||!d)throw 0;
+      TMW.d={t:c.temperature_2m,f:c.apparent_temperature,h:c.relative_humidity_2m,c:c.weather_code,w:c.wind_speed_10m,day:c.is_day,min:d.temperature_2m_min[0],max:d.temperature_2m_max[0]};
+      TMW.at=Date.now();TMW.err=false;TMW.busy=false;try{localStorage.setItem("kdt_wx",JSON.stringify({d:TMW.d,at:TMW.at}))}catch(e){}tmWxPaint();
+    }).catch(function(){TMW.busy=false;TMW.err=true;tmWxPaint()});
+}
+function tmHeroTick(){
+  var ck=$("tmClock");if(!ck)return;var t=tmTz();
+  ck.innerHTML=pad(t.hh)+":"+pad(t.mm)+"<small>"+pad(t.ss)+"</small>";
+  $("tmDate").textContent=WDN[t.wd]+", "+t.d+" "+MONTHS[t.m-1].toLowerCase()+" "+t.y;
+  var g=t.hh<12?"Xayrli tong":t.hh<18?"Xayrli kun":"Xayrli kech",run=0;TM.rows.forEach(function(r){if(r.sum&&r.sum.run)run++});
+  $("tmSub").textContent=g+". "+(TM.at?(!TM.rows.length?"Hali xodim qo‘shilmagan.":run?"Hozir "+run+" xodim ishlayapti.":"Hozir hech kim ishlamayapti."):"Jamoa ma’lumoti yuklanmoqda…");
+  var mins=t.hh*60+t.mm+t.ss/60,S=540,L1=810,L2=870,E=1080,now=$("tmNow"),tx;
+  if(t.wd===0){tx="Bugun dam olish kuni (yakshanba).";now.hidden=true}
+  else if(mins<S){tx="Ish kuni 09:00 da boshlanadi.";now.hidden=true}
+  else if(mins>=E){tx="Ish kuni tugadi.";now.hidden=true}
+  else{now.hidden=false;now.style.left=((mins-S)/(E-S)*100)+"%";
+    tx=(mins>=L1&&mins<L2)?"Tushlik vaqti, 14:30 gacha.":"Ish kunining "+Math.round((mins-S)/(E-S)*100)+"% o‘tdi, 18:00 gacha "+hmTxt(E-mins).replace(/\.$/,"")+" qoldi."}
+  $("tmDayTxt").textContent=tx;
+}
+function tmBand(){
+  var el=$("tmBand");if(!el)return;var T=ymd(Date.now()),n=TM.rows.length,run=0,act=0,min=0,done=0,pc=[];
+  TM.rows.forEach(function(r){var u=r.sum||{},m=(u.dm&&u.dm[T])||0;if(u.run)run++;if(m>0||u.run)act++;min+=m;if(u.td===T)done+=u.tn||0;if(m>0)pc.push(m/480*100)});
+  var avg=pc.length?pc.reduce(function(a,b){return a+b},0)/pc.length:0,lv=tmLevel(avg);
+  el.innerHTML='<div class="tmbi"><b>'+(run?'<span class="tmrun">●</span> ':'')+run+'<small> / '+n+'</small></b><span>Hozir ishlayapti</span></div>'
+   +'<div class="tmbi"><b>'+act+'<small> / '+n+'</small></b><span>Bugun ish boshlagan</span></div>'
+   +'<div class="tmbi"><b>'+(min?hmTxt(min):'—')+'</b><span>Bugungi jami vaqt</span></div>'
+   +'<div class="tmbi"><b>'+done+'</b><span>Bugun tugatilgan vazifa</span></div>'
+   +'<div class="tmbi"><b'+(pc.length?' style="color:'+LC[lv]+'"':'')+'>'+(pc.length?Math.round(avg)+'%':'—')+'</b><span>O‘rtacha yuklama (bugun)</span></div>';
+}
+function tmHeroInit(){
+  var nm=tmAdminName();$("tmHi").textContent=nm?"Xush kelibsiz, "+nm+"!":"Xush kelibsiz!";
+  try{var c=JSON.parse(localStorage.getItem("kdt_wx")||"null");if(c&&c.d&&Date.now()-c.at<30*60000){TMW.d=c.d;TMW.at=c.at}}catch(e){}
+  tmWxPaint();tmWxLoad(false);tmHeroTick();
+  setInterval(function(){if(!document.hidden)tmWxLoad(false)},60000);
+  document.addEventListener("visibilitychange",function(){if(!document.hidden)tmWxLoad(false)});
 }
 function tmDone(r){var u=r.sum||{};if(u.td!==ymd(Date.now())||!u.tn)return "";
   return '<small><b>'+u.tn+'</b> ta vazifa tugatildi'+(u.lt&&ymd(u.lt.e)===u.td?' · oxirgisi '+clock(u.lt.e)+': '+esc((u.lt.p?u.lt.p+" — ":"")+u.lt.t):'')+'</small>'}
 function tmAgo(ts){var d=Date.now()-ts,m=Math.round(d/60000);if(m<1)return "hozirgina";if(m<60)return m+" daq. oldin";var k=ymd(ts);return k===ymd(Date.now())?"bugun "+clock(ts):dayLabel(k)+" "+clock(ts)}
-function tmLive(){Array.prototype.forEach.call(document.querySelectorAll("#tmBody .tmel"),function(el){var s=+el.dataset.s;el.textContent=s?hms(Date.now()-s):""})}
+function tmLive(){tmHeroTick();Array.prototype.forEach.call(document.querySelectorAll("#tmBody .tmel"),function(el){var s=+el.dataset.s;el.textContent=s?hms(Date.now()-s):""})}
 
 /* ---- Xodim jurnali (tafsilot) ---- */
 function tmSess(st,from,to){
@@ -2267,7 +2404,7 @@ function tmSess(st,from,to){
   });
   out.sort(function(a,b){return a.s-b.s});return out;
 }
-function tmAvail(st){var se=st&&st.settings||{},sp=Math.max(.5,(+se.en||0)-(+se.st||0));return Math.max(.5,sp-(+se.lu||0))*60}
+function tmAvail(){return 480}
 function tmOpen(id){
   TM.sel=id;tmRender();var d=$("tmDet");d.hidden=false;d.innerHTML='<p class="note">Yuklanmoqda…</p>';
   if(TM.full[id]){tmDetail();return}
@@ -2358,7 +2495,7 @@ function tmClick(e){
     else if(ac==="close"){TM.sel=null;$("tmDet").hidden=true;tmRender()}
     else if(ac==="xone")tmXlsxOne(b.dataset.id);
     else if(ac==="xall")tmXlsxAll();
-    else if(ac==="refresh")tmLoad();
+    else if(ac==="refresh")tmLoad();else if(ac==="wx")tmWxLoad(true);
     else if(ac==="panel")window.open(location.pathname+"?as="+encodeURIComponent(b.dataset.id)+"&n="+encodeURIComponent(b.dataset.n||""),"_blank");
   }
 }
@@ -2375,6 +2512,7 @@ function tmInit(){
   TM.live=setInterval(tmLive,1000);
   var tick=function(){var s=$("s-team");if(document.hidden||!s||s.classList.contains("sec-off"))return;tmLoad(true)};
   TM.poll=setInterval(tick,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)tick()});
+  tmHeroInit();
   tmLoad();
 }
 /* --- mavzu va shrift --- */
@@ -2477,7 +2615,7 @@ async function initRuntime(){
           if(v&&Array.isArray(v.tasks)&&(v.savedAt||0)>=mod){
             tasks=v.tasks.map(function(x){return{id:x.id||uid(),p:x.p,t:x.t,c:x.c||"",d:x.d||""}});
             sessions=Array.isArray(v.sessions)?JSON.parse(JSON.stringify(v.sessions)):[];run=v.run&&v.run.id?JSON.parse(JSON.stringify(v.run)):null;
-            var se=v.settings||{};SET.forEach(function(k){if(se[k]!==undefined)$(k).value=se[k]});
+            
             if(Array.isArray(v.plans))plans=JSON.parse(JSON.stringify(v.plans));
             if(Array.isArray(v.media)){media=JSON.parse(JSON.stringify(v.media)).filter(function(e){return e&&e.d});media.forEach(function(e){if(!e.k)e.k=uid();if(!Array.isArray(e.c))e.c=[];e.p=e.p||"";e.t=e.t||""});if(Array.isArray(v.mediaProjects))mdExtra=v.mediaProjects.filter(function(x){return typeof x==="string"});mdNorm();mdLocal();mSel=null;safe(renderMedia,"media-reja")}
             if(Array.isArray(v.hidden)){hiddenSecs=v.hidden.filter(function(i){return secById(i)});try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}safe(applyHidden,"yashirish")}
