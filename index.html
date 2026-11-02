@@ -725,18 +725,7 @@ body.viewas #s-media .me input,body.viewas #s-media .me textarea,body.viewas #s-
   </section>
   <script>if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)){var __t=document.getElementById("s-team");if(__t)__t.remove()}</script>
 
-  <section class="sec" id="s-settings" data-sec="settings">
-  <div class="card">
-    <h2>Ish jadvali va oylik</h2>
-    <div class="settings">
-      <div><label for="sal">Oylik (so‘m)</label><input id="sal" type="number" value="18000000" min="0"></div>
-      <div><label for="days">Ish kunlari / oy</label><input id="days" type="number" value="22" min="1" max="31"></div>
-      <div><label for="st">Boshlanish (soat)</label><input id="st" type="number" value="9" min="0" max="23"></div>
-      <div><label for="en">Tugash (soat)</label><input id="en" type="number" value="18" min="1" max="24"></div>
-      <div><label for="lu">Tushlik (soat)</label><input id="lu" type="number" value="0" min="0" step="0.5"></div>
-    </div>
-  </div>
-  </section>
+  <div id="cfgHidden" hidden aria-hidden="true"><input id="days" type="number" value="22"><input id="st" type="number" value="9"><input id="en" type="number" value="18"><input id="lu" type="number" value="0"></div>
 
   <section class="sec" id="s-hero" data-sec="hero">
   <div class="card hero">
@@ -964,13 +953,13 @@ function actual(id){var m=0,n=0;sessions.forEach(function(s){if(s.id===id){m+=(s
 function todayMs(){var t=ymd(Date.now()),ms=0;sessions.forEach(function(s){if(ymd(s.s)===t)ms+=s.e-s.s});if(run)ms+=Date.now()-run.s;return ms}
 
 function calc(){
-  var sal=+$("sal").value||0,days=Math.max(1,+$("days").value||1),st=+$("st").value||0,en=+$("en").value||0,lu=+$("lu").value||0;
+  var days=Math.max(1,+$("days").value||1),st=+$("st").value||0,en=+$("en").value||0,lu=+$("lu").value||0;
   var span=Math.max(0.5,en-st),avail=Math.max(0.5,span-lu),total=0,dset={};
   sessions.forEach(function(s){dset[ymd(s.s)]=1;total+=(s.e-s.s)/3600000});
   var nDays=Object.keys(dset).length;
   tasks.forEach(function(x){var a=actual(x.id);x.a=a;x.avg=a.n?a.m/a.n:0});
   var avgDay=nDays?total/nDays:0,fMonth=avgDay*days;
-  return{sal:sal,days:days,st:st,en:en,lu:lu,span:span,avail:avail,total:total,nDays:nDays,avgDay:avgDay,fMonth:fMonth,
+  return{days:days,st:st,en:en,lu:lu,span:span,avail:avail,total:total,nDays:nDays,avgDay:avgDay,fMonth:fMonth,
     pct:fMonth/(days*avail)*100,has:total>0,monthAvail:days*avail,monthPresence:days*span};
 }
 var LV=[["Past","Vazifalar ish vaqtingizning kichik qismini egallaydi. Sig‘im katta.",0],
@@ -1079,7 +1068,7 @@ function renderKeepFocus(){
   if(sel){var el=document.querySelector(scope+sel);if(el){try{el.focus();el.select()}catch(x){}}}
 }
 /* --- bo'limlar tartibi, header menyusi --- */
-var SECS=[{id:"settings",ico:"⚙",t:"Ish jadvali va oylik"},{id:"hero",ico:"🔥",t:"Kuchlanish darajasi"},{id:"kpis",ico:"📊",t:"Ko‘rsatkichlar"},{id:"timeline",ico:"🕒",t:"Bugun: soat nechida nima qilindi"},{id:"charts",ico:"🥧",t:"Diagrammalar"},{id:"tasks",ico:"✅",t:"Loyihalar va vazifalar"},{id:"plan",ico:"🎯",t:"Kontent reja"},{id:"media",ico:"🗓",t:"Media-reja"},{id:"mediaxl",ico:"📥",t:"Media-reja → Excel"},{id:"journal",ico:"📝",t:"Vaqt jurnali"},{id:"history",ico:"📚",t:"Tarix"},{id:"report",ico:"📄",t:"PDF hisobot"}];
+var SECS=[{id:"hero",ico:"🔥",t:"Kuchlanish darajasi"},{id:"kpis",ico:"📊",t:"Ko‘rsatkichlar"},{id:"timeline",ico:"🕒",t:"Bugun: soat nechida nima qilindi"},{id:"charts",ico:"🥧",t:"Diagrammalar"},{id:"tasks",ico:"✅",t:"Loyihalar va vazifalar"},{id:"plan",ico:"🎯",t:"Kontent reja"},{id:"media",ico:"🗓",t:"Media-reja"},{id:"mediaxl",ico:"📥",t:"Media-reja → Excel"},{id:"journal",ico:"📝",t:"Vaqt jurnali"},{id:"history",ico:"📚",t:"Tarix"},{id:"report",ico:"📄",t:"PDF hisobot"}];
 if(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)SECS.unshift({id:"team",ico:"👥",t:"Jamoa (admin)"});
 function secById(id){for(var i=0;i<SECS.length;i++)if(SECS[i].id===id)return SECS[i];return null}
 function normOrder(arr){var seen={},out=[];(Array.isArray(arr)?arr:[]).forEach(function(id){if(secById(id)&&!seen[id]){seen[id]=1;out.push(id)}});SECS.forEach(function(x){if(!seen[x.id])out.push(x.id)});return out}
@@ -1259,9 +1248,7 @@ function renderHero(d){
    [d.has?hm(d.fMonth/(d.days/5)):D,"Prognoz / hafta"],
    [hm(d.monthAvail),"Sof ish vaqti / oy"],
    [d.has?hm(Math.max(0,d.monthAvail-d.fMonth)):D,"Hisobga olinmagan vaqt"],
-   [fmt(d.sal/d.monthPresence)+" so‘m","Soatlik (ish joyida)"],
-   [fmt(d.sal/d.monthAvail)+" so‘m","Soatlik (tushliksiz)"],
-   [d.has?fmt(d.sal/d.fMonth)+" so‘m":D,"Soatlik (faqat vazifalar)"]];
+   ];
   $("kpis").innerHTML=kp.map(function(k){return '<div class="kpi"><b'+(k[2]?' id="'+k[2]+'"':'')+'>'+k[0]+'</b><span>'+k[1]+'</span></div>'}).join("");
 }
 function dayMaps(ds){
@@ -1388,10 +1375,9 @@ function buildXlsx(){
   ws=XLSX.utils.aoa_to_sheet(vz);ws["!cols"]=[{wch:22},{wch:30},{wch:16},{wch:14},{wch:22}];XLSX.utils.book_append_sheet(wb,ws,"Vazifalar");
   ws=XLSX.utils.aoa_to_sheet(planRows());ws["!cols"]=[{wch:16},{wch:22},{wch:14},{wch:8},{wch:12},{wch:10}];XLSX.utils.book_append_sheet(wb,ws,"Reja");
   ws=XLSX.utils.aoa_to_sheet(mediaRows());ws["!cols"]=[{wch:10},{wch:12},{wch:14},{wch:20},{wch:24},{wch:50},{wch:10}];XLSX.utils.book_append_sheet(wb,ws,"Media-reja");
-  var sum=[["Ko‘rsatkich","Qiymat"],["Oylik (so‘m)",d.sal],["Ish kunlari / oy",d.days],["Ish vaqti",pad(d.st)+":00–"+pad(d.en)+":00"],["Tushlik (soat)",d.lu],
+  var sum=[["Ko‘rsatkich","Qiymat"],["Ish kunlari / oy",d.days],["Ish vaqti",pad(d.st)+":00–"+pad(d.en)+":00"],["Tushlik (soat)",d.lu],
    ["Taymer yozilgan kunlar",d.nDays],["Real jami",hm(d.total)],["Real o‘rtacha / kun",hm(d.avgDay)],["Prognoz / oy",hm(d.fMonth)],["Prognoz kuchlanish (%)",r2(d.has?d.pct:0)],["Daraja",level(d)],
-   ["Soatlik (ish joyida, so‘m)",Math.round(d.sal/d.monthPresence)],["Soatlik (tushliksiz, so‘m)",Math.round(d.sal/d.monthAvail)],["Soatlik (faqat vazifalar, so‘m)",d.has?Math.round(d.sal/d.fMonth):"—"],
-   ["Saqlangan vaqt",new Date().toLocaleString("ru-RU")]];
+      ["Saqlangan vaqt",new Date().toLocaleString("ru-RU")]];
   ws=XLSX.utils.aoa_to_sheet(sum);ws["!cols"]=[{wch:32},{wch:22}];XLSX.utils.book_append_sheet(wb,ws,"Xulosa");
   return XLSX.write(wb,{type:"array",bookType:"xlsx"});
 }
@@ -1428,7 +1414,7 @@ async function saveDb(){
   if(!dbRef)return "data baza ulanmagan (ma’lumot shu brauzerda saqlanadi)";
   try{var at=Date.now(),snapMod=localMod;
     await withTimeout(dbRef.set({tasks:tasks.map(function(x){return{id:x.id,p:x.p,t:x.t,c:x.c||"",d:x.d||""}}),sessions:sessions,plans:plans,media:media,mediaProjects:mdExtra,hidden:hiddenSecs,layout:order,run:run||null,
-      settings:{sal:$("sal").value,days:$("days").value,st:$("st").value,en:$("en").value,lu:$("lu").value},savedAt:at}),20000,"Data baza");
+      settings:{days:$("days").value,st:$("st").value,en:$("en").value,lu:$("lu").value},savedAt:at}),20000,"Data baza");
     if(localMod===snapMod){try{localStorage.setItem("kd_mod",at)}catch(e){}}
     return "data bazaga yozildi"}catch(e){return "data bazaga yozib bo‘lmadi"}
 }
@@ -2379,7 +2365,7 @@ function applyPrefs(){
 try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){applyPrefs();render()})}catch(e){}
 
 /* --- hodisalar --- */
-var SET=["sal","days","st","en","lu"];
+var SET=["days","st","en","lu"];
 document.addEventListener("change",function(e){var t=e.target;
   if(t.id==="mS"||t.id==="mE"){var pt0=parseTime(t.value);if(pt0)t.value=pt0}
   if(t.dataset&&t.dataset.dses!==undefined){var q2=sessions[+t.dataset.dses],v2=parseFloat(String(t.value).replace(",","."));
