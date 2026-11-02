@@ -503,6 +503,14 @@ label.rpc .rd{width:10px;height:10px;border-radius:50%;display:inline-block}
 .hidebtn{float:right;margin-left:6px}
 .menu nav .mi{display:flex;align-items:center;gap:4px}.menu nav .mi a{flex:1}
 .menu nav .mi.off a{opacity:.45;text-decoration:line-through}
+.menu nav .mi{border-radius:8px;position:relative}
+.menu nav .grip2{flex:none;width:26px;height:32px;display:flex;align-items:center;justify-content:center;padding:0;border:0;background:transparent;color:var(--mute);cursor:grab;touch-action:none;border-radius:6px;opacity:.55}
+.menu nav .mi:hover .grip2,.menu nav .grip2:focus-visible{opacity:1;background:var(--bg)}
+.menu nav .mi.dragging{background:var(--card);box-shadow:0 10px 26px rgba(20,33,61,.28);outline:2px solid var(--cool,#1f8a8a);z-index:5;opacity:.97}
+.menu nav .mi.dragging .grip2{cursor:grabbing}
+.menu nav .mi.dragging a{pointer-events:none}
+.menu nav.dnd{user-select:none;-webkit-user-select:none}
+.menu .lyhint{margin:2px 2px 6px;font-size:12.5px;color:var(--mute);line-height:1.4}
 .menu nav .mi .eye{padding:4px 8px;font-size:14px;background:transparent;border:0;color:var(--ink)}
 @media(max-width:760px){.md{grid-template-columns:1fr}.mdl{display:flex;align-items:center;gap:8px}.mdl b{grid-column:auto}.mdl button{margin:0 0 0 auto}.me,.me.all{grid-template-columns:1fr 1fr}.me .mt{grid-column:1/-1}.ma{grid-column:1/-1}.mdnav label{margin-left:0}}
 
@@ -672,7 +680,7 @@ body.secmaxed{overflow:hidden}
 /* faqat ko'rish rejimi */
 #tvBar{order:-1;flex:0 0 100%;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff4d6;color:#5b4300;border:1px solid #f2c94c;border-radius:10px;padding:6px 12px;font-size:13px;margin-bottom:2px}
 #tvBar span{flex:1 1 220px}
-body.viewas .top{flex-wrap:wrap}
+body.viewas .top{flex-wrap:wrap}body.viewas .menu .grip2{display:none}
 body.viewas .add,body.viewas [data-start],body.viewas [data-stop],body.viewas [data-del],body.viewas [data-delses],body.viewas [data-save],body.viewas [data-madd],body.viewas [data-mdel],
 body.viewas [data-mdnew],body.viewas [data-mdclr],body.viewas [data-mddist],body.viewas [data-tday],body.viewas .savebar.bottom,body.viewas #s-settings input,body.viewas #undoBar{display:none!important}
 body.viewas #s-media .me input,body.viewas #s-media .me textarea,body.viewas #s-media .me select,body.viewas #s-tasks input,body.viewas #s-tasks select{pointer-events:none}
@@ -680,8 +688,8 @@ body.viewas #s-media .me input,body.viewas #s-media .me textarea,body.viewas #s-
 .mh[hidden],.mrow[hidden]{display:none}
 /* admin: faqat "Jamoa" bo'limi. Qolgan bo'limlar xodimlar uchun ("Panel" ko'rish rejimida to'liq ko'rinadi) */
 html.adminonly #sections>.sec:not(#s-team),html.adminonly #rec,html.adminonly #gs,html.adminonly #topSt,html.adminonly #tmBtn,
-html.adminonly .wrap>*:not(#sections),html.adminonly #lyH,html.adminonly #lyR,html.adminonly .menu .mi .eye,html.adminonly #s-team .hidebtn,
-html.adminonly #s-team .mvbar,html.adminonly #undoBar{display:none!important}
+html.adminonly .wrap>*:not(#sections),html.adminonly #lyH,html.adminonly #lyHint,html.adminonly #lyR,html.adminonly .menu .mi .eye,html.adminonly #s-team .hidebtn,
+html.adminonly #s-team .mvbar,html.adminonly .menu .grip2,html.adminonly #undoBar{display:none!important}
 html.adminonly .top{justify-content:flex-start}
 /* === Admin: xush kelibsiz bloki va yangilangan jadval === */
 #s-team .tmhero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 32px;align-items:start;padding:28px 30px 22px;margin:0 0 14px;border-radius:20px;background:#0f3a3c;color:#f2fbfa}
@@ -759,8 +767,8 @@ html.adminonly .top{justify-content:flex-start}
     <div class="mrow"><div class="seg" role="group" aria-label="Mavzu"><button data-theme-set="light">☀ Kunduzgi</button><button data-theme-set="cream">🥛 Qaymoq</button><button data-theme-set="dark">🌙 Kechki</button><button data-theme-set="auto">Avto</button></div></div>
     <div class="mh">Shrift</div>
     <div class="mrow"><select id="fontSel" aria-label="Shrift"></select></div>
-    <div class="mh" id="lyH">Joylashuv</div>
-    <div class="mrow" id="lyR"><button class="sm" data-layout="toggle" id="arrBtn">⇅ Bo‘limlar joyini o‘zgartirish</button><button class="sm" data-layout="reset">Tartibni tiklash</button></div>
+    <div class="mh" id="lyH">Joylashuv</div><p class="lyhint" id="lyHint">Bo‘limlarni yuqoridagi ro‘yxatda chap tarafdagi ⠿ belgisidan ushlab sudrang.</p>
+    <div class="mrow" id="lyR"><button class="sm" data-layout="reset">Tartibni tiklash</button></div>
   </div>
 </header>
 <div class="recbar" id="rec" role="status"><span class="rdot" id="recDot"></span><b>REC</b><span id="recName"></span><textarea id="recNote" class="nt" rows="1" placeholder="Natija / izoh (ixtiyoriy)" aria-label="Natija"></textarea><span class="rtime" id="recTime">00:00</span><span class="since" id="recSince"></span><button class="stop" data-stop="1"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>Finish</button><button class="save" data-save="1"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Saqlash</button></div>
@@ -1150,10 +1158,13 @@ function normOrder(arr){var seen={},out=[];(Array.isArray(arr)?arr:[]).forEach(f
 var order=SECS.map(function(x){return x.id});
 try{order=normOrder(JSON.parse(localStorage.getItem("kd_order")||"null"))}catch(e){}
 function saveOrder(){try{localStorage.setItem("kd_order",JSON.stringify(order))}catch(e){}touch()}
+var HDEF=["plan","media","mediaxl","report"]; /* standart: shu 4 bo'lim yashirin (menyudan qaytarish mumkin) */
 var hiddenSecs=[];try{var hs0=JSON.parse(localStorage.getItem("kd_hidden")||"[]");if(Array.isArray(hs0))hiddenSecs=hs0.filter(function(i){return secById(i)})}catch(e){}
+function hdefApply(){HDEF.forEach(function(i){if(hiddenSecs.indexOf(i)<0)hiddenSecs.push(i)})}
+try{if(localStorage.getItem("kd_hdef")!=="1"){hdefApply();localStorage.setItem("kd_hdef","1");localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}}catch(e){hdefApply()}
 function applyHidden(){SECS.forEach(function(x){var el=$("s-"+x.id);if(el)el.classList.toggle("sec-off",hiddenSecs.indexOf(x.id)>-1)});buildMenu()}
 function toggleSec(id,show){var i=hiddenSecs.indexOf(id);if(show===undefined)show=i>-1;if(show&&i>-1)hiddenSecs.splice(i,1);if(!show&&i<0)hiddenSecs.push(id);try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}touch();applyHidden();queueDb()}
-function buildMenu(){$("menuNav").innerHTML=order.filter(function(id){return !(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)||id==="team"}).map(function(id){var x=secById(id);var off=hiddenSecs.indexOf(id)>-1;return '<div class="mi'+(off?' off':'')+'"><a href="#s-'+id+'" data-go="'+id+'"><span>'+x.ico+'</span>'+esc(x.t)+'</a><button type="button" class="eye" data-hide="'+id+'" title="'+(off?'Ko‘rsatish':'Yashirish')+'" aria-label="'+(off?'Bo‘limni ko‘rsatish':'Bo‘limni yashirish')+'">'+(off?'🚫':'👁')+'</button></div>'}).join("")}
+function buildMenu(){$("menuNav").innerHTML=order.filter(function(id){return !(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)||id==="team"}).map(function(id){var x=secById(id);var off=hiddenSecs.indexOf(id)>-1;return '<div class="mi'+(off?' off':'')+'" data-mid="'+id+'"><button type="button" class="grip2" data-grip="'+id+'" title="Sudrab joyini o‘zgartiring (yoki ↑ ↓ tugmalari)" aria-label="'+esc(x.t)+': joyini o‘zgartirish, ↑ ↓ tugmalari"><svg width="12" height="16" viewBox="0 0 12 16" aria-hidden="true"><g fill="currentColor"><circle cx="3" cy="3" r="1.4"/><circle cx="9" cy="3" r="1.4"/><circle cx="3" cy="8" r="1.4"/><circle cx="9" cy="8" r="1.4"/><circle cx="3" cy="13" r="1.4"/><circle cx="9" cy="13" r="1.4"/></g></svg></button><a href="#s-'+id+'" data-go="'+id+'"><span>'+x.ico+'</span>'+esc(x.t)+'</a><button type="button" class="eye" data-hide="'+id+'" title="'+(off?'Ko‘rsatish':'Yashirish')+'" aria-label="'+(off?'Bo‘limni ko‘rsatish':'Bo‘limni yashirish')+'">'+(off?'🚫':'👁')+'</button></div>'}).join("")}
 function applyOrder(){var c=$("sections");order.forEach(function(id){var el=$("s-"+id);if(el)c.appendChild(el)});buildMenu()}
 function moveSec(id,dir){var i=order.indexOf(id),j=i+dir;if(i<0||j<0||j>=order.length)return;order.splice(i,1);order.splice(j,0,id);saveOrder();applyOrder();queueDb();
   var el=$("s-"+id);if(el){el.classList.remove("flash-sec");void el.offsetWidth;el.classList.add("flash-sec");try{el.scrollIntoView({block:"center",behavior:"smooth"})}catch(x){}}}
@@ -1174,6 +1185,53 @@ function initLayout(){
   });
   applyOrder();
 }
+
+/* --- menyuda sudrab tartiblash (sichqoncha va sensorli ekran) --- */
+(function(){
+  var nav=null,drag=null;
+  function items(){return Array.prototype.slice.call(nav.querySelectorAll(".mi"))}
+  function finish(commit){
+    if(!drag)return;var d=drag;drag=null;
+    document.removeEventListener("pointermove",onMove);document.removeEventListener("pointerup",onUp);document.removeEventListener("pointercancel",onCancel);
+    cancelAnimationFrame(d.raf);
+    d.el.classList.remove("dragging");d.el.style.transform="";d.el.style.transition="";nav.classList.remove("dnd");
+    if(commit){var ids=items().map(function(x){return x.dataset.mid}),ok=ids.length===order.length&&ids.every(function(i){return order.indexOf(i)>-1});
+      if(ok&&ids.join()!==order.join()){order=ids;saveOrder();applyOrder();queueDb();var st=$("saveSt");if(st)st.textContent="Bo‘limlar tartibi saqlandi."}else buildMenu()}
+    else buildMenu();
+  }
+  function onUp(){finish(true)}function onCancel(){finish(false)}
+  function place(){
+    if(!drag)return;var d=drag,el=d.el;el.style.transform="none";
+    var list=items().filter(function(x){return x!==el}),y=d.y,before=null,i;
+    for(i=0;i<list.length;i++){var r=list[i].getBoundingClientRect();if(y-d.oy+el.offsetHeight/2<r.top+r.height/2){before=list[i];break}}
+    if(before!==el.nextElementSibling){
+      var first=list.map(function(x){return x.getBoundingClientRect().top});
+      nav.insertBefore(el,before);
+      list.forEach(function(x,k){var dy=first[k]-x.getBoundingClientRect().top;if(dy){x.style.transition="none";x.style.transform="translateY("+dy+"px)";x.getBoundingClientRect();x.style.transition="transform .14s ease";x.style.transform=""}});
+    }
+    var m=$("menuPanel"),mr=m.getBoundingClientRect();
+    if(y<mr.top+36)m.scrollTop-=10;else if(y>mr.bottom-36)m.scrollTop+=10;
+    el.style.transform="translateY("+(y-d.oy-el.getBoundingClientRect().top)+"px)";
+    d.raf=requestAnimationFrame(place);
+  }
+  function onMove(e){if(!drag)return;e.preventDefault();drag.y=e.clientY}
+  document.addEventListener("pointerdown",function(e){
+    var g=e.target.closest&&e.target.closest(".grip2");if(!g||(e.button!==undefined&&e.button>0))return;
+    nav=$("menuNav");var el=g.closest(".mi");if(!el)return;e.preventDefault();
+    var r=el.getBoundingClientRect();
+    drag={el:el,y:e.clientY,oy:e.clientY-r.top,raf:0};
+    el.classList.add("dragging");nav.classList.add("dnd");
+    try{g.setPointerCapture(e.pointerId)}catch(x){}
+    document.addEventListener("pointermove",onMove,{passive:false});document.addEventListener("pointerup",onUp);document.addEventListener("pointercancel",onCancel);
+    drag.raf=requestAnimationFrame(place);
+  });
+  document.addEventListener("keydown",function(e){
+    var g=e.target.closest&&e.target.closest(".grip2");if(!g||(e.key!=="ArrowUp"&&e.key!=="ArrowDown"))return;
+    e.preventDefault();var id=g.dataset.grip,i=order.indexOf(id),dir=e.key==="ArrowUp"?-1:1,j=i+dir;
+    if(i<0||j<0||j>=order.length)return;order.splice(i,1);order.splice(j,0,id);saveOrder();applyOrder();queueDb();
+    var ng=document.querySelector('.grip2[data-grip="'+id+'"]');if(ng)ng.focus();
+  });
+})();
 var dragId=null;
 function clearDrop(){document.querySelectorAll(".sec.dropbefore,.sec.dropafter,.sec.dragging").forEach(function(e){e.classList.remove("dropbefore","dropafter","dragging")})}
 document.addEventListener("dragstart",function(e){var g=e.target.closest&&e.target.closest(".grip");if(!g)return;var sec=g.closest(".sec");if(!sec)return;dragId=sec.dataset.sec;sec.classList.add("dragging");
@@ -1488,7 +1546,7 @@ function queueSync(){queueDb()}
 async function saveDb(){
   if(!dbRef)return "data baza ulanmagan (ma’lumot shu brauzerda saqlanadi)";
   try{var at=Date.now(),snapMod=localMod;
-    await withTimeout(dbRef.set({tasks:tasks.map(function(x){return{id:x.id,p:x.p,t:x.t,c:x.c||"",d:x.d||""}}),sessions:sessions,plans:plans,media:media,mediaProjects:mdExtra,hidden:hiddenSecs,layout:order,run:run||null,
+    await withTimeout(dbRef.set({tasks:tasks.map(function(x){return{id:x.id,p:x.p,t:x.t,c:x.c||"",d:x.d||""}}),sessions:sessions,plans:plans,media:media,mediaProjects:mdExtra,hidden:hiddenSecs,hdef:1,layout:order,run:run||null,
       settings:{days:$("days").value,st:$("st").value,en:$("en").value,lu:$("lu").value},savedAt:at}),20000,"Data baza");
     if(localMod===snapMod){try{localStorage.setItem("kd_mod",at)}catch(e){}}
     return "data bazaga yozildi"}catch(e){return "data bazaga yozib bo‘lmadi"}
@@ -2618,7 +2676,7 @@ async function initRuntime(){
             
             if(Array.isArray(v.plans))plans=JSON.parse(JSON.stringify(v.plans));
             if(Array.isArray(v.media)){media=JSON.parse(JSON.stringify(v.media)).filter(function(e){return e&&e.d});media.forEach(function(e){if(!e.k)e.k=uid();if(!Array.isArray(e.c))e.c=[];e.p=e.p||"";e.t=e.t||""});if(Array.isArray(v.mediaProjects))mdExtra=v.mediaProjects.filter(function(x){return typeof x==="string"});mdNorm();mdLocal();mSel=null;safe(renderMedia,"media-reja")}
-            if(Array.isArray(v.hidden)){hiddenSecs=v.hidden.filter(function(i){return secById(i)});try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}safe(applyHidden,"yashirish")}
+            if(Array.isArray(v.hidden)){hiddenSecs=v.hidden.filter(function(i){return secById(i)});if(v.hdef!==1)hdefApply();try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}safe(applyHidden,"yashirish")}
             if(Array.isArray(v.layout)){order=normOrder(v.layout);try{localStorage.setItem("kd_order",JSON.stringify(order))}catch(e){}applyOrder()}relink();snapAll();ensureKeys();save();saveS();savePlans();try{localStorage.setItem("kd_mod",v.savedAt)}catch(e){}
             safe(render,"render");tick()}}}
     }catch(e){}
