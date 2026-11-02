@@ -28,6 +28,7 @@ if(A&&!(A.at&&A.rt&&A.uid))A=null;
 var Q=new URLSearchParams(location.search);
 var T=window.TEAM={cfg:C,auth:A,uid:A?A.uid:"",name:A?A.name:"",role:A?A.role:"member",as:null};
 if(A&&A.role==="admin"&&Q.get("as"))T.as={uid:Q.get("as"),name:Q.get("n")||""};
+if(A&&A.role==="admin"&&!T.as)document.documentElement.classList.add("adminonly");
 var configured=!!(C.url&&C.anonKey)&&!/YOUR-/.test(C.url+C.anonKey);
 if(C.url)C.url=String(C.url).replace(/\/+$/,"");
 var LS=localStorage;
@@ -677,6 +678,11 @@ body.viewas [data-mdnew],body.viewas [data-mdclr],body.viewas [data-mddist],body
 body.viewas #s-media .me input,body.viewas #s-media .me textarea,body.viewas #s-media .me select,body.viewas #s-tasks input,body.viewas #s-tasks select{pointer-events:none}
 @media(max-width:700px){#tmBtn span{display:none}}
 .mh[hidden],.mrow[hidden]{display:none}
+/* admin: faqat "Jamoa" bo'limi. Qolgan bo'limlar xodimlar uchun ("Panel" ko'rish rejimida to'liq ko'rinadi) */
+html.adminonly #sections>.sec:not(#s-team),html.adminonly #rec,html.adminonly #gs,html.adminonly #topSt,html.adminonly #tmBtn,
+html.adminonly .wrap>*:not(#sections),html.adminonly #lyH,html.adminonly #lyR,html.adminonly .menu .mi .eye,html.adminonly #s-team .hidebtn,
+html.adminonly #s-team .mvbar,html.adminonly #undoBar{display:none!important}
+html.adminonly .top{justify-content:flex-start}
 </style>
 </head>
 <body>
@@ -705,8 +711,8 @@ body.viewas #s-media .me input,body.viewas #s-media .me textarea,body.viewas #s-
     <div class="mrow"><div class="seg" role="group" aria-label="Mavzu"><button data-theme-set="light">☀ Kunduzgi</button><button data-theme-set="cream">🥛 Qaymoq</button><button data-theme-set="dark">🌙 Kechki</button><button data-theme-set="auto">Avto</button></div></div>
     <div class="mh">Shrift</div>
     <div class="mrow"><select id="fontSel" aria-label="Shrift"></select></div>
-    <div class="mh">Joylashuv</div>
-    <div class="mrow"><button class="sm" data-layout="toggle" id="arrBtn">⇅ Bo‘limlar joyini o‘zgartirish</button><button class="sm" data-layout="reset">Tartibni tiklash</button></div>
+    <div class="mh" id="lyH">Joylashuv</div>
+    <div class="mrow" id="lyR"><button class="sm" data-layout="toggle" id="arrBtn">⇅ Bo‘limlar joyini o‘zgartirish</button><button class="sm" data-layout="reset">Tartibni tiklash</button></div>
   </div>
 </header>
 <div class="recbar" id="rec" role="status"><span class="rdot" id="recDot"></span><b>REC</b><span id="recName"></span><textarea id="recNote" class="nt" rows="1" placeholder="Natija / izoh (ixtiyoriy)" aria-label="Natija"></textarea><span class="rtime" id="recTime">00:00</span><span class="since" id="recSince"></span><button class="stop" data-stop="1"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>Finish</button><button class="save" data-save="1"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Saqlash</button></div>
@@ -1081,7 +1087,7 @@ function saveOrder(){try{localStorage.setItem("kd_order",JSON.stringify(order))}
 var hiddenSecs=[];try{var hs0=JSON.parse(localStorage.getItem("kd_hidden")||"[]");if(Array.isArray(hs0))hiddenSecs=hs0.filter(function(i){return secById(i)})}catch(e){}
 function applyHidden(){SECS.forEach(function(x){var el=$("s-"+x.id);if(el)el.classList.toggle("sec-off",hiddenSecs.indexOf(x.id)>-1)});buildMenu()}
 function toggleSec(id,show){var i=hiddenSecs.indexOf(id);if(show===undefined)show=i>-1;if(show&&i>-1)hiddenSecs.splice(i,1);if(!show&&i<0)hiddenSecs.push(id);try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}touch();applyHidden();queueDb()}
-function buildMenu(){$("menuNav").innerHTML=order.map(function(id){var x=secById(id);var off=hiddenSecs.indexOf(id)>-1;return '<div class="mi'+(off?' off':'')+'"><a href="#s-'+id+'" data-go="'+id+'"><span>'+x.ico+'</span>'+esc(x.t)+'</a><button type="button" class="eye" data-hide="'+id+'" title="'+(off?'Ko‘rsatish':'Yashirish')+'" aria-label="'+(off?'Bo‘limni ko‘rsatish':'Bo‘limni yashirish')+'">'+(off?'🚫':'👁')+'</button></div>'}).join("")}
+function buildMenu(){$("menuNav").innerHTML=order.filter(function(id){return !(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)||id==="team"}).map(function(id){var x=secById(id);var off=hiddenSecs.indexOf(id)>-1;return '<div class="mi'+(off?' off':'')+'"><a href="#s-'+id+'" data-go="'+id+'"><span>'+x.ico+'</span>'+esc(x.t)+'</a><button type="button" class="eye" data-hide="'+id+'" title="'+(off?'Ko‘rsatish':'Yashirish')+'" aria-label="'+(off?'Bo‘limni ko‘rsatish':'Bo‘limni yashirish')+'">'+(off?'🚫':'👁')+'</button></div>'}).join("")}
 function applyOrder(){var c=$("sections");order.forEach(function(id){var el=$("s-"+id);if(el)c.appendChild(el)});buildMenu()}
 function moveSec(id,dir){var i=order.indexOf(id),j=i+dir;if(i<0||j<0||j>=order.length)return;order.splice(i,1);order.splice(j,0,id);saveOrder();applyOrder();queueDb();
   var el=$("s-"+id);if(el){el.classList.remove("flash-sec");void el.offsetWidth;el.classList.add("flash-sec");try{el.scrollIntoView({block:"center",behavior:"smooth"})}catch(x){}}}
@@ -2209,7 +2215,7 @@ function tmLoad(quiet){
   TM.busy=true;if(!quiet)tmSt("Yuklanmoqda…");
   var t0=Date.now(),needP=!TM.rows.length||Date.now()-(TM.pAt||0)>30000;
   return Promise.all([needP?TEAM.api("/rest/v1/profiles?select=id,login,full_name,role&order=login.asc"):Promise.resolve(null),TEAM.api("/rest/v1/user_state?select=user_id,summary,saved_at")]).then(function(r){
-    if(r[0]){TM.prof=r[0];TM.pAt=Date.now()}
+    if(r[0]){TM.prof=(r[0]||[]).filter(function(p){return p.role!=="admin"});TM.pAt=Date.now()}
     var by={};(r[1]||[]).forEach(function(x){by[x.user_id]=x});
     var old=tmSig();
     TM.rows=(TM.prof||[]).map(function(p){var s=by[p.id]||{};return{id:p.id,name:p.full_name||p.login,login:p.login,role:p.role,sum:s.summary||{},saved:s.saved_at||0}});
@@ -2482,7 +2488,7 @@ async function initRuntime(){
   $("saveSt").textContent=dbRef?"Bulutga ulangan: ma’lumot avtomatik saqlanadi.":"Bulutga ulanmagan — ma’lumot shu brauzerda saqlanadi.";
   $("shSt").textContent="";window.__tmAuto=!!dbRef&&!(window.TEAM&&TEAM.as);
 }
-relink();snapAll();ensureKeys();buildFonts();initLayout();$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
+relink();snapAll();ensureKeys();buildFonts();initLayout();$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as))safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
 </script>
 <!-- v:tday-top -->
 </body>
