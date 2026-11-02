@@ -149,33 +149,66 @@ function signIn(login,pw){
 function buildLogin(){
   var css=document.createElement("style");
   css.textContent="html.kdt-lock body>*:not(#tauth){visibility:hidden}"
-   +"#tauth{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--bg,#eef1f6);font-family:var(--font,system-ui,sans-serif);color:var(--ink,#14213d)}"
-   +"#tauth form{width:min(380px,100%);background:var(--card,#fff);border:1px solid var(--line,#dbe1ec);border-radius:16px;padding:26px 24px;box-shadow:0 18px 50px rgba(20,33,61,.18);display:flex;flex-direction:column;gap:6px}"
-   +"#tauth .tab{width:44px;height:44px;border-radius:12px;background:var(--cool,#1f8a8a);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:6px}"
-   +"#tauth h1{margin:0;font-size:20px;letter-spacing:-.01em}#tauth p{margin:0 0 10px;color:var(--mute,#5d6b86);font-size:13.5px}"
-   +"#tauth label{font-size:12.5px;font-weight:700;margin-top:8px}"
-   +"#tauth input{width:100%;box-sizing:border-box;font:inherit;font-size:15px;padding:10px 12px;border:1.5px solid var(--line,#dbe1ec);border-radius:10px;background:var(--bg,#eef1f6);color:inherit}"
-   +"#tauth input:focus{outline:none;border-color:var(--cool,#1f8a8a);box-shadow:0 0 0 3px rgba(31,138,138,.18)}"
-   +"#tauth .tap{position:relative}#tauth .tap input{padding-right:44px}"
-   +"#tauth .tap button{position:absolute;right:4px;top:4px;bottom:4px;width:36px;border:0;background:transparent;font-size:16px;cursor:pointer;color:var(--mute,#5d6b86)}"
-   +"#tauth #taE{min-height:18px;color:#c0392b;font-size:13px;font-weight:600;margin-top:4px}"
-   +"#tauth #taB{margin-top:4px;padding:11px 14px;font:inherit;font-weight:800;font-size:15px;border:0;border-radius:10px;background:var(--cool,#1f8a8a);color:#fff;cursor:pointer}"
-   +"#tauth #taB:disabled{opacity:.6;cursor:wait}#tauth small{color:var(--mute,#5d6b86);font-size:12px;margin-top:10px;text-align:center}";
+   +"#tauth{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto;font-family:var(--font,system-ui,sans-serif);color:var(--ink,#14213d);background:radial-gradient(60% 50% at 10% 6%,rgba(31,138,138,.30),transparent 70%),radial-gradient(55% 55% at 94% 98%,rgba(79,124,255,.24),transparent 70%),var(--bg,#eef1f6)}"
+   +"#tauth::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:radial-gradient(rgba(120,135,165,.35) 1px,transparent 1.4px);background-size:22px 22px;-webkit-mask-image:radial-gradient(65% 65% at 50% 50%,#000,transparent);mask-image:radial-gradient(65% 65% at 50% 50%,#000,transparent)}"
+   +"#tauth form{position:relative;width:min(400px,100%);margin:auto;background:var(--card,#fff);border:1px solid var(--line,#dbe1ec);border-radius:24px;padding:30px 26px 22px;box-shadow:0 1px 1px rgba(20,33,61,.05),0 8px 18px -6px rgba(20,33,61,.14),0 36px 70px -24px rgba(20,33,61,.42);display:flex;flex-direction:column;gap:6px}"
+   +"#tauth form::before{content:'';position:absolute;left:28px;right:28px;top:-1px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--cool,#1f8a8a),#4f7cff,transparent)}"
+   +"#tauth .tab{width:56px;height:56px;border-radius:18px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,#27a3a0,#1f6f9a 60%,#4f7cff);box-shadow:0 12px 24px -8px rgba(31,138,138,.75),inset 0 1px 0 rgba(255,255,255,.35)}"
+   +"#tauth .tab svg{width:28px;height:28px}"
+   +"#tauth h1{margin:0;text-align:center;font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.2}"
+   +"#tauth p{margin:2px 0 12px;text-align:center;color:var(--mute,#5d6b86);font-size:13.5px}"
+   +"#tauth label{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--mute,#5d6b86)}"
+   +"#tauth label span{font-size:11.5px;letter-spacing:0;text-transform:none;color:#d1432a;font-weight:700}"
+   +"#tauth label span[hidden]{display:none}"
+   +"#tauth .tf{position:relative}"
+   +"#tauth .tf>.ti{position:absolute;left:15px;top:50%;width:18px;height:18px;margin-top:-9px;color:var(--mute,#5d6b86);pointer-events:none;transition:color .2s}"
+   +"#tauth .tf:focus-within>.ti{color:var(--cool,#1f8a8a)}"
+   +"#tauth input{width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:13px 14px 13px 44px;border:1.5px solid var(--line,#dbe1ec);border-radius:14px;background:var(--bg,#eef1f6);color:inherit;transition:border-color .2s,box-shadow .2s}"
+   +"#tauth input:focus{outline:none;border-color:var(--cool,#1f8a8a);box-shadow:0 0 0 4px rgba(31,138,138,.18)}"
+   +"#tauth .tf.tap input{padding-right:50px}"
+   +"#tauth .tf button{position:absolute;right:6px;top:6px;bottom:6px;width:38px;display:flex;align-items:center;justify-content:center;padding:0;border:0;border-radius:10px;background:transparent;color:var(--mute,#5d6b86);cursor:pointer;transition:background .15s,color .15s}"
+   +"#tauth .tf button:hover{background:var(--card,#fff);color:var(--ink,#14213d)}"
+   +"#tauth .tf button svg{width:18px;height:18px}"
+   +"#tauth #taE{min-height:0;margin-top:6px;color:#c0392b;font-size:13px;font-weight:600;line-height:1.35}"
+   +"#tauth #taE:not(:empty){padding:9px 12px;border-radius:12px;background:rgba(209,67,42,.10);border:1px solid rgba(209,67,42,.28)}"
+   +":root[data-theme=dark] #tauth #taE{color:#ff9a88}:root[data-theme=dark] #tauth label span{color:#ff9a88}"
+   +"@media (prefers-color-scheme:dark){:root:not([data-theme=light]):not([data-theme=cream]) #tauth #taE{color:#ff9a88}:root:not([data-theme=light]):not([data-theme=cream]) #tauth label span{color:#ff9a88}}"
+   +"#tauth #taE.shake{animation:tshake .4s}"
+   +"@keyframes tshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}"
+   +"#tauth #taB{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;font:inherit;font-weight:800;font-size:15.5px;border:0;border-radius:14px;color:#fff;cursor:pointer;background:linear-gradient(135deg,#25a09d,#1f8a8a 55%,#1b7a9a);box-shadow:0 12px 24px -10px rgba(31,138,138,.95),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s,box-shadow .2s,filter .2s}"
+   +"#tauth #taB:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.07);box-shadow:0 16px 28px -10px rgba(31,138,138,1),inset 0 1px 0 rgba(255,255,255,.25)}"
+   +"#tauth #taB:active:not(:disabled){transform:scale(.98)}"
+   +"#tauth #taB:focus-visible{outline:3px solid rgba(31,138,138,.45);outline-offset:3px}"
+   +"#tauth #taB svg{width:18px;height:18px;transition:transform .2s}"
+   +"#tauth #taB:hover:not(:disabled) svg{transform:translateX(3px)}"
+   +"#tauth #taB:disabled{opacity:.7;cursor:wait}"
+   +"#tauth #taB.ld svg{display:none}"
+   +"#tauth #taB.ld::before{content:'';width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:tspin .7s linear infinite}"
+   +"@keyframes tspin{to{transform:rotate(360deg)}}"
+   +"#tauth small{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--mute,#5d6b86);font-size:12px;margin-top:14px;text-align:center}"
+   +"#tauth small svg{width:13px;height:13px;flex:none}"
+   +"@media(max-width:420px){#tauth form{padding:26px 18px 20px;border-radius:22px}}"
+   +"@media(prefers-reduced-motion:reduce){#tauth #taE.shake,#tauth #taB.ld::before{animation:none}}";
   document.head.appendChild(css);
   var d=document.createElement("div");d.id="tauth";d.setAttribute("role","dialog");d.setAttribute("aria-modal","true");d.setAttribute("aria-labelledby","taT");
-  d.innerHTML='<form id="taF" autocomplete="on"><div class="tab" aria-hidden="true">⚡</div><h1 id="taT"></h1><p>Jamoa kirishi</p>'
-   +'<label for="taL">Login</label><input id="taL" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>'
-   +'<label for="taP">Parol</label><div class="tap"><input id="taP" name="password" type="password" autocomplete="current-password" required><button type="button" id="taS" aria-label="Parolni ko‘rsatish">👁</button></div>'
-   +'<div id="taE" role="alert"></div><button id="taB" type="submit">Kirish</button><small>Login va parolni administrator beradi.</small></form>';
+  var S=function(d,c){return '<svg'+(c?' class="'+c+'"':'')+' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>'};
+  var I={bolt:'<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',eyeoff:'<path d="M17.9 17.9A10.9 10.9 0 0 1 12 19c-6.4 0-10-7-10-7a18.5 18.5 0 0 1 4.1-5.1M9.9 5.2A10 10 0 0 1 12 5c6.4 0 10 7 10 7a18.6 18.6 0 0 1-2.2 3.2M1 1l22 22"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>'};
+  d.innerHTML='<form id="taF" autocomplete="on"><div class="tab" aria-hidden="true">'+S(I.bolt)+'</div><h1 id="taT"></h1><p>Jamoa kirishi</p>'
+   +'<label for="taL">Login</label><div class="tf">'+S(I.user,"ti")+'<input id="taL" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required></div>'
+   +'<label for="taP">Parol<span id="taCaps" hidden>Caps Lock yoqilgan</span></label><div class="tf tap">'+S(I.lock,"ti")+'<input id="taP" name="password" type="password" autocomplete="current-password" required><button type="button" id="taS" aria-label="Parolni ko‘rsatish" aria-pressed="false">'+S(I.eye)+'</button></div>'
+   +'<div id="taE" role="alert"></div><button id="taB" type="submit"><span>Kirish</span>'+S(I.arrow)+'</button><small>'+S(I.lock)+'Login va parolni administrator beradi.</small></form>';
   document.body.appendChild(d);
   document.getElementById("taT").textContent=C.orgName||"Ish kuchlanishi paneli";
   var E=document.getElementById("taE"),B=document.getElementById("taB"),L=document.getElementById("taL"),P=document.getElementById("taP");
   if(!configured){E.textContent="Sozlanmagan: index.html boshidagi TEAM_CFG ga Supabase manzili va kalitini yozing.";B.disabled=true;return}
-  document.getElementById("taS").addEventListener("click",function(){P.type=P.type==="password"?"text":"password"});
+  var BT=B.querySelector("span"),CP=document.getElementById("taCaps"),TS=document.getElementById("taS");
+  TS.addEventListener("click",function(){var sh=P.type==="password";P.type=sh?"text":"password";TS.innerHTML=S(sh?I.eyeoff:I.eye);TS.setAttribute("aria-pressed",String(sh));TS.setAttribute("aria-label",sh?"Parolni yashirish":"Parolni ko‘rsatish")});
+  function caps(e){try{CP.hidden=!(e.getModifierState&&e.getModifierState("CapsLock"))}catch(x){}}
+  P.addEventListener("keydown",caps);P.addEventListener("keyup",caps);P.addEventListener("blur",function(){CP.hidden=true});
   document.getElementById("taF").addEventListener("submit",function(e){
     e.preventDefault();var lg=L.value.trim().toLowerCase();if(!lg||!P.value)return;
-    B.disabled=true;B.textContent="Kirilmoqda…";E.textContent="";
-    signIn(lg,P.value).then(function(){location.replace(location.pathname)},function(er){E.textContent=(er&&er.msg)||"Kirib bo‘lmadi.";B.disabled=false;B.textContent="Kirish";P.select()});
+    B.disabled=true;B.classList.add("ld");BT.textContent="Kirilmoqda…";E.textContent="";E.classList.remove("shake");
+    signIn(lg,P.value).then(function(){location.replace(location.pathname)},function(er){E.textContent=(er&&er.msg)||"Kirib bo‘lmadi.";void E.offsetWidth;E.classList.add("shake");B.disabled=false;B.classList.remove("ld");BT.textContent="Kirish";P.select()});
   });
   setTimeout(function(){L.focus()},50);
 }
