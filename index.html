@@ -185,8 +185,8 @@ if(!A||!configured){
 }else{
   /* rol yoki ism o'zgargan bo'lsa yangilaymiz */
   T.api("/rest/v1/profiles?id=eq."+encodeURIComponent(A.uid)+"&select=full_name,login,role").then(function(rows){
-    var p=rows&&rows[0];if(!p)return;var nm=p.full_name||p.login,rl=p.role==="admin"?"admin":"member",chg=rl!==A.role;
-    if(rl!==A.role||nm!==A.name){A.role=rl;A.name=nm;saveAuth(A);if(chg&&!T.as)location.reload()}
+    var p=rows&&rows[0];if(!p)return;var nm=p.full_name||p.login,rl=p.role==="admin"?"admin":"member",chg=rl!==A.role||nm!==A.name;
+    if(chg){A.role=rl;A.name=nm;saveAuth(A);if(!T.as)location.reload()}
   }).catch(function(){});
 }
 })();
