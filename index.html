@@ -1001,6 +1001,71 @@ select{max-width:100%}
   .tmtool .tmx .tmdash{text-align:center;color:var(--mute)}
   .tmtool .tmx input[type=date]{width:100%!important;min-width:0!important;flex:none!important}
 }
+
+/* ===== "Xush kelibsiz" bloki: fonni sozlash ===== */
+:is(#s-team,#mHeroWrap) .tmhero{isolation:isolate;overflow:hidden}
+:is(#s-team,#mHeroWrap) .tmhero.hc{background:var(--hg,#0f3a3c)}
+:is(#s-team,#mHeroWrap) .tmhero.hc::before{content:"";position:absolute;inset:-28px;z-index:-2;background:var(--himg,none) center/cover no-repeat;opacity:var(--himgo,0);filter:blur(var(--hb,0px)) saturate(var(--hs,100%)) grayscale(var(--hgr,0));pointer-events:none}
+:is(#s-team,#mHeroWrap) .tmhero.hc::after{content:"";position:absolute;inset:0;z-index:-1;background:var(--hov,none);pointer-events:none}
+:is(#s-team,#mHeroWrap) .tmhero.hc .tmh-date{color:rgba(255,255,255,.94)}
+:is(#s-team,#mHeroWrap) .tmhero.hc :is(.tmh-sub,.tmh-city,.tmd-lab,.tmh-clock small,.tmh-wx .d,.tmh-me .mi2 span){color:rgba(255,255,255,.82)}
+:is(#s-team,#mHeroWrap) .tmhero.hc .tmd-txt{color:#fff}
+:is(#s-team,#mHeroWrap) .tmhero.hc :is(.tmh-wx,.tmh-me .mi2){background:rgba(0,0,0,.24)}
+:is(#s-team,#mHeroWrap) .tmhero.hglass :is(.tmh-wx,.tmh-me .mi2,.tmh-fon){background:rgba(0,0,0,.28);-webkit-backdrop-filter:blur(12px) saturate(140%);backdrop-filter:blur(12px) saturate(140%);border:1px solid rgba(255,255,255,.16)}
+:is(#s-team,#mHeroWrap) .tmhero.himg :is(.tmh-hi,.tmh-date,.tmh-sub,.tmh-clock,.tmh-city,.tmd-txt,.tmd-lab,.tmh-wx,.tmh-me){text-shadow:0 1px 10px rgba(0,0,0,.5)}
+.tmh-fon{margin-top:10px;padding:6px 13px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.32);font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.tmh-fon[hidden]{display:none}
+.tmh-fon:hover,.tmh-fon[aria-expanded=true]{background:rgba(255,255,255,.24)}
+.tmh-fon:focus-visible{outline:3px solid #f2a33a;outline-offset:2px}
+#hsPanel{position:static;margin:0 0 14px;display:flex;flex-direction:column;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 34px rgba(0,0,0,.12)}
+#hsPanel[hidden]{display:none}
+#hsPanel .hsh{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);font-size:15px}
+#hsPanel .hsx{padding:4px 9px;background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+#hsPanel .hsb{column-width:300px;column-gap:34px;padding:6px 18px 10px}
+#hsPanel .hss{break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid}
+#hsPanel .hss{padding:10px 0;border-bottom:1px dashed var(--line)}
+#hsPanel .hss:last-child{border-bottom:0}
+#hsPanel .hss.wide{grid-column:1/-1}
+#hsPanel h4{margin:0 0 8px;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--mute)}
+#hsPanel .hsws{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#hsPanel .hsw{position:relative;height:50px;padding:0;border-radius:12px;border:2px solid transparent;color:#fff;display:flex;align-items:flex-end;justify-content:flex-start;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+#hsPanel .hsw span{padding:0 8px 5px;font-size:11.5px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.55)}
+#hsPanel .hsw i{display:none;position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:50%;background:#fff;color:#14213d;font-style:normal;font-size:11px;align-items:center;justify-content:center}
+#hsPanel .hsw.on{border-color:var(--cool);outline:2px solid var(--cool);outline-offset:1px}
+#hsPanel .hsw.on i{display:flex}
+#hsPanel .hsc2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:end}
+#hsPanel .hsc2 label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:var(--mute);min-width:0}
+#hsPanel input[type=color]{width:100%;height:40px;padding:2px;border-radius:10px;cursor:pointer;background:var(--bg)}
+#hsPanel .hsc2 select{padding:8px 6px}
+#hsPanel .hsn{margin:8px 0 0;font-size:12px;color:var(--mute);line-height:1.4}
+#hsPanel .hpts{display:flex;flex-wrap:wrap;gap:6px}
+#hsPanel .hpt{padding:6px 12px;border-radius:999px;background:var(--bg);color:var(--ink);border:1px solid var(--line);font-size:13px;font-weight:600}
+#hsPanel .hpt.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#hsPanel .hsim{display:flex;gap:10px;align-items:center}
+#hsPanel .hth{flex:none;width:112px;height:64px;border-radius:10px;border:1.5px dashed var(--line);background:var(--bg) center/cover no-repeat;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--mute);text-align:center}
+#hsPanel .hth.has{border-style:solid}
+#hsPanel .hsbtn{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+#hsPanel .hsbtn .sm:disabled{opacity:.45;cursor:default}
+#hsPanel .hsfx{margin-top:10px;display:grid;gap:8px}
+#hsPanel .hsfx.off{opacity:.45}
+#hsPanel .hsfx label{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;font-weight:600}
+#hsPanel .hsfx output{font-variant-numeric:tabular-nums;color:var(--mute);font-weight:600}
+#hsPanel .hsfx input[type=range]{grid-column:1/-1;width:100%;padding:0;border:0;background:transparent;accent-color:var(--cool)}
+#hsPanel .hsto{display:grid;gap:8px}
+#hsPanel .hsck{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;cursor:pointer}
+#hsPanel .hsck input{width:20px;height:20px;flex:none;margin:0;accent-color:var(--cool)}
+#hsPanel .hsf{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--line)}
+#hsPanel #hsSt{flex:1;min-width:0;font-size:12.5px;color:var(--mute);line-height:1.3}
+#hsPanel #hsSt.bad{color:#c0392b}
+#hsPanel .hsok{background:var(--cool);color:#fff}
+@media(max-width:700px){
+  #hsPanel{position:fixed;z-index:95;left:0;right:0;bottom:0;margin:0;width:auto;max-height:62vh;max-height:62dvh;border-radius:18px 18px 0 0;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -12px 40px rgba(0,0,0,.35)}
+  #hsPanel .hsb{display:block;column-width:auto;overflow:auto;flex:1 1 auto;padding:4px 14px 8px;-webkit-overflow-scrolling:touch}
+  #hsPanel .hsws{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #hsPanel .hsc2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #hsPanel .hsc2 label:nth-child(3){grid-column:1/-1}
+}
+@media (prefers-reduced-motion:no-preference){:is(#s-team,#mHeroWrap) .tmhero{transition:background .3s}}
 </style>
 </head>
 <body>
@@ -1057,6 +1122,7 @@ select{max-width:100%}
     <div class="tmh-side">
       <div class="tmh-clock" id="tmClock" role="timer" aria-label="Toshkent vaqti"></div>
       <div class="tmh-city">Toshkent vaqti</div>
+      <button type="button" class="tmh-fon" id="hsBtn" aria-expanded="false" aria-controls="hsPanel" title="Fonni sozlash: rang, rasm, effektlar">🎨 Fon</button>
       <div class="tmh-wx" id="tmWx" aria-live="polite"></div>
     </div>
     <div class="tmh-day" id="tmDay">
@@ -2926,6 +2992,182 @@ function tmRender(){
   h+='</tbody></table></div><p class="note">'+esc(lbl)+' bo‘yicha jamoa jami: <b>'+hmTxt(totAll)+'</b> Yuklama faol kunlardagi o‘rtacha vaqtning kunlik sof ish vaqtiga nisbati.</p>';
   box.innerHTML=h;tmLive();
 }
+/* ---- "Xush kelibsiz" bloki fonini sozlash: rang, gradient, naqsh, rasm va effektlar ---- */
+var HS={d:null,on:false,t:0,cloud:null,busy:false};
+var HS_PRE=[
+  {id:"zumrad",n:"Zumrad",c1:"#0f3a3c",c2:"#0f3a3c"},
+  {id:"okean",n:"Okean",c1:"#0b3d6b",c2:"#0e7490"},
+  {id:"tun",n:"Tun",c1:"#0f172a",c2:"#312e81"},
+  {id:"binafsha",n:"Binafsha",c1:"#3b1a6b",c2:"#a21caf"},
+  {id:"shafaq",n:"Shafaq",c1:"#7c2d12",c2:"#be123c"},
+  {id:"atirgul",n:"Atirgul",c1:"#831843",c2:"#db2777"},
+  {id:"oryor",n:"O‘rmon",c1:"#14532d",c2:"#4d7c0f"},
+  {id:"kofe",n:"Kofe",c1:"#3f2a1d",c2:"#92400e"},
+  {id:"grafit",n:"Grafit",c1:"#1f2937",c2:"#4b5563"},
+  {id:"yoqut",n:"Yoqut",c1:"#7f1d1d",c2:"#b91c1c"},
+  {id:"osmon",n:"Osmon",c1:"#1e3a8a",c2:"#0369a1"},
+  {id:"nefrit",n:"Nefrit",c1:"#064e3b",c2:"#0d9488"}
+];
+var HS_PAT=[["none","Yo‘q"],["dots","Nuqtalar"],["grid","To‘r"],["diag","Diagonal"],["waves","To‘lqinlar"],["aurora","Aurora"],["bokeh","Bokeh"]];
+var HS_DEF={pre:"zumrad",c1:"#0f3a3c",c2:"#0f3a3c",ang:135,pat:"none",img:"",blur:0,dim:40,sat:100,gray:0,vig:0,glass:0};
+function hsUid(){return window.TEAM&&TEAM.as?TEAM.as.uid:(window.TEAM&&TEAM.uid)||""}
+function hsRO(){return !!(window.TEAM&&TEAM.as)}
+function hsClone(o){return JSON.parse(JSON.stringify(o))}
+function hsNum(v,a,b,d){v=+v;if(!isFinite(v))v=d;return Math.max(a,Math.min(b,v))}
+function hsHex(h,d){h=String(h||"");return /^#[0-9a-f]{6}$/i.test(h)?h.toLowerCase():d}
+function hsLum(hex){var r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+  function f(c){return c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)}return .2126*f(r)+.7152*f(g)+.0722*f(b)}
+/* oq matn doim o'qilsin: juda yorug' rang avtomatik to'qlashtiriladi (kontrast >= 4.5) */
+function hsSafe(hex){var n=0,h=hex;while(hsLum(h)>.17&&n<30){var r=Math.round(parseInt(h.slice(1,3),16)*.9),g=Math.round(parseInt(h.slice(3,5),16)*.9),b=Math.round(parseInt(h.slice(5,7),16)*.9);
+  h="#"+[r,g,b].map(function(x){return (x<16?"0":"")+x.toString(16)}).join("");n++}return h}
+function hsNorm(o){o=o&&typeof o==="object"?o:{};var d=hsClone(HS_DEF);
+  d.pre=String(o.pre||d.pre).slice(0,16);d.c1=hsHex(o.c1,d.c1);d.c2=hsHex(o.c2,d.c1);d.ang=hsNum(o.ang,0,360,135);
+  d.pat=HS_PAT.some(function(p){return p[0]===o.pat})?o.pat:"none";
+  d.img=/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(o.img||"")&&o.img.length<420000?o.img:"";
+  d.blur=hsNum(o.blur,0,24,0);d.dim=hsNum(o.dim,20,85,40);d.sat=hsNum(o.sat,40,170,100);
+  d.gray=o.gray?1:0;d.vig=o.vig?1:0;d.glass=o.glass?1:0;return d}
+function hsSame(d){var b=hsClone(HS_DEF);return !d||(d.c1===b.c1&&d.c2===b.c2&&d.pat==="none"&&!d.img&&!d.vig&&!d.glass&&!d.gray&&d.ang===b.ang)}
+function hsWaves(){var s="<svg xmlns='http://www.w3.org/2000/svg' width='160' height='48'><path d='M0 24 Q40 4 80 24 T160 24' fill='none' stroke='white' stroke-opacity='.13' stroke-width='2'/><path d='M0 40 Q40 20 80 40 T160 40' fill='none' stroke='white' stroke-opacity='.08' stroke-width='2'/></svg>";return 'url("data:image/svg+xml,'+encodeURIComponent(s)+'") 0 0/160px 48px'}
+function hsPatCss(p){
+  if(p==="dots")return "radial-gradient(rgba(255,255,255,.16) 1.6px,transparent 1.8px) 0 0/18px 18px";
+  if(p==="grid")return "linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px) 0 0/28px 28px,linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px) 0 0/28px 28px";
+  if(p==="diag")return "repeating-linear-gradient(135deg,rgba(255,255,255,.08) 0 2px,transparent 2px 14px)";
+  if(p==="waves")return hsWaves();
+  if(p==="aurora")return "radial-gradient(60% 80% at 12% 15%,rgba(80,230,200,.34),transparent 62%),radial-gradient(50% 70% at 88% 25%,rgba(168,120,255,.34),transparent 62%),radial-gradient(70% 60% at 50% 115%,rgba(255,160,90,.28),transparent 62%)";
+  if(p==="bokeh")return "radial-gradient(circle at 10% 28%,rgba(255,255,255,.15) 0 46px,transparent 47px),radial-gradient(circle at 78% 18%,rgba(255,255,255,.12) 0 70px,transparent 71px),radial-gradient(circle at 60% 82%,rgba(255,255,255,.1) 0 38px,transparent 39px),radial-gradient(circle at 92% 70%,rgba(255,255,255,.12) 0 54px,transparent 55px),radial-gradient(circle at 30% 90%,rgba(255,255,255,.09) 0 60px,transparent 61px)";
+  return "";
+}
+function hsApply(d){
+  var el=document.getElementById("tmHero");if(!el)return;
+  var keys=["--hg","--himg","--himgo","--hb","--hs","--hgr","--hov"],i;
+  if(!d||hsSame(d)){el.classList.remove("hc","himg","hglass");keys.forEach(function(k){el.style.removeProperty(k)});return}
+  var c1=hsSafe(d.c1),c2=hsSafe(d.c2),lay=[],hasImg=!!d.img;
+  if(d.vig)lay.push("radial-gradient(ellipse at 50% 45%,transparent 38%,rgba(0,0,0,.6) 100%)");
+  var pc=hsPatCss(d.pat);if(pc)lay.push(pc);
+  if(hasImg){var a=(d.dim/100).toFixed(2);lay.push("linear-gradient(rgba(0,0,0,"+a+"),rgba(0,0,0,"+a+"))")}
+  el.style.setProperty("--hg","linear-gradient("+d.ang+"deg,"+c1+","+c2+")");
+  el.style.setProperty("--hov",lay.length?lay.join(","):"none");
+  if(hasImg){el.style.setProperty("--himg",'url("'+d.img+'")');el.style.setProperty("--himgo","1");
+    el.style.setProperty("--hb",d.blur+"px");el.style.setProperty("--hs",d.sat+"%");el.style.setProperty("--hgr",d.gray?"1":"0")}
+  else{el.style.setProperty("--himg","none");el.style.setProperty("--himgo","0");el.style.setProperty("--hb","0px");el.style.setProperty("--hs","100%");el.style.setProperty("--hgr","0")}
+  el.classList.add("hc");el.classList.toggle("himg",hasImg);el.classList.toggle("hglass",!!d.glass||hasImg);
+}
+function hsLsGet(){try{return JSON.parse(localStorage.getItem("kd_hero")||"null")}catch(e){return null}}
+function hsLsSet(d){try{if(d)localStorage.setItem("kd_hero",JSON.stringify(d));else localStorage.removeItem("kd_hero")}catch(e){}}
+function hsSay(m,bad){var s=$("hsSt");if(!s)return;s.textContent=m||"";s.className=bad?"bad":""}
+function hsCloudErr(e){var m=String((e&&e.message)||"")+(e&&e.code||"");
+  if(/hero_styles|relation|42P01|PGRST205|http_404/.test(m))return "Fon bulutga saqlanmadi: jadval sozlanmagan (administrator SQL ni ishga tushirsin). Shu qurilmada saqlandi.";
+  if(/413|too large|check|23514/.test(m))return "Rasm juda og‘ir. Kichikroq rasm tanlang. Shu qurilmada saqlandi.";
+  return "Bulutga saqlanmadi. Shu qurilmada saqlandi."}
+function hsPush(){
+  if(hsRO()||!window.TEAM||!TEAM.api)return;clearTimeout(HS.t);
+  HS.t=setTimeout(function(){
+    var d=HS.d;
+    var p=(!d||hsSame(d))?TEAM.api("/rest/v1/hero_styles?user_id=eq."+encodeURIComponent(TEAM.uid),{method:"DELETE"})
+      :TEAM.api("/rest/v1/hero_styles?on_conflict=user_id",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},json:{user_id:TEAM.uid,style:d,updated_at:new Date().toISOString()}});
+    p.then(function(){HS.cloud=true;hsSay("✓ Saqlandi")},function(e){HS.cloud=false;hsSay(hsCloudErr(e),true)});
+  },700);
+}
+function hsSet(d,quiet){HS.d=hsNorm(d);hsApply(HS.d);hsLsSet(hsSame(HS.d)?null:HS.d);if(!quiet){hsSay("Saqlanmoqda…");hsPush()}hsSync()}
+function hsLoadCloud(){
+  var uid=hsUid();if(!uid||!window.TEAM||!TEAM.api)return;
+  TEAM.api("/rest/v1/hero_styles?user_id=eq."+encodeURIComponent(uid)+"&select=style,updated_at").then(function(rows){
+    HS.cloud=true;var r=rows&&rows[0];
+    if(r&&r.style){HS.d=hsNorm(r.style);hsApply(HS.d);if(!hsRO())hsLsSet(hsSame(HS.d)?null:HS.d);hsSync()}
+    else if(!hsRO()&&HS.d&&!hsSame(HS.d))hsPush();
+  },function(){HS.cloud=false});
+}
+/* rasmni kichraytirib JPEG ga o'tkazish (<= ~300 KB) */
+function hsImg(file){
+  return new Promise(function(res,rej){
+    if(!file||!/^image\//.test(file.type||"")){rej({message:"Faqat rasm tanlang."});return}
+    var fr=new FileReader();fr.onerror=function(){rej({message:"Rasmni o‘qib bo‘lmadi."})};
+    fr.onload=function(){var im=new Image();im.onerror=function(){rej({message:"Bu rasm formatini ochib bo‘lmadi."})};
+      im.onload=function(){
+        var W=im.naturalWidth||im.width,H=im.naturalHeight||im.height,sc=Math.min(1,1500/Math.max(W,H)),q=.74,out="",k;
+        for(k=0;k<6;k++){var cw=Math.max(1,Math.round(W*sc)),ch=Math.max(1,Math.round(H*sc)),cv=document.createElement("canvas");cv.width=cw;cv.height=ch;
+          var cx=cv.getContext("2d");cx.drawImage(im,0,0,cw,ch);out=cv.toDataURL("image/jpeg",q);
+          if(out.length<300000)break;q=Math.max(.4,q-.1);sc*=.82}
+        if(out.length>=400000){rej({message:"Rasm juda katta. Boshqa rasm tanlang."});return}
+        /* o'rtacha yorqinlik: yorug' rasm ustiga matn o'qilishi uchun qorong'ulik avtomatik tanlanadi */
+        var L=.4;try{var sm=document.createElement("canvas");sm.width=sm.height=24;var sx=sm.getContext("2d");sx.drawImage(im,0,0,24,24);var px=sx.getImageData(0,0,24,24).data,t=0,n=0,i2;
+          function lin(c){c/=255;return c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)}
+          for(i2=0;i2<px.length;i2+=4){t+=.2126*lin(px[i2])+.7152*lin(px[i2+1])+.0722*lin(px[i2+2]);n++}L=t/n}catch(e){}
+        var a=L>.13?1-Math.pow(.13/L,.4545):0;
+        res({url:out,dim:Math.round(Math.max(30,Math.min(80,a*100)))})};im.src=fr.result};
+    fr.readAsDataURL(file);
+  });
+}
+/* ---- tahrirlash oynasi ---- */
+function hsBuild(){
+  var p=document.createElement("div");p.id="hsPanel";p.hidden=true;p.setAttribute("role","dialog");p.setAttribute("aria-label","Fonni sozlash");
+  var sw=HS_PRE.map(function(x){return '<button type="button" class="hsw" data-hs="pre" data-id="'+x.id+'" style="background:linear-gradient(135deg,'+x.c1+','+x.c2+')" aria-label="'+x.n+'" title="'+x.n+'"><i>✓</i><span>'+x.n+'</span></button>'}).join("");
+  var pt=HS_PAT.map(function(x){return '<button type="button" class="hpt" data-hs="pat" data-id="'+x[0]+'">'+x[1]+'</button>'}).join("");
+  p.innerHTML='<div class="hsh"><b>🎨 Fonni sozlash</b><button type="button" class="hsx" data-hs="close" aria-label="Yopish">✕</button></div>'
+   +'<div class="hsb">'
+   +'<div class="hss"><h4>Tayyor ranglar</h4><div class="hsws">'+sw+'</div></div>'
+   +'<div class="hss"><h4>O‘z rangingiz</h4><div class="hsc2"><label>Asosiy<input type="color" id="hsC1" aria-label="Asosiy rang"></label><label>Qo‘shimcha<input type="color" id="hsC2" aria-label="Qo‘shimcha rang"></label>'
+   +'<label>Yo‘nalish<select id="hsAng" aria-label="Gradient yo‘nalishi"><option value="135">Diagonal ↘</option><option value="90">Chapdan o‘ngga →</option><option value="180">Yuqoridan pastga ↓</option><option value="45">Pastdan yuqoriga ↗</option><option value="270">O‘ngdan chapga ←</option></select></label></div>'
+   +'<p class="hsn">Matn yaxshi o‘qilishi uchun juda yorug‘ ranglar avtomatik to‘qroq qilinadi.</p></div>'
+   +'<div class="hss"><h4>Naqsh va uslub</h4><div class="hpts">'+pt+'</div></div>'
+   +'<div class="hss"><h4>Fon rasmi</h4><div class="hsim"><div class="hth" id="hsTh" aria-hidden="true"></div><div class="hsbtn"><button type="button" class="sm" data-hs="pick">📷 Rasm tanlash</button><button type="button" class="sm" data-hs="noimg" id="hsNoImg">Rasmni olib tashlash</button></div></div>'
+   +'<div class="hsfx" id="hsFx">'
+   +'<label>Xiralik <output id="hsOb">0</output><input type="range" id="hsBlur" min="0" max="24" step="1"></label>'
+   +'<label>Qorong‘ulik <output id="hsOd">40</output><input type="range" id="hsDim" min="20" max="85" step="1"></label>'
+   +'<label>To‘yinganlik <output id="hsOs">100</output><input type="range" id="hsSat" min="40" max="170" step="5"></label>'
+   +'<p class="hsn">Qorong‘ulik kamida 20% bo‘ladi: shunda matn rasm ustida ham aniq o‘qiladi.</p></div></div>'
+   +'<div class="hss"><h4>Effektlar</h4><div class="hsto">'
+   +'<label class="hsck"><input type="checkbox" id="hsGray"><span>Oq-qora rasm</span></label>'
+   +'<label class="hsck"><input type="checkbox" id="hsVig"><span>Chetlarini qoraytirish</span></label>'
+   +'<label class="hsck"><input type="checkbox" id="hsGlass"><span>Shisha kartalar</span></label></div></div>'
+   +'</div><div class="hsf"><span id="hsSt" role="status"></span><button type="button" class="sm" data-hs="reset">↺ Asl holatiga</button><button type="button" class="sm hsok" data-hs="close">Tayyor</button></div>';
+  var hh=$("tmHero");if(hh&&hh.parentNode)hh.parentNode.insertBefore(p,hh.nextSibling);else document.body.appendChild(p);
+  var f=document.createElement("input");f.type="file";f.accept="image/*";f.id="hsFile";f.hidden=true;f.setAttribute("aria-hidden","true");document.body.appendChild(f);
+  f.addEventListener("change",function(){var x=f.files&&f.files[0];f.value="";if(!x)return;hsSay("Rasm tayyorlanmoqda…");
+    hsImg(x).then(function(u){var d=hsClone(HS.d||HS_DEF);d.img=u.url;d.dim=u.dim;hsSet(d);hsSay("Qorong‘ulik rasm yorqinligiga moslab qo‘yildi. Matn aniq o‘qilmasa, oshiring.")},function(e){hsSay((e&&e.message)||"Rasmni qo‘shib bo‘lmadi.",true)})});
+  p.addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-hs]"):null;if(!b)return;var a=b.dataset.hs,d=hsClone(HS.d||HS_DEF);
+    if(a==="close"){hsClose();return}
+    if(a==="pick"){$("hsFile").click();return}
+    if(a==="noimg"){d.img="";hsSet(d);return}
+    if(a==="reset"){hsSet(HS_DEF);return}
+    if(a==="pre"){var x=HS_PRE.filter(function(q){return q.id===b.dataset.id})[0];if(x){d.pre=x.id;d.c1=x.c1;d.c2=x.c2;hsSet(d)}return}
+    if(a==="pat"){d.pat=b.dataset.id;hsSet(d);return}
+  });
+  function bind(id,fn,ev){var e=$(id);e.addEventListener(ev||"input",function(){var d=hsClone(HS.d||HS_DEF);fn(d,e);hsSet(d)})}
+  bind("hsC1",function(d,e){var o=(HS.d||HS_DEF);if(!d.c2||d.c2===o.c1)d.c2=e.value;d.c1=e.value;d.pre=""});
+  bind("hsC2",function(d,e){d.c2=e.value;d.pre=""});
+  bind("hsAng",function(d,e){d.ang=+e.value},"change");
+  bind("hsBlur",function(d,e){d.blur=+e.value});bind("hsDim",function(d,e){d.dim=+e.value});bind("hsSat",function(d,e){d.sat=+e.value});
+  bind("hsGray",function(d,e){d.gray=e.checked?1:0},"change");bind("hsVig",function(d,e){d.vig=e.checked?1:0},"change");bind("hsGlass",function(d,e){d.glass=e.checked?1:0},"change");
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&HS.on)hsClose()});
+  document.addEventListener("pointerdown",function(e){if(!HS.on)return;var t=e.target;if(t.closest&&(t.closest("#hsPanel")||t.closest("#hsBtn")))return;hsClose()});
+}
+function hsSync(){
+  var p=$("hsPanel");if(!p)return;var d=HS.d||HS_DEF;
+  $("hsC1").value=hsHex(d.c1,"#0f3a3c");$("hsC2").value=hsHex(d.c2,"#0f3a3c");$("hsAng").value=String(d.ang);
+  $("hsBlur").value=d.blur;$("hsDim").value=d.dim;$("hsSat").value=d.sat;$("hsOb").textContent=d.blur+" px";$("hsOd").textContent=d.dim+"%";$("hsOs").textContent=d.sat+"%";
+  $("hsGray").checked=!!d.gray;$("hsVig").checked=!!d.vig;$("hsGlass").checked=!!d.glass;
+  Array.prototype.forEach.call(p.querySelectorAll("[data-hs=pre]"),function(b){var on=b.dataset.id===d.pre&&!d.img;b.classList.toggle("on",!!on);b.setAttribute("aria-pressed",on?"true":"false")});
+  Array.prototype.forEach.call(p.querySelectorAll("[data-hs=pat]"),function(b){var on=b.dataset.id===d.pat;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on?"true":"false")});
+  var th=$("hsTh");th.style.backgroundImage=d.img?'url("'+d.img+'")':"none";th.classList.toggle("has",!!d.img);th.textContent=d.img?"":"Rasm yo‘q";
+  $("hsNoImg").disabled=!d.img;var fx=$("hsFx");fx.classList.toggle("off",!d.img);
+  Array.prototype.forEach.call(fx.querySelectorAll("input"),function(i){i.disabled=!d.img});
+  $("hsGray").disabled=!d.img;
+}
+function hsOpen(){
+  if(hsRO())return;if(!$("hsPanel"))hsBuild();var p=$("hsPanel");hsSync();hsSay("");p.hidden=false;HS.on=true;
+  var b=$("hsBtn");if(b)b.setAttribute("aria-expanded","true");
+  try{var h=$("tmHero");if(h){var r=h.getBoundingClientRect(),mob=window.innerWidth<=700;if(r.top<(mob?0:60)||r.top>window.innerHeight*.35)window.scrollTo({top:Math.max(0,window.scrollY+r.top-(mob?(+getComputedStyle(document.documentElement).getPropertyValue("--hh").replace("px","")||56)+8:70)),behavior:"smooth"})}}catch(e){}
+}
+function hsClose(){var p=$("hsPanel");if(p)p.hidden=true;HS.on=false;var b=$("hsBtn");if(b){b.setAttribute("aria-expanded","false")}}
+function hsInit(){
+  var b=$("hsBtn");
+  if(hsRO()){if(b)b.hidden=true;hsLoadCloud();return}
+  var l=hsLsGet();if(l){HS.d=hsNorm(l);hsApply(HS.d)}
+  if(b)b.addEventListener("click",function(){HS.on?hsClose():hsOpen()});
+  hsLoadCloud();
+}
+
 /* ---- Profil rasmi: xodim yuklaydi, admin dumaloq ko'radi ---- */
 var AV={map:{},busy:false,inited:false};
 function avOk(d){return typeof d==="string"&&d.length<200000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(d)}
@@ -3079,7 +3321,7 @@ function tmBand(){
 function tmHeroInit(){
   var nm=tmAdminName();$("tmHi").textContent=nm?"Xush kelibsiz, "+nm+"!":"Xush kelibsiz!";
   try{var c=JSON.parse(localStorage.getItem("kdt_wx")||"null");if(c&&c.d&&Date.now()-c.at<30*60000){TMW.d=c.d;TMW.at=c.at}}catch(e){}
-  tmWxPaint();tmWxLoad(false);tmHeroTick();avInit();
+  tmWxPaint();tmWxLoad(false);tmHeroTick();avInit();hsInit();
   setInterval(function(){if(!document.hidden)tmWxLoad(false)},60000);
   document.addEventListener("visibilitychange",function(){if(!document.hidden)tmWxLoad(false)});
 }
