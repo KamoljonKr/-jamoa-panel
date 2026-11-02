@@ -67,7 +67,8 @@ T.api=function(path,o,retry){
     var h={apikey:C.anonKey,Authorization:"Bearer "+t},k;
     if(o.json!==undefined)h["Content-Type"]="application/json";
     if(o.headers)for(k in o.headers)h[k]=o.headers[k];
-    return fetch(C.url+path,{method:o.method||"GET",headers:h,body:o.json!==undefined?JSON.stringify(o.json):undefined});
+    var body=o.json!==undefined?JSON.stringify(o.json):undefined;
+    return fetch(C.url+path,{method:o.method||"GET",headers:h,body:body,keepalive:!!(o.keepalive&&body&&body.length<60000)});
   }).then(function(r){
     if(r.status===401&&!retry){A.exp=0;return T.api(path,o,true)}
     return r.text().then(function(tx){
@@ -91,7 +92,9 @@ function summarize(st){
   S.forEach(function(s){if(!s||!s.s||!s.e)return;if(s.e>last)last=s.e;if(s.s<cut)return;var k=ymd(s.s);dm[k]=Math.round(((dm[k]||0)+(s.e-s.s)/60000)*100)/100});
   var se=st.settings||{},sp=Math.max(.5,(+se.en||0)-(+se.st||0)),av=Math.max(.5,sp-(+se.lu||0)),run=null;
   if(st.run&&st.run.id){var tk=(st.tasks||[]).filter(function(x){return x.id===st.run.id})[0]||{};run={p:tk.p||"",t:tk.t||"",s:st.run.s}}
-  return {dm:dm,av:Math.round(av*60),run:run,last:last,n:S.length};
+  var td=ymd(Date.now()),tn=0,lt=null;
+  S.forEach(function(s){if(!s||!s.s||!s.e)return;if(ymd(s.s)===td)tn++;if(!lt||s.e>lt.e){var t=(st.tasks||[]).filter(function(x){return x.id===s.id})[0]||{};lt={e:s.e,p:t.p||s.p||"",t:t.t||s.t||""}}});
+  return {dm:dm,av:Math.round(av*60),run:run,last:last,n:S.length,tn:tn,td:td,lt:lt};
 }
 T.summarize=summarize;
 var LOADED={};
@@ -111,7 +114,7 @@ window.claude={use:function(n){
         if(uid!==T.uid)return Promise.reject({code:"forbidden"});
         /* bulutdagi ma'lumot o'qilmaguncha yozmaymiz: bo'sh holat haqiqiyini bosib ketmasin */
         var go=function(){return T.api("/rest/v1/user_state?on_conflict=user_id",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
-          json:{user_id:uid,state:obj,summary:summarize(obj),saved_at:obj.savedAt||Date.now(),updated_at:new Date().toISOString()}})};
+          json:{user_id:uid,state:obj,summary:summarize(obj),saved_at:obj.savedAt||Date.now(),updated_at:new Date().toISOString()},keepalive:true})};
         return LOADED[uid]?go():load().then(go);
       }};
   }});
@@ -937,7 +940,7 @@ if(idFix){try{localStorage.setItem("kd_tasks",JSON.stringify(tasks))}catch(e){}}
 var CT=["Story","Post","Reels","Short","Oblojka","YouTube long"],plans=[];
 try{var pl0=JSON.parse(localStorage.getItem("kd_plans")||"[]");if(Array.isArray(pl0))plans=pl0}catch(e){}
 try{var ss=JSON.parse(localStorage.getItem("kd_ses")||"[]");if(Array.isArray(ss))sessions=ss;var rr=JSON.parse(localStorage.getItem("kd_run")||"null");if(rr&&rr.id&&rr.s)run=rr}catch(e){}
-function touch(){localMod=Date.now();try{localStorage.setItem("kd_mod",localMod)}catch(e){}}
+var tmAutoT=0;function touch(){localMod=Date.now();try{localStorage.setItem("kd_mod",localMod)}catch(e){}if(window.__tmAuto){clearTimeout(tmAutoT);tmAutoT=setTimeout(function(){if(dbAt<localMod)queueDb()},350)}}
 function save(){try{localStorage.setItem("kd_tasks",JSON.stringify(tasks))}catch(e){}touch()}
 function saveS(){try{localStorage.setItem("kd_ses",JSON.stringify(sessions));localStorage.setItem("kd_run",JSON.stringify(run))}catch(e){}touch()}
 function byId(id){for(var i=0;i<tasks.length;i++)if(tasks[i].id===id)return tasks[i];return null}
@@ -1408,8 +1411,8 @@ async function runSync(manual){if(!mcp)return;
   syncing=false;
   if(pending){pending=false;runSync()}
 }
-function queueDb(){dbQ=dbQ.then(saveDb)}
-function queueSync(){clearTimeout(syncTimer);syncTimer=setTimeout(runSync,1500)}
+var dbPend=false,dbAt=0;function queueDb(){if(dbPend)return;dbPend=true;dbQ=dbQ.then(function(){dbPend=false;dbAt=Date.now();return saveDb()})}
+function queueSync(){queueDb()}
 async function saveDb(){
   if(!dbRef)return "data baza ulanmagan (ma’lumot shu brauzerda saqlanadi)";
   try{var at=Date.now(),snapMod=localMod;
@@ -2157,7 +2160,7 @@ function gsInit(){
   document.addEventListener("mouseover",function(e){var b=e.target.closest&&e.target.closest("#gsL .gsi");if(!b)return;var els=document.querySelectorAll("#gsL .gsi");Array.prototype.forEach.call(els,function(el,i){var on=el===b;el.classList.toggle("act",on);if(on)GS.act=i})});
 }
 /* --- Jamoa: hisob, admin bo'limi, faqat ko'rish rejimi --- */
-var TM={rows:[],days:7,sel:null,full:{},at:0,busy:false,live:0,poll:0,err:""};
+var TM={prof:null,pAt:0,seen:{},fetching:false,rows:[],days:7,sel:null,full:{},at:0,busy:false,live:0,poll:0,err:""};
 function tmAdmin(){return !!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)}
 function tmSt(t,bad){var e=$("tmSt");if(e){e.textContent=t||"";e.classList.toggle("bad",!!bad)}}
 function tmErr(e){var c=e&&e.code||"";if(/^http_(401|403)/.test(c))return "Ruxsat yo‘q (admin emasmisiz?)";if(c==="net")return "Internetga ulanib bo‘lmadi";return "Xato: "+((e&&e.message)||c||"noma’lum").toString().slice(0,100)}
@@ -2200,14 +2203,30 @@ function tmStat(r,days){
   return{tot:tot,act:act,avg:act?tot/act:0,pct:act?tot/act/av*100:0,av:av,today:dm[ymd(Date.now())]||0};
 }
 function tmLevel(p){var i=0;LV.forEach(function(l,k){if(p>=l[2])i=k});return i}
+function tmSig(){return ymd(Date.now())+"|"+TM.days+"|"+TM.sel+"|"+JSON.stringify(TM.rows.map(function(r){var u=r.sum||{};return[r.id,r.name,r.role,r.saved,u.run&&u.run.s,u.n,u.tn,u.lt&&u.lt.e]}))}
 function tmLoad(quiet){
   if(!tmAdmin()||TM.busy)return Promise.resolve();
   TM.busy=true;if(!quiet)tmSt("Yuklanmoqda…");
-  return Promise.all([TEAM.api("/rest/v1/profiles?select=id,login,full_name,role&order=login.asc"),TEAM.api("/rest/v1/user_state?select=user_id,summary,saved_at")]).then(function(r){
+  var t0=Date.now(),needP=!TM.rows.length||Date.now()-(TM.pAt||0)>30000;
+  return Promise.all([needP?TEAM.api("/rest/v1/profiles?select=id,login,full_name,role&order=login.asc"):Promise.resolve(null),TEAM.api("/rest/v1/user_state?select=user_id,summary,saved_at")]).then(function(r){
+    if(r[0]){TM.prof=r[0];TM.pAt=Date.now()}
     var by={};(r[1]||[]).forEach(function(x){by[x.user_id]=x});
-    TM.rows=(r[0]||[]).map(function(p){var s=by[p.id]||{};return{id:p.id,name:p.full_name||p.login,login:p.login,role:p.role,sum:s.summary||{},saved:s.saved_at||0}});
-    TM.at=Date.now();TM.busy=false;tmSt(clock(Date.now())+" da yangilandi · "+TM.rows.length+" xodim");tmRender();
-  },function(e){TM.busy=false;tmSt(tmErr(e),true)});
+    var old=tmSig();
+    TM.rows=(TM.prof||[]).map(function(p){var s=by[p.id]||{};return{id:p.id,name:p.full_name||p.login,login:p.login,role:p.role,sum:s.summary||{},saved:s.saved_at||0}});
+    TM.at=Date.now();TM.busy=false;TM.err="";
+    tmSt("● Jonli · "+hms(Date.now()-new Date().setHours(0,0,0,0))+" · "+TM.rows.length+" xodim");
+    if(tmSig()!==old)tmRender();
+    tmFresh();
+  },function(e){TM.busy=false;TM.err=tmErr(e);tmSt(TM.err,true)});
+}
+/* ochiq jurnal: xodim yangi saqlasa, darrov qayta yuklanadi */
+function tmFresh(){
+  var id=TM.sel;if(!id||TM.fetching)return;
+  var r=TM.rows.filter(function(x){return x.id===id})[0];if(!r||!TM.full[id]||r.saved===TM.seen[id])return;
+  TM.fetching=true;
+  TEAM.api("/rest/v1/user_state?user_id=eq."+encodeURIComponent(id)+"&select=state,saved_at").then(function(rows){
+    TM.fetching=false;if(rows&&rows[0]){TM.full[id]=rows[0].state||{};TM.seen[id]=rows[0].saved_at}if(TM.sel===id)tmDetail();
+  },function(){TM.fetching=false});
 }
 function tmRender(){
   var box=$("tmBody");if(!box)return;
@@ -2218,7 +2237,7 @@ function tmRender(){
     var s=tmStat(r,days),lv=tmLevel(s.pct),run=r.sum&&r.sum.run;totAll+=s.tot;if(run)runN++;
     h+='<tr data-tmr="'+esc(r.id)+'"'+(TM.sel===r.id?' class="sel"':'')+'><td><b>'+esc(r.name)+'</b><small>'+esc(r.login)+(r.role==="admin"?' · admin':'')+'</small></td>'
      +'<td>'+(run?'<span class="tmrun">●</span> '+esc((run.p||"")+" — "+(run.t||""))+' <b class="tmel" data-s="'+(+run.s||0)+'"></b>':'<span class="tmoff">—</span>')+'</td>'
-     +'<td>'+(s.today?hmTxt(s.today):'<span class="tmoff">—</span>')+'</td>'
+     +'<td>'+(s.today?hmTxt(s.today):'<span class="tmoff">—</span>')+tmDone(r)+'</td>'
      +'<td>'+(s.act?hmTxt(s.avg)+' <small>('+s.act+' faol kun, jami '+hmTxt(s.tot)+')</small>':'<span class="tmoff">ma’lumot yo‘q</span>')+'</td>'
      +'<td>'+(s.act?'<div class="tmbar"><i style="width:'+Math.min(100,s.pct)+'%;background:'+LC[lv]+'"></i></div><b style="color:'+LC[lv]+'">'+Math.round(s.pct)+'%</b> <small>'+LV[lv][0]+'</small>':'<span class="tmoff">—</span>')+'</td>'
      +'<td>'+(r.saved?'<small>'+esc(tmAgo(r.saved))+'</small>':'<span class="tmoff">hali kirmagan</span>')+'</td>'
@@ -2227,6 +2246,8 @@ function tmRender(){
   h+='</tbody></table></div><p class="note">Hozir ishlayotgan: <b>'+runN+'</b> · '+esc(lbl)+' bo‘yicha jamoa jami: <b>'+hmTxt(totAll)+'</b> · Kuchlanish: faol kunlardagi o‘rtacha vaqtning xodim ish kuni sig‘imiga nisbati.</p>';
   box.innerHTML=h;tmLive();
 }
+function tmDone(r){var u=r.sum||{};if(u.td!==ymd(Date.now())||!u.tn)return "";
+  return '<small><b>'+u.tn+'</b> ta vazifa tugatildi'+(u.lt&&ymd(u.lt.e)===u.td?' · oxirgisi '+clock(u.lt.e)+': '+esc((u.lt.p?u.lt.p+" — ":"")+u.lt.t):'')+'</small>'}
 function tmAgo(ts){var d=Date.now()-ts,m=Math.round(d/60000);if(m<1)return "hozirgina";if(m<60)return m+" daq. oldin";var k=ymd(ts);return k===ymd(Date.now())?"bugun "+clock(ts):dayLabel(k)+" "+clock(ts)}
 function tmLive(){Array.prototype.forEach.call(document.querySelectorAll("#tmBody .tmel"),function(el){var s=+el.dataset.s;el.textContent=s?hms(Date.now()-s):""})}
 
@@ -2245,7 +2266,7 @@ function tmOpen(id){
   TM.sel=id;tmRender();var d=$("tmDet");d.hidden=false;d.innerHTML='<p class="note">Yuklanmoqda…</p>';
   if(TM.full[id]){tmDetail();return}
   TEAM.api("/rest/v1/user_state?user_id=eq."+encodeURIComponent(id)+"&select=state").then(function(rows){
-    TM.full[id]=rows&&rows[0]?rows[0].state||{}:{};tmDetail();
+    TM.full[id]=rows&&rows[0]?rows[0].state||{}:{};TM.seen[id]=(TM.rows.filter(function(x){return x.id===id})[0]||{}).saved;tmDetail();
     try{d.scrollIntoView({block:"nearest",behavior:"smooth"})}catch(x){}
   },function(e){d.innerHTML='<p class="note bad">'+esc(tmErr(e))+'</p>'});
 }
@@ -2336,6 +2357,7 @@ function tmClick(e){
   }
 }
 function tmInit(){
+  document.addEventListener("visibilitychange",function(){if(document.hidden&&window.__tmAuto){clearTimeout(tmAutoT);queueDb()}});window.addEventListener("pagehide",function(){if(window.__tmAuto){clearTimeout(tmAutoT);queueDb()}});
   safe(tmAccount,"hisob");
   document.addEventListener("click",function(e){try{tmClick(e)}catch(x){showErr("jamoa",x)}});
   if(TEAM.as){tmViewAs();return}
@@ -2345,7 +2367,8 @@ function tmInit(){
   $("tmPer").addEventListener("change",function(){TM.days=+this.value;tmRender()});
   document.addEventListener("input",function(e){var id=e.target.id;if(id==="tmQ"||id==="tmFrom"||id==="tmTo")tmDetail()});
   TM.live=setInterval(tmLive,1000);
-  TM.poll=setInterval(function(){var s=$("s-team");if(document.hidden||!s||s.classList.contains("sec-off"))return;tmLoad(true)},30000);
+  var tick=function(){var s=$("s-team");if(document.hidden||!s||s.classList.contains("sec-off"))return;tmLoad(true)};
+  TM.poll=setInterval(tick,2000);document.addEventListener("visibilitychange",function(){if(!document.hidden)tick()});
   tmLoad();
 }
 /* --- mavzu va shrift --- */
@@ -2457,7 +2480,7 @@ async function initRuntime(){
     }catch(e){}
   }
   $("saveSt").textContent=dbRef?"Bulutga ulangan: ma’lumot avtomatik saqlanadi.":"Bulutga ulanmagan — ma’lumot shu brauzerda saqlanadi.";
-  $("shSt").textContent="";
+  $("shSt").textContent="";window.__tmAuto=!!dbRef&&!(window.TEAM&&TEAM.as);
 }
 relink();snapAll();ensureKeys();buildFonts();initLayout();$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
 </script>
