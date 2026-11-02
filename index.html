@@ -2039,15 +2039,41 @@ function mdaiParse(text){
     var c=s.slice(h.end,i+1<heads.length?heads[i+1].start:s.length).trim(),cm=/^(\d{1,3})\s*(?:ta|dona)?\s*$/i.exec(c),items=[];
     if(cm){var n=Math.min(60,+cm[1]);for(var q=0;q<n;q++)items.push("")}
     else{
-      var mk=/(^|\s)(\d{1,3})(?:\s*\)\s*|\.\s+)/g,exp=1,pos=[],x;
-      while((x=mk.exec(c))){if(+x[2]===exp){pos.push({a:x.index+x[1].length,b:mk.lastIndex});exp++}}
-      if(pos.length){pos.forEach(function(p,k){items.push(c.slice(p.b,k+1<pos.length?pos[k+1].a:c.length))})}
-      else c.split("\n").forEach(function(l){l=l.replace(/^\s*[-–•*·]\s*/,"");if(l.trim())items.push(l)});
-      items=items.map(function(t){return t.replace(/^[.\s]+/,"").replace(/\s*\n\s*/g," ").replace(/\s{2,}/g," ").replace(/[\s,;]+$/,"").trim()}).filter(function(t,k,a){return t||a.length>0&&false});
+      items=mdaiSplit(c);
     }
     items.forEach(function(t){out.push({c:h.type,t:t})});
   });
   return out;
+}
+/* Raqamlangan (1) 2) ...) yoki qatorma-qator ro'yxatni mavzularga ajratadi */
+function mdaiSplit(c){
+  var items=[],mk=/(^|\s)(\d{1,3})(?:\s*\)\s*|\.\s+)/g,exp=1,pos=[],x;
+  while((x=mk.exec(c))){if(+x[2]===exp){pos.push({a:x.index+x[1].length,b:mk.lastIndex});exp++}}
+  if(pos.length){pos.forEach(function(p,k){items.push(c.slice(p.b,k+1<pos.length?pos[k+1].a:c.length))})}
+  else c.split("\n").forEach(function(l){l=l.replace(/^\s*[-\u2013\u2022*\u00b7]\s*/,"");if(l.trim())items.push(l)});
+  return items.map(function(t){return t.replace(/^[.\s]+/,"").replace(/\s*\n\s*/g," ").replace(/\s{2,}/g," ").replace(/[\s,;]+$/,"").trim()}).filter(Boolean);
+}
+/* Tur nomisiz ro'yxat: «Postlar kiritilgan kunlarga Storylarni ham kiriting  1) ... 2) ...» */
+function mdaiLoose(text){
+  var s=String(text||"").replace(/\r/g,"").replace(/\t+/g," ").replace(/\u00a0/g," "),m=/(^|\s)1\s*(\)|\.\s)/.exec(s);
+  if(!m)return null;
+  var pre=s.slice(0,m.index),body=s.slice(m.index+m[1].length),types=[],tr=new RegExp("\\b("+MDAI_TYRX+")\\w*","gi"),x;
+  while((x=tr.exec(pre))){var t=mdaiType(x[1]);if(t&&types.indexOf(t)<0)types.push(t)}
+  if(!types.length)return{err:"Ro‘yxat qaysi kontent turiga tegishli ekanini yozing (masalan, «Storylarni kiriting» yoki «Story 1) ...»)."};
+  var items=mdaiSplit(body);if(!items.length)return null;
+  var target=types[types.length-1],ref=types.length>1?types[0]:"";
+  return{target:target,ref:ref,same:!!ref&&/kun|sana|bir\s*vaqt|bilan/i.test(mdaiNorm(pre)),items:items.map(function(t){return{c:target,t:t}})};
+}
+/* Tur nomisiz ro'yxatni boshqa tur (masalan Post) turgan kunlarga qo'yadi */
+function mdaiPlanSame(L,proj,opt){
+  var ref=media.filter(function(e){return e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&e.c.indexOf(L.ref)>-1&&(!opt.fut||e.d>=ymd(Date.now()))}).map(function(e){return e.d}).sort().filter(function(d,i,a){return a.indexOf(d)===i});
+  if(!ref.length)return{err:"Bu oyda "+L.ref+" yozuvlari yo‘q. Avval "+L.ref+" larni tarqating, keyin "+L.target+" larni shu kunlarga qo‘ying."};
+  var ops=[],n=Math.min(ref.length,L.items.length),rest=L.items.slice(n);
+  if(opt.rep)media.forEach(function(e){if(!e.x&&e.d.slice(0,7)===mMonth&&normK(e.p)===normK(proj)&&e.c.length&&e.c.every(function(c){return c===L.target}))ops.push({op:"del",k:e.k})});
+  for(var i=0;i<n;i++)ops.push({op:"add",d:ref[i],c:[L.target],t:L.items[i].t});
+  var extra=0;
+  if(rest.length){var pl=mdaiPlan(rest,proj,{rep:false,fut:opt.fut,sat:opt.sat});if(pl.err)return pl;pl.ops.forEach(function(o){ops.push(o)});extra=rest.length}
+  return{ops:ops,same:n,extra:extra};
 }
 function mdaiDays(opt){
   var t=ymd(Date.now());
@@ -2199,9 +2225,16 @@ function mdaiRun(kind){
         done(r,"AI")},function(e){say("AI ishlamadi: "+((e&&e.message)||"xato")+" Oddiy usulga o‘tdim.",true);var it=mdaiParse(txt);if(!it.length)return;done(mdaiPlan(it,proj,opt),"")});
       return}
     var items=mdaiParse(txt);
+    if(!items.length){var L=mdaiLoose(txt);
+      if(L&&L.err){say(L.err,true);return}
+      if(L){var pl=L.same?mdaiPlanSame(L,proj,opt):mdaiPlan(L.items,proj,opt);
+        if(pl.err){say(pl.err,true);return}
+        done(pl,L.same?L.target+" "+L.ref+" kunlariga qo‘yildi"+(pl.extra?", yana "+pl.extra+" tasi qo‘shimcha kunlarga":""):"");return}
+    }
     if(!items.length){say("Ro‘yxat tushunilmadi. Format: «Post - 1) mavzu 2) mavzu   Story 1) mavzu 2) mavzu».",true);return}
     done(mdaiPlan(items,proj,opt),"");return}
   var c=$("mdaiC").value;
+  if(/(^|\s)1\s*(\)|\.\s)/.test(c)){$("mdaiT").value=c;$("mdaiC").value="";mdaiRun("list");return}
   var local=mdaiCmd(c,proj);
   var fin=function(r,via){var k=mdaiApply(r.ops,proj,"Tahrirlandi: "+String(c).slice(0,40));say("✓ "+mdaiSummary(k)+(via?" ("+via+")":"")+".");$("mdaiC").value=""};
   if(local.ops&&!useAi){fin(local,"");return}

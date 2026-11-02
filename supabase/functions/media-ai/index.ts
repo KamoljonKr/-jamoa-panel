@@ -20,7 +20,7 @@ Schema: {"ops":[ {"op":"add","d":"YYYY-MM-DD","c":["Post"],"t":"topic"}, {"op":"
 Rules:
 - "c" values must come only from the given "types" list. Dates must come only from the given "days" list (for add) or be a valid date of the given month (for move).
 - Keep topics in the user's own language and wording; do not invent or translate topics. Strip list numbering such as "1)" from topics.
-- mode "parse": the user pasted a list grouped by content type (e.g. "Post - 1) ... 2) ...  Story 1) ..."). Create one "add" op per item. Spread the items of each type evenly over "days" (earliest item on the earliest slot), do not put two items of the same type on the same day when there are enough days, and avoid days that already have many entries in "current". Different types may share a day.
+- mode "parse": the user pasted a list grouped by content type (e.g. "Post - 1) ... 2) ...  Story 1) ..."). Create one "add" op per item. Spread the items of each type evenly over "days" (earliest item on the earliest slot), do not put two items of the same type on the same day when there are enough days, and avoid days that already have many entries in "current". Different types may share a day. If the user says a type should go on the same days as another type already present in "current" (e.g. "put Stories on the days that have Posts"), use exactly those dates in order.
 - mode "edit": the user gave a command to change the plan. Use the "current" entries (they have keys "k") and return only the ops needed. Never touch entries the command does not mention. If the command is unclear or matches nothing, return {"ops":[]}.`;
 
 Deno.serve(async (req: Request) => {
