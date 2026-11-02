@@ -220,7 +220,7 @@ h1{font-size:clamp(26px,4vw,38px);font-weight:800;margin:0 0 4px;letter-spacing:
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
 h2{font-size:16px;font-weight:800;margin:0 0 12px}
 .grid{display:grid;gap:16px}
-.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
 .kpi b{display:block;font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}
@@ -236,8 +236,9 @@ h2{font-size:16px;font-weight:800;margin:0 0 12px}
 .dl .cl.emp i{background:var(--line)!important;opacity:.6}.dl .cl.emp b{color:var(--mute);font-weight:400}
 .dl .cl.today span{color:var(--ink);font-weight:800}
 .dl .ln{position:absolute;left:0;right:0;border-top:1px dashed var(--mute);opacity:.5;pointer-events:none}
-.hero{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:18px;align-items:center}
-@media(max-width:700px){.hero{grid-template-columns:1fr}}
+.hero{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:18px;align-items:center}
+.hero>*,.dl,.card,.sec{min-width:0}
+@media(max-width:700px){.hero{grid-template-columns:minmax(0,1fr)}}
 .verdict{font-size:20px;font-weight:800;margin:0 0 6px}
 .settings{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
 label{font-size:12px;color:var(--mute);display:block}
@@ -317,7 +318,7 @@ tr.planned td{background:var(--rt);border-top-color:transparent}
 tr.planned td:first-child{box-shadow:inset 5px 0 0 var(--c)}
 tr.planned input.txt,tr.planned select.ct{background:transparent;border-color:var(--c)}
 td select.ct{width:150px;padding:5px 7px}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:14px;margin:12px 0}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(310px,100%),1fr));gap:14px;margin:12px 0}
 .pbox{border:1px solid var(--line);border-radius:12px;padding:14px}
 .pbox h3{margin:0 0 4px;font-size:15px;display:flex;align-items:center}
 .prow{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center;margin:10px 0;font-size:13px}
@@ -325,6 +326,7 @@ td select.ct{width:150px;padding:5px 7px}
 .cnt span{color:var(--mute);font-weight:600;font-size:12px;margin-left:6px}
 .pe{display:flex;align-items:center;gap:2px}
 .pe input.pn{width:64px;padding:5px 7px}
+@media(max-width:420px){.prow{grid-template-columns:70px minmax(0,1fr) auto;gap:8px}.pbox{padding:12px 10px}.pe input.pn{width:54px}}
 .fe{display:block;color:#e4572e;font-size:12px;font-weight:600;margin-top:3px}
 @keyframes fl{from{background:rgba(31,138,138,.4)}to{background:transparent}}
 tr.flash td,.hday.flash,#s-journal.flash{animation:fl 3s ease-out}
@@ -664,6 +666,7 @@ body.secmaxed{overflow:hidden}
 .tmtool{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:8px 0 12px}
 .tmtool label{font-size:13px;display:inline-flex;align-items:center;gap:6px}
 .tmtool .tmx{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap;margin-left:auto}
+@media(max-width:600px){.tmtool .tmx{margin-left:0;width:100%}.tmtool .tmx label{display:flex;flex-wrap:wrap;align-items:center;gap:6px;width:100%}.tmtool .tmx input[type=date]{flex:1 1 120px;min-width:0;width:auto}.tmtool .tmx .sm{width:100%}}
 #tmSt.bad,.note.bad{color:#c0392b;font-weight:600}
 .tmt{width:100%;border-collapse:collapse;min-width:760px;font-size:13.5px}
 .tmt th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute);padding:6px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
@@ -773,6 +776,175 @@ html.adminonly .top{justify-content:flex-start}
 .tmh-me .mi2 span{font-size:12px;color:#a8d6d1}
 .tmh-me .mi2.on b{color:#ffcf86}
 @media (prefers-reduced-motion:reduce){#s-team .tmrun{animation:none}}
+@media(max-width:560px){.me,.me.all{grid-template-columns:minmax(0,1fr) auto}.me.all>*:nth-child(3){grid-column:1/-1}#histStats .bar,.tmpj .bar{grid-template-columns:minmax(80px,34%) minmax(0,1fr) auto}}
+@media(max-width:520px){.dl .cols{gap:2px;overflow-x:visible}.dl .cl{flex:1 1 0;min-width:0}.dl button.cl{padding:0}.dl .cl b{font-size:9px;letter-spacing:-.3px}.dl .cl{font-size:10px}.dl .cl i{max-width:none}}
+
+/* ===== MOBIL (responsive) tuzatishlari: telefonda sig'maydigan elementlar ===== */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden}
+@supports (overflow:clip){html{overflow-x:clip}}
+img,svg,video,canvas{max-width:100%}
+.card,.kpi,.hero>*,.grid>*,.tmhero>*{min-width:0}
+#gauge{width:100%;max-width:340px;margin:0 auto}
+#gauge svg{display:block;width:100%;height:auto;max-width:100%}
+.verdict,.note,.kpi b,.kpi span,h2,.hrow>div{overflow-wrap:anywhere}
+.kpi b{text-wrap:balance}
+@media(max-width:700px){
+  .wrap{padding:14px 12px 44px}
+  .menu{max-height:calc(100vh - 80px);max-height:calc(100dvh - 80px);-webkit-overflow-scrolling:touch}
+  .top{gap:8px;padding:8px 10px}
+  .recbar{flex-wrap:wrap;gap:6px 8px}
+  .recbar #recName{flex:1 1 0;min-width:0}
+  .recbar:not(.on) #recName{flex:1 1 0}
+  .recbar.on #recNote{order:9;flex:1 1 100%;max-width:none}
+  .recbar .stop{margin-left:0}
+  .recbar.on .rtime{margin-left:auto}
+  .recbar button.save{margin-left:auto}
+  .recbar.on button.save{margin-left:0}
+  .verdict{font-size:18px}
+  .hero{gap:12px}
+}
+@media(max-width:520px){
+  .wrap{padding:12px 10px 40px}
+  .card{padding:14px 12px;border-radius:12px;margin-bottom:12px}
+  h2{font-size:15px}
+  .menubtn{padding:7px 10px}
+  .tsw{display:none}
+  .topst{font-size:11.5px}
+  .gs{padding:0 6px}
+  .gs input{font-size:13.5px;padding:7px 4px}
+  .recbar{padding:4px 10px}
+  .recbar button.save{font-size:0;gap:0;padding:6px 9px}
+  .recbar button.save svg{width:15px;height:15px}
+  .kpis{gap:8px;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi{padding:10px 11px}
+  .kpi b{font-size:16.5px;line-height:1.25}
+  .kpi span{font-size:12px;line-height:1.35}
+  #gauge{max-width:260px}
+  .verdict{font-size:17px}
+  .dl h3{font-size:13px}
+  .dl h3 span{display:block;margin-top:2px}
+  .dl .cols{height:118px}
+  /* chiziqli diagramma qatorlari: nom tepada, chiziq pastda */
+  .bar,#histStats .bar,.tmpj .bar{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"l v" "t t";gap:4px 8px;margin:10px 0}
+  .bar>span:first-child,#histStats .bar>span:first-child,.tmpj .bar>span:first-child{grid-area:l;min-width:0}
+  .bar>.track,#histStats .bar>.track,.tmpj .bar>.track{grid-area:t}
+  .bar>b,#histStats .bar>b,.tmpj .bar>b{grid-area:v;text-align:right;white-space:nowrap}
+  .hrow{gap:8px}
+  .hrow>div{min-width:0!important;flex:1 1 100%!important}
+  .hrow>.sm{margin-left:auto}
+  .note{font-size:12.5px}
+  .settings{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dayb{gap:6px}
+  .tlw{padding:0 4px}
+  .tl div{font-size:10px;padding:0 3px}
+  .ticks{font-size:10px}
+  .ent{font-size:12.5px}
+  input,select,textarea{font-size:16px} /* iOS: fokusda sahifa kattalashib ketmasligi uchun */
+  .gs input{font-size:16px}
+  td input.tm{width:70px}
+  .add.man{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .add.man>.addt,.add.man>.wide,.add.man>button{grid-column:1/-1}
+  .add.man>div:nth-of-type(2),.add.man>div:nth-of-type(3),.add.man>div:nth-of-type(4){grid-column:span 2}
+  .add.man>div:nth-of-type(5),.add.man>div:nth-of-type(6){grid-column:span 1}
+  .add.man>div.wide{grid-column:1/-1}
+  .dl button.cl,.dl .cl{font-size:10px}
+  .dl button.cl b{font-size:8.5px}
+  .tlw{padding:0 10px}
+}
+@media(max-width:380px){
+  .menubtn{font-size:13px;padding:7px 8px}
+  .kpi b{font-size:15.5px}
+}
+/* ---- Vazifalar jadvali: telefonda kartochka ko'rinishi ---- */
+@media(max-width:640px){
+  #s-tasks .tw{overflow-x:visible}
+  #s-tasks .tkt,#s-tasks .tkt tbody{display:block;width:100%}
+  #s-tasks .tkt{min-width:0}
+  #s-tasks .tkt thead{display:none}
+  #s-tasks .tkt tr{display:grid;grid-template-columns:30px minmax(0,1fr) auto 30px;column-gap:6px;row-gap:4px;align-items:center;padding:10px 6px;border-top:1px solid var(--line);border-radius:10px}
+  #s-tasks .tkt td{display:block;border:0!important;padding:0;min-width:0;width:auto!important;background:transparent!important;box-shadow:none!important}
+  #s-tasks .tkt tr.planned{background:var(--rt);border-top-color:transparent;box-shadow:inset 4px 0 0 var(--c)}
+  #s-tasks .tkt td:nth-child(1){grid-area:1/1}
+  #s-tasks .tkt td:nth-child(2){grid-area:1/2}
+  #s-tasks .tkt td:nth-child(7){grid-area:1/3;justify-self:end}
+  #s-tasks .tkt td:nth-child(8){grid-area:1/4;justify-self:end}
+  #s-tasks .tkt td:nth-child(3){grid-area:2/2/3/5}
+  #s-tasks .tkt td:nth-child(4){grid-area:3/2/5/3;align-self:center}
+  #s-tasks .tkt td:nth-child(5){grid-area:3/3/4/5;justify-self:end;font-size:12.5px;white-space:nowrap}
+  #s-tasks .tkt td:nth-child(6){grid-area:4/3/5/5;justify-self:end;font-size:11.5px;color:var(--mute);white-space:nowrap}
+  #s-tasks .tkt td:nth-child(5)::before{content:"Bugun: ";color:var(--mute)}
+  #s-tasks .tkt td:nth-child(6)::before{content:"Hammasi: "}
+  #s-tasks .tkt td:nth-child(6):empty{display:none}
+  #s-tasks .tkt td input.txt{min-width:0;width:100%}
+  #s-tasks .tkt td select.ct{min-width:0;width:100%;font-size:14px}
+  #s-tasks .tkt .pc{min-width:0}
+  #s-tasks .tkt button.go,.tkt button.stop{padding:6px 10px;font-size:13px;white-space:nowrap}
+  #s-tasks .tkt button.ghost{padding:4px 8px}
+}
+/* ---- Vaqt jurnali (bugun / tarix): telefonda kartochka ---- */
+@media(max-width:640px){
+  .tw:has(.jt){overflow-x:visible}
+  .jt{min-width:0!important;width:100%}
+  .jt,.jt tbody{display:block}
+  .jt thead{display:none}
+  .jt tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr) 32px;gap:6px 8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+  .jt td{display:block;border:0;padding:0;min-width:0}
+  .jt td:nth-child(1){grid-area:1/1/2/4;font-weight:700;font-size:13.5px;overflow-wrap:anywhere}
+  .jt td:nth-child(6){grid-area:1/4;justify-self:end}
+  .jt td:nth-child(2){grid-area:2/1}
+  .jt td:nth-child(3){grid-area:2/2}
+  .jt td:nth-child(4){grid-area:2/3/3/5}
+  .jt td:nth-child(5){grid-area:3/1/4/5}
+  .jt td:nth-child(2)::before,.jt td:nth-child(3)::before{display:block;font-size:10.5px;color:var(--mute);font-weight:600;margin-bottom:2px}
+  .jt td:nth-child(2)::before{content:"Start"}
+  .jt td:nth-child(3)::before{content:"Finish"}
+  .jt td:nth-child(4)::before{content:"Davomiyligi";display:block;font-size:10.5px;color:var(--mute);font-weight:600;margin-bottom:2px}
+  .jt td input.tm,.jt td .dn{width:100%}
+  .jt .dwrap{width:100%}
+  .jt td textarea.txt,td textarea.txt{min-width:0;width:100%}
+  .jt td[colspan]{grid-column:1/-1}
+}
+
+/* ---- Admin (Jamoa) bo'limi: telefonda ---- */
+@media(max-width:640px){
+  .tmf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .tmf label,.tmf label input{min-width:0;width:100%}
+  .tmf label.tmq,.tmf>button{grid-column:1/-1}
+  .tmf>button{width:100%;padding:9px 10px}
+  .tmk{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tmdh h3{overflow-wrap:anywhere}
+  #tmBand .tmbi:last-child:nth-child(odd){grid-column:1/-1}
+  #s-team .tmbi{padding:10px 12px}
+  #s-team .tmbi b{font-size:21px}
+  .tmtool{gap:8px}
+  .tmtool>label{flex:1 1 auto}
+  .tmtool .tmx label{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px 6px!important;align-items:center}
+  .tmtool .tmx .tmlb{grid-column:1/-1;font-weight:700}
+  .tmtool .tmx input[type=date]{width:100%!important;flex:none!important}
+  #s-team .tw{overflow-x:visible}
+  #s-team table.tmt{min-width:0!important;width:100%}
+  #s-team table.tmt,#s-team table.tmt tbody{display:block}
+  #s-team table.tmt thead{display:none}
+  #s-team table.tmt:not(.tmj) tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--line)}
+  #s-team table.tmt td{display:block;border:0;padding:0;min-width:0;background:transparent!important}
+  #s-team table.tmt:not(.tmj) td:nth-child(1){grid-area:1/1}
+  #s-team table.tmt:not(.tmj) td:nth-child(3){grid-area:1/2;text-align:right;white-space:nowrap}
+  #s-team table.tmt:not(.tmj) td:nth-child(2){grid-area:2/1/3/3}
+  #s-team table.tmt:not(.tmj) td:nth-child(4){grid-area:3/1;font-size:12.5px}
+  #s-team table.tmt:not(.tmj) td:nth-child(5){grid-area:3/2;text-align:right}
+  #s-team table.tmt:not(.tmj) td:nth-child(6){grid-area:4/1/5/3;display:flex;gap:8px}
+  #s-team table.tmt:not(.tmj) td.tma .sm{flex:1;margin:0;padding:8px 10px}
+  #s-team table.tmt:not(.tmj) td:nth-child(3)::before{content:"Bugun";display:block;font-size:10.5px;color:var(--mute);font-weight:600}
+  #s-team table.tmt:not(.tmj) td:nth-child(4)::before{content:"O‘rtacha";color:var(--mute);margin-right:4px}
+  #s-team table.tmt:not(.tmj) tr.sel{background:rgba(31,138,138,.08);border-radius:10px}
+  /* jurnal tafsiloti */
+  #s-team table.tmj tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;padding:10px 4px;border-bottom:1px solid var(--line)}
+  #s-team table.tmj td:nth-child(1){grid-area:1/1;font-weight:700;white-space:nowrap}
+  #s-team table.tmj td:nth-child(3){grid-area:1/2;text-align:right;white-space:nowrap}
+  #s-team table.tmj td:nth-child(2){grid-area:2/1/3/3;overflow-wrap:anywhere}
+  #s-team table.tmj td:nth-child(4){grid-area:3/1/4/3;color:var(--mute);font-size:12.5px;overflow-wrap:anywhere}
+  #s-team table.tmj td:nth-child(4):empty{display:none}
+}
 </style>
 </head>
 <body>
@@ -842,7 +1014,7 @@ html.adminonly .top{justify-content:flex-start}
     <div class="tmband" id="tmBand" aria-live="polite"></div>
     <div class="tmtool"><label>Davr <select id="tmPer"><option value="1">Bugun</option><option value="7" selected>Oxirgi 7 kun</option><option value="30">Oxirgi 30 kun</option><option value="0">Shu oy</option></select></label>
       <button class="sm" type="button" data-tmact="refresh">⟳ Yangilash</button>
-      <span class="tmx"><label>Excel davri <input type="date" id="tmXf" aria-label="Excel: dan"> — <input type="date" id="tmXt" aria-label="Excel: gacha"></label><button class="sm" type="button" data-tmact="xall">⬇ Butun jamoa Excel</button></span>
+      <span class="tmx"><label><span class="tmlb">Excel davri</span> <input type="date" id="tmXf" aria-label="Excel: dan"> <span class="tmdash">—</span> <input type="date" id="tmXt" aria-label="Excel: gacha"></label><button class="sm" type="button" data-tmact="xall">⬇ Butun jamoa Excel</button></span>
       <span id="tmSt" class="note" role="status"></span></div>
     <div id="tmBody"><p class="note">Yuklanmoqda…</p></div>
     <div id="tmDet" class="tmd" hidden></div>
@@ -897,7 +1069,7 @@ html.adminonly .top{justify-content:flex-start}
   <div class="card">
     <h2>Loyihalar va vazifalar</h2>
     <p class="note" style="margin-top:0">Loyiha va vazifa nomini jadvalning o‘zida o‘zgartirish mumkin. “Bugun” ustuni bugungi natijani ko‘rsatadi. O‘tgan kunlar Tarix bo‘limida. Vazifani × bilan o‘chirsangiz, uning yozuvlari tarixda qoladi. Chapdagi doira bugun qilinadigan vazifani belgilaydi: qatori rangga bo‘yaladi va jadvalning eng yuqorisiga ko‘tariladi. Qolgan vazifalar bir xil rangli loyihalar bo‘yicha ketma-ket tartiblanadi, vazifasi eng ko‘p rang ro‘yxat boshida turadi. Belgi ertasi kuni o‘zi tozalanadi.</p>
-    <div class="tw"><table>
+    <div class="tw"><table class="tkt">
       <thead><tr><th aria-label="Bugun qilinadigan"></th><th>Loyiha</th><th>Vazifa</th><th>Kontent turi</th><th>Bugun</th><th>Barcha kunlar</th><th>Taymer</th><th></th></tr></thead>
       <tbody id="rows"></tbody>
     </table></div>
@@ -982,7 +1154,7 @@ html.adminonly .top{justify-content:flex-start}
   <section class="sec" id="s-journal" data-sec="journal">
   <div class="card">
     <h2>Vaqt jurnali (bugun)</h2>
-    <div class="tw"><table style="min-width:640px"><thead><tr><th>Vazifa</th><th>Start</th><th>Finish</th><th>Davomiyligi</th><th>Natija</th><th></th></tr></thead><tbody id="log"></tbody></table></div>
+    <div class="tw"><table class="jt" style="min-width:640px"><thead><tr><th>Vazifa</th><th>Start</th><th>Finish</th><th>Davomiyligi</th><th>Natija</th><th></th></tr></thead><tbody id="log"></tbody></table></div>
     <p class="note" id="logTotal"></p>
     <div class="add man">
       <div class="addt"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Vaqtni qo‘lda yozish</div>
@@ -1137,7 +1309,7 @@ function renderStrip(){
     rows+='<div class="ent"'+(o.live?'':' data-goto="'+o.i+'" role="button" tabindex="0"')+'><span class="dot" style="background:'+col(pi)+'"></span><b>'+clock(o.s)+"–"+(o.live?"hozir":clock(o.e))+'</b> · '+esc(x.p)+' — '+esc(x.t)+' · '+dTxt(m)+(o.n?' <i>· '+esc(o.n)+'</i>':'')+'</div>'});
   $("tlTitle").textContent=(day===ymd(Date.now())?"Bugun":dayLabel(day))+": soat nechida nima qilindi";
   $("tl").innerHTML=blocks;
-  for(h=rs;h<=re;h+=(span>12?2:1))tk+='<span style="left:'+((h-rs)/span*100)+'%">'+pad(h)+':00</span>';
+  for(h=rs;h<=re;h+=(span>12||(window.innerWidth<560&&span>5)?2:1))tk+='<span style="left:'+((h-rs)/span*100)+'%">'+pad(h)+':00</span>';
   $("ticks").innerHTML=tk;
   $("tlList").innerHTML=rows||'<p class="note">'+(day===ymd(Date.now())?"Bugun hali yozuv yo‘q.":"Shu kunda yozuv yo‘q.")+'</p>';
   var av=Math.max(0.5,en-st-lu)*60;
@@ -1183,7 +1355,7 @@ function renderHist(){
   }
   $("histStats").innerHTML=st;
   $("histList").innerHTML=days.map(function(k){var v=map[k],open=!!openDays[k],body="",pc=Math.round(v.m/availMin*100);
-    if(open)body='<div class="tw"><table style="min-width:700px"><thead><tr><th>Vazifa</th><th>Start</th><th>Finish</th><th>Davomiyligi</th><th>Natija</th><th></th></tr></thead><tbody>'
+    if(open)body='<div class="tw"><table class="jt" style="min-width:700px"><thead><tr><th>Vazifa</th><th>Start</th><th>Finish</th><th>Davomiyligi</th><th>Natija</th><th></th></tr></thead><tbody>'
       +daySess(k).map(function(o){var s=o.s,x=sInfo(s),m=(s.e-s.s)/60000;
         return '<tr><td>'+esc(x.p)+' — '+esc(x.t)+'</td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.s)+'" data-tses="'+o.i+'" data-tk="s" aria-label="Start"></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.e)+'" data-tses="'+o.i+'" data-tk="e" aria-label="Finish"></td><td><div class="dwrap"><input type="number" class="dn" min="0.1" step="any" value="'+(Math.round(m*10)/10)+'" data-dses="'+o.i+'" aria-label="Davomiylik (daqiqa)"><span>daq.</span></div></td><td><textarea class="txt nt" rows="2" data-ses="'+o.i+'" placeholder="Natija…" aria-label="Natija">'+esc(s.n||"")+'</textarea></td><td><button class="ghost" data-delses="'+o.i+'" aria-label="O‘chirish">×</button></td></tr>'}).join("")+'</tbody></table></div>';
     return '<div class="hday" data-hday="'+k+'"><div class="hrow"><div style="flex:1;min-width:220px"><b>'+k+'</b> — '+hmTxt(v.m)+' · ish vaqtining '+pc+'% · '+v.n+' ta yozuv<small>'+Object.keys(v.p).map(function(n){return esc(n)+" "+hmTxt(v.p[n])}).join(" · ")+'</small><div class="pb"><i style="width:'+Math.min(100,pc)+'%"></i></div></div><button class="sm" data-day="'+k+'">'+(open?"Yashirish":"Ko‘rish")+'</button></div>'+body+'</div>'}).join("")||'<p class="note">O‘tgan kunlar hali yo‘q.</p>';
@@ -1536,7 +1708,7 @@ function tick(){try{
   var bar=$("rec"),k=$("kToday"),nt=ymd(Date.now());
   if(nt!==lastToday){var wv=viewDay===lastToday;if(planMonth===lastToday.slice(0,7))planMonth=nt.slice(0,7);lastToday=nt;if(wv)viewDay=nt;$("mD").value=nt;render()}
   if(k)k.textContent=hms(todayMs());
-  var tsx=$("topSt");if(tsx)tsx.textContent="Bugun "+hms(todayMs());
+  var tsx=$("topSt");if(tsx)tsx.innerHTML='<span class="tsw">Bugun </span>'+hms(todayMs());
   if(run){var x=byId(run.id)||{p:run.p||"—",t:run.t||"(o‘chirilgan vazifa)"};
     blink=!blink;var t=dur(Date.now()-run.s);
     bar.className="recbar on";
@@ -3097,5 +3269,11 @@ async function initRuntime(){
 relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"tozalash");$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as))safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
 </script>
 <!-- v:tday-top -->
+<script>
+/* telefonda qidiruv maydoni qisqa yozuv ko'rsatadi (sig'masligi uchun) */
+(function(){var q=document.getElementById("gsQ");if(!q)return;var L=q.getAttribute("placeholder"),mq=window.matchMedia("(max-width:520px)");
+function ap(){q.setAttribute("placeholder",mq.matches?"Qidiruv…":L)}ap();
+if(mq.addEventListener)mq.addEventListener("change",ap);else if(mq.addListener)mq.addListener(ap)})();
+</script>
 </body>
 </html>
