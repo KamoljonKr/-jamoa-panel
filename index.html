@@ -731,7 +731,7 @@ body.secmaxed{overflow:hidden}
 #tvBar span{flex:1 1 220px}
 body.viewas .top{flex-wrap:wrap}body.viewas .menu .grip2{display:none}
 body.viewas .add,body.viewas [data-start],body.viewas [data-stop],body.viewas [data-del],body.viewas [data-delses],body.viewas [data-save],body.viewas [data-madd],body.viewas [data-mdel],
-body.viewas [data-mdnew],body.viewas [data-mdai],body.viewas #mdAi,body.viewas [data-mdclr],body.viewas [data-mddist],body.viewas [data-tday],body.viewas .tkclr,body.viewas .savebar.bottom,body.viewas #s-settings input,body.viewas #undoBar{display:none!important}
+body.viewas [data-alok],body.viewas [data-mdnew],body.viewas [data-mdai],body.viewas #mdAi,body.viewas [data-mdclr],body.viewas [data-mddist],body.viewas [data-tday],body.viewas .tkclr,body.viewas .savebar.bottom,body.viewas #s-settings input,body.viewas #undoBar{display:none!important}
 body.viewas #s-media .me input,body.viewas #s-media .me textarea,body.viewas #s-media .me select,body.viewas #s-tasks input,body.viewas #s-tasks select{pointer-events:none}
 @media(max-width:700px){#tmBtn span{display:none}}
 .mh[hidden],.mrow[hidden]{display:none}
@@ -1389,6 +1389,50 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
 @keyframes neUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
 @keyframes neDown{from{opacity:1;transform:none}to{opacity:0;transform:translateY(100%)}}
 @media (prefers-reduced-motion:no-preference){.ned:not([hidden]):not(.out){animation:neUp .3s var(--ease) backwards}.ned.out{animation:neDown .34s cubic-bezier(.4,0,.8,.4) forwards;pointer-events:none}}
+
+/* ===== Ogohlantirishlar paneli ===== */
+.alp{position:relative;margin:0 0 16px;border-radius:20px;padding:14px 16px 12px;color:var(--ink);
+  background:linear-gradient(135deg,rgba(242,163,58,.20),rgba(228,87,46,.12) 55%,rgba(228,87,46,.05)),var(--card);
+  border:1px solid rgba(228,87,46,.30);box-shadow:0 18px 38px -22px rgba(228,87,46,.55),var(--sh);overflow:hidden}
+.alp::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,#f2a33a,#e4572e)}
+.alp[hidden]{display:none}
+.alh{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.alb{position:relative;flex:none;width:42px;height:42px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f2a33a,#e4572e);color:#fff;font-weight:900;font-size:24px;line-height:1;box-shadow:0 8px 18px -6px rgba(228,87,46,.7)}
+.alb::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid #e4572e;opacity:0}
+.alhd{flex:1;min-width:0;display:flex;flex-direction:column}
+.alhd b{font-size:16.5px;letter-spacing:-.01em}
+.alhd small{color:var(--mute);font-size:12.5px}
+.alc{flex:none;min-width:30px;height:30px;padding:0 10px;border-radius:15px;background:#e4572e;color:#fff;font-weight:800;font-size:14px;display:inline-flex;align-items:center;justify-content:center}
+.all{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.alr{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line);box-shadow:inset 4px 0 0 var(--c);max-height:200px;overflow:hidden;transition:background .2s}
+.alr.late{background:linear-gradient(90deg,rgba(228,87,46,.08),var(--card))}
+.alp0{flex:none;display:inline-flex;align-items:center}
+.aldot{width:10px;height:10px;border-radius:50%;background:var(--c);display:block;margin:0 4px}
+.alm{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.alt{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:12.5px}
+.alt b{font-size:13px}
+.alch{padding:1px 8px;border-radius:9px;background:rgba(31,138,138,.14);color:var(--cool);font-weight:700;font-size:11.5px}
+.alw{padding:1px 8px;border-radius:9px;background:rgba(228,87,46,.16);color:#d1432a;font-weight:800;font-size:11.5px}
+.alx{all:unset;cursor:pointer;font-size:14.5px;line-height:1.35;font-weight:600;overflow-wrap:anywhere;display:block}
+.alx:hover{text-decoration:underline}
+.alx i{color:var(--mute);font-weight:500}
+.alok{flex:none;display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:12px;border:0;background:#2f9e63;color:#fff;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 8px 16px -8px rgba(47,158,99,.9);transition:transform .18s var(--ease),filter .2s}
+.alok:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.alok:active{transform:scale(.95)}
+.alm2{all:unset;cursor:pointer;display:block;margin:8px 2px 0;font-size:13px;font-weight:700;color:var(--cool)}
+.alm2:hover{text-decoration:underline}
+@media (max-width:560px){.alok span{display:none}.alok{width:42px;padding:0;justify-content:center}.alhd b{font-size:15px}}
+@keyframes alPulse{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.55)}}
+@keyframes alOut{to{opacity:0;transform:translateX(28px);max-height:0;padding-top:0;padding-bottom:0;margin-top:-4px;border-width:0}}
+@keyframes alOk{40%{background:rgba(47,158,99,.22)}}
+@keyframes alPanelOut{to{opacity:0;transform:translateY(-10px);max-height:0;margin-bottom:0;padding-top:0;padding-bottom:0}}
+@media (prefers-reduced-motion:no-preference){
+  .alb::after{animation:alPulse 1.8s ease-out infinite}
+  .alp:not([hidden]):not(.out){animation:dropIn .4s var(--ease) backwards;transform-origin:50% 0}
+  .alr.out{animation:alOut .3s var(--ease) forwards}
+  .alr.ok{animation:alOk .3s ease}
+  .alp.out{animation:alPanelOut .32s var(--ease) forwards;max-height:600px}
+}
 </style>
 </head>
 <body>
@@ -1436,6 +1480,7 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
 </header>
 <div class="recbar" id="rec" role="status"><span class="rdot" id="recDot"></span><b>REC</b><span id="recName"></span><textarea id="recNote" class="nt" rows="1" placeholder="Natija / izoh (ixtiyoriy)" aria-label="Natija"></textarea><span class="rtime" id="recTime">00:00</span><span class="since" id="recSince"></span><button class="stop" data-stop="1"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>Finish</button><button class="save" data-save="1"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Saqlash</button></div>
 <div class="wrap">
+  <aside id="alerts" class="alp" role="region" aria-label="Ogohlantirishlar" hidden></aside>
   <p class="sub">Ko‘rsatkich va prognozlar faqat taymerda yozilgan real vaqtdan hisoblanadi.</p>
 
   <div id="sections">
@@ -2302,6 +2347,37 @@ function prClick(c){var b;
   fi.addEventListener("change",function(){var f=fi.files&&fi.files[0];if(!f)return;
     prLoadFile(f).then(function(im){lgStart(im,PRT)},function(e){prSay(e&&e.message||"Rasm o‘qib bo‘lmadi.")});fi.value=""});
   document.body.appendChild(fi)})();
+/* --- Ogohlantirishlar: bugun qilinadigan (va kechikkan) media-reja ishlari --- */
+var AL={key:"",tm:0,max:5};
+function alItems(){var td=ymd(Date.now()),lim=ymd(Date.now()-14*864e5),t=[],o=[];
+  media.forEach(function(e,i){if(!e||e.x||mdEmpty(e))return;if(e.d===td)t.push(e);else if(e.d<td&&e.d>=lim)o.push(e)});
+  o.sort(function(a,b){return a.d<b.d?1:-1});return{today:t,late:o}}
+function alRow(e,late){var td=ymd(Date.now()),n=late?Math.round((new Date(td+"T12:00:00")-new Date(e.d+"T12:00:00"))/864e5):0,pn=(e.p||"").trim();
+  return '<li class="alr'+(late?" late":"")+'" data-alk="'+esc(e.k)+'" style="--c:'+(pn?col(projNames().indexOf(pn)):"var(--mute)")+'">'
+   +'<span class="alp0">'+(pn&&prLogo(pn)?plg(pn,"sm"):'<i class="aldot"></i>')+'</span>'
+   +'<div class="alm"><div class="alt"><b>'+esc(pn||"Loyihasiz")+'</b>'+e.c.map(function(c){return'<span class="alch">'+esc(c)+'</span>'}).join("")+(late?'<span class="alw">'+(n===1?"Kecha":n+" kun oldin")+'</span>':'')+'</div>'
+   +'<button type="button" class="alx" data-algo="'+esc(e.k)+'" title="Media-rejada ochish">'+(e.t.trim()?esc(e.t):'<i>Nomsiz kontent</i>')+'</button></div>'
+   +'<button type="button" class="alok" data-alok="'+esc(e.k)+'" title="Tayyor deb belgilash" aria-label="Tayyor: '+esc(e.t||pn||"kontent")+'"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>Tayyor</span></button></li>'}
+function renderAlerts(){var box=$("alerts");if(!box)return;var it=alItems(),all=it.today.concat(it.late),key=all.map(function(e){return e.k}).join("|")+"#"+ymd(Date.now());
+  if(key===AL.key)return;
+  var old=AL.key?AL.key.split("#")[0].split("|").filter(Boolean):[],now=all.map(function(e){return e.k}),gone=old.filter(function(k){return now.indexOf(k)<0}),first=!AL.key;
+  AL.key=key;clearTimeout(AL.tm);
+  function paint(){
+    if(!all.length){if(!box.hidden){box.classList.add("out");AL.tm=setTimeout(function(){box.hidden=true;box.classList.remove("out");box.innerHTML=""},320)}return}
+    box.classList.remove("out");var td=new Date(),nt=it.today.length,nl=it.late.length,lim=AL.open?99:AL.max,shown=0,h="";
+    function part(list,late){return list.map(function(e){if(shown>=lim)return"";shown++;return alRow(e,late)}).join("")}
+    var body=part(it.today,false)+part(it.late,true),more=all.length-shown;
+    h='<div class="alh"><span class="alb" aria-hidden="true">!</span><div class="alhd"><b>'+(nt?"Bugun qilinadigan ishlar":"Kechikkan ishlar")+'</b><small>'+WDN[td.getDay()]+', '+td.getDate()+'-'+MONTHS[td.getMonth()].toLowerCase()+' · Media-reja'+(nl&&nt?' · '+nl+' ta kechikkan':'')+'</small></div><span class="alc" title="Tayyor bo‘lmagan ishlar">'+all.length+'</span></div>'
+     +'<ul class="all">'+body+'</ul>'+(more>0?'<button type="button" class="alm2" data-almore="1">Yana '+more+' ta ko‘rsatish</button>':(AL.open&&all.length>AL.max?'<button type="button" class="alm2" data-almore="0">Kamroq ko‘rsatish</button>':''));
+    box.innerHTML=h;box.hidden=false}
+  if(gone.length&&!first&&!box.hidden){var any=false;gone.forEach(function(k){var r=box.querySelector('.alr[data-alk="'+k+'"]');if(r){r.classList.add("out");any=true}});
+    if(any){AL.tm=setTimeout(paint,300);return}}
+  paint()}
+function alGo(k){var e=null,ix=-1;media.forEach(function(m,i){if(m.k===k){e=m;ix=i}});if(!e)return;
+  gsPrep("media");mdPurge();mSel=e.p?e.p:"";setPref("kd_mdsel",e.p?e.p:"__all");mOnly=0;var oc=$("mdOnly");if(oc&&oc.checked)oc.checked=false;
+  mMonth=e.d.slice(0,7);renderMedia();var row=document.querySelector('#mdBody .me[data-mi="'+ix+'"]');if(row)gsFlash(row);else goSec("media")}
+function alDone(k){if(window.TEAM&&TEAM.as)return;var e=null;media.forEach(function(m){if(m.k===k)e=m});if(!e)return;
+  e.x=1;saveMedia();try{renderMedia()}catch(x){}renderAlerts()}
 function renderRows(names,dm){
   var td0=ymd(Date.now()),cnt={};tasks.forEach(function(x){var k=names.indexOf(x.p)%COLORS.length;cnt[k]=(cnt[k]||0)+1});
   var ord=tasks.map(function(x,i){return i}).sort(function(a,b){var pa=names.indexOf(tasks[a].p),pb=names.indexOf(tasks[b].p),ca=pa%COLORS.length,cb=pb%COLORS.length;return (tasks[a].d===td0?0:1)-(tasks[b].d===td0?0:1)||(cnt[cb]||0)-(cnt[ca]||0)||ca-cb||pa-pb||a-b});
@@ -2326,7 +2402,7 @@ function render(){
   safe(renderCal,"taqvim");
   safe(renderHist,"tarix");
   safe(function(){renderCharts(names,m)},"diagrammalar");
-  safe(jfThumbs,"fayl rasmlari");safe(neRefresh,"natija oynasi");
+  safe(jfThumbs,"fayl rasmlari");safe(neRefresh,"natija oynasi");safe(renderAlerts,"ogohlantirishlar");
 }
 function startTask(id){
   var x=byId(id);if(!x)return;
@@ -2801,6 +2877,7 @@ function mdStatsRender(){
   $("mdHist").innerHTML=Object.keys(cnt).sort().reverse().map(function(m){return'<button type="button" class="mdh'+(m===mMonth?" on":"")+'" data-mgo="'+m+'">'+MSH[+m.slice(5,7)-1]+' '+m.slice(0,4)+(cnt[m]?' · '+cnt[m]:'')+'</button>'}).join("");
   try{renderPlan()}catch(e){}
   mxInfo();
+  try{renderAlerts()}catch(e){}
 }
 function mdEnsure(row){
   if(row.dataset.mi!=="")return media[+row.dataset.mi];
@@ -4076,6 +4153,9 @@ document.addEventListener("click",function(e){try{clickH(e)}catch(x){showErr("tu
 function clickH(e){var t=e.target,c=t.closest?function(s){return t.closest(s)}:function(){return null},b;
   if(!$("menuPanel").hidden&&!c("#menuPanel")&&!c("[data-menu]"))closeMenu();
   if(c("[data-menu]")){var mp=$("menuPanel");mp.hidden=!mp.hidden;$("menuBtn").setAttribute("aria-expanded",String(!mp.hidden));setHH();if(!mp.hidden)menuCur()}
+  if(b=c("[data-alok]")){e.preventDefault();alDone(b.dataset.alok);return}
+  if(b=c("[data-algo]")){e.preventDefault();alGo(b.dataset.algo);return}
+  if(b=c("[data-almore]")){e.preventDefault();AL.open=b.dataset.almore==="1";AL.key="";renderAlerts();return}
   if(b=c("[data-jattach]")){e.preventDefault();JF.target=+b.dataset.jattach;var jfi=$("jFile");if(jfi){jfi.value="";jfi.click()}return}
   if(b=c("[data-jfopen]")){e.preventDefault();jfOpen(b.dataset.jfs,b.dataset.jfopen);return}
   if(b=c("[data-jfdel]")){e.preventDefault();jfDel(b.dataset.jfs,b.dataset.jfdel);return}
