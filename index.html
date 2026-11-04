@@ -142,7 +142,7 @@ function signIn(login,pw){
           var p=rows&&rows[0]||{};
           var a={at:j.access_token,rt:j.refresh_token,exp:Date.now()+(j.expires_in||3600)*1000,uid:uid,email:email,name:p.full_name||p.login||login,role:p.role==="admin"?"admin":"member"};
           if(LS.getItem("kd_owner")!==uid){wipe();LS.setItem("kd_owner",uid)}
-          saveAuth(a);
+          saveAuth(a);try{LS.setItem("kdt_fresh","1")}catch(e){}
         });
     })},function(){throw {msg:"Internetga ulanib bo‘lmadi."}});
 }
@@ -1297,7 +1297,7 @@ select{max-width:100%}
     <div class="mh">Shrift</div>
     <div class="mrow"><div class="selw"><select id="fontSel" aria-label="Shrift"></select></div></div>
     <div class="mh" id="lyH">Joylashuv</div><p class="lyhint" id="lyHint">Bo‘limlarni yuqoridagi ro‘yxatda chap tarafdagi ⠿ belgisidan ushlab sudrang.</p>
-    <div class="mrow" id="lyR"><button class="sm" data-layout="reset">↺ Tartibni tiklash</button></div>
+    <div class="mrow" id="lyR"><button class="sm" data-layout="reset">↺ Standart holatga qaytarish</button></div>
   </div>
 </header>
 <div class="recbar" id="rec" role="status"><span class="rdot" id="recDot"></span><b>REC</b><span id="recName"></span><textarea id="recNote" class="nt" rows="1" placeholder="Natija / izoh (ixtiyoriy)" aria-label="Natija"></textarea><span class="rtime" id="recTime">00:00</span><span class="since" id="recSince"></span><button class="stop" data-stop="1"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>Finish</button><button class="save" data-save="1"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Saqlash</button></div>
@@ -1687,13 +1687,16 @@ var SECS=[{id:"hero",ico:"🔥",t:"Kuchlanish darajasi"},{id:"kpis",ico:"📊",t
 if(window.TEAM&&TEAM.role==="admin"&&!TEAM.as)SECS.unshift({id:"team",ico:"👥",t:"Jamoa (admin)"});
 function secById(id){for(var i=0;i<SECS.length;i++)if(SECS[i].id===id)return SECS[i];return null}
 function normOrder(arr){var seen={},out=[];(Array.isArray(arr)?arr:[]).forEach(function(id){if(secById(id)&&!seen[id]){seen[id]=1;out.push(id)}});SECS.forEach(function(x){if(!seen[x.id])out.push(x.id)});return out}
-var order=SECS.map(function(x){return x.id});
-try{order=normOrder(JSON.parse(localStorage.getItem("kd_order")||"null"))}catch(e){}
+/* Standart joylashuv: har safar kirganda shu tartib va yashirinlik tiklanadi */
+var DEF_ORDER=["hero","kpis","tasks","journal","timeline","charts","media","mediaxl","history","report"];
+var DEF_HIDDEN=["hero","kpis","timeline","charts","media","mediaxl","history","report"];
+var FRESH=false;try{FRESH=!(window.TEAM&&TEAM.as)&&localStorage.getItem("kdt_fresh")==="1"}catch(e){}
+var order=normOrder(DEF_ORDER);
+try{var o0=JSON.parse(localStorage.getItem("kd_order")||"null");if(Array.isArray(o0))order=normOrder(o0)}catch(e){}
 function saveOrder(){try{localStorage.setItem("kd_order",JSON.stringify(order))}catch(e){}touch()}
-var HDEF=["media","mediaxl","report"]; /* standart: shu 3 bo'lim yashirin (menyudan qaytarish mumkin) */
-var hiddenSecs=[];try{var hs0=JSON.parse(localStorage.getItem("kd_hidden")||"[]");if(Array.isArray(hs0))hiddenSecs=hs0.filter(function(i){return secById(i)})}catch(e){}
-function hdefApply(){HDEF.forEach(function(i){if(hiddenSecs.indexOf(i)<0)hiddenSecs.push(i)})}
-try{if(localStorage.getItem("kd_hdef")!=="1"){hdefApply();localStorage.setItem("kd_hdef","1");localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}}catch(e){hdefApply()}
+var hiddenSecs=DEF_HIDDEN.filter(secById);
+try{var hs0=JSON.parse(localStorage.getItem("kd_hidden")||"null");if(Array.isArray(hs0))hiddenSecs=hs0.filter(function(i){return secById(i)})}catch(e){}
+if(FRESH){order=normOrder(DEF_ORDER);hiddenSecs=DEF_HIDDEN.filter(secById);try{localStorage.setItem("kd_order",JSON.stringify(order));localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}}
 function applyHidden(){SECS.forEach(function(x){var el=$("s-"+x.id);if(el)el.classList.toggle("sec-off",hiddenSecs.indexOf(x.id)>-1)});buildMenu()}
 function toggleSec(id,show){var i=hiddenSecs.indexOf(id);if(show===undefined)show=i>-1;if(show&&i>-1)hiddenSecs.splice(i,1);if(!show&&i<0)hiddenSecs.push(id);try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}touch();applyHidden();queueDb();if(show){var pe=$("s-"+id);if(pe){pe.classList.remove("sec-pop");void pe.offsetWidth;pe.classList.add("sec-pop");setTimeout(function(){pe.classList.remove("sec-pop")},800)}}}
 var MI={"hero":"<path d=\"M13 2L3 14h9l-1 8 10-12h-9l1-8z\"/>","kpis":"<path d=\"M18 20V10M12 20V4M6 20v-6\"/>","timeline":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 6v6l4 2\"/>","charts":"<path d=\"M21.21 15.89A10 10 0 1 1 8 2.83\"/><path d=\"M22 12A10 10 0 0 0 12 2v10z\"/>","tasks":"<path d=\"M9 11l3 3L22 4\"/><path d=\"M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11\"/>","plan":"<circle cx=\"12\" cy=\"12\" r=\"10\"/><circle cx=\"12\" cy=\"12\" r=\"6\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/>","media":"<rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M16 2v4M8 2v4M3 10h18\"/>","mediaxl":"<path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3\"/>","journal":"<path d=\"M12 20h9\"/><path d=\"M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z\"/>","history":"<path d=\"M1 4v6h6\"/><path d=\"M3.51 15a9 9 0 1 0 2.13-9.36L1 10\"/>","report":"<path d=\"M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z\"/><path d=\"M13 2v7h7M16 13H8M16 17H8\"/>","team":"<path d=\"M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/><path d=\"M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75\"/>"};
@@ -1718,7 +1721,7 @@ function goSec(id){closeMenu();if(hiddenSecs.indexOf(id)>-1)toggleSec(id,true);v
 function layoutAct(a){
   if(a==="toggle"){var on=!document.body.classList.contains("arrange");document.body.classList.toggle("arrange",on);$("arrBtn").textContent=on?"✓ Tartiblash tugadi":"⇅ Bo‘limlar joyini o‘zgartirish";closeMenu();
     if(on)$("saveSt").textContent="Bo‘limlarni ⠿ belgisidan sudrang yoki ▲ ▼ tugmalari bilan siljiting."}
-  if(a==="reset"){order=SECS.map(function(x){return x.id});saveOrder();applyOrder();queueDb();closeMenu()}
+  if(a==="reset"){order=normOrder(DEF_ORDER);hiddenSecs=DEF_HIDDEN.filter(secById);try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}saveOrder();applyOrder();applyHidden();queueDb();closeMenu()}
 }
 function initLayout(){
   document.querySelectorAll(".sec").forEach(function(sec){
@@ -3731,11 +3734,12 @@ async function initRuntime(){
             
             if(Array.isArray(v.plans))plans=JSON.parse(JSON.stringify(v.plans));
             if(Array.isArray(v.media)){media=JSON.parse(JSON.stringify(v.media)).filter(function(e){return e&&e.d});media.forEach(function(e){if(!e.k)e.k=uid();if(!Array.isArray(e.c))e.c=[];e.p=e.p||"";e.t=e.t||""});if(Array.isArray(v.mediaProjects))mdExtra=v.mediaProjects.filter(function(x){return typeof x==="string"});mdNorm();mdLocal();mSel=null;safe(renderMedia,"media-reja")}
-            if(Array.isArray(v.hidden)){hiddenSecs=v.hidden.filter(function(i){return secById(i)});if(v.hdef!==1)hdefApply();try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}safe(applyHidden,"yashirish")}
-            if(Array.isArray(v.layout)){order=normOrder(v.layout);try{localStorage.setItem("kd_order",JSON.stringify(order))}catch(e){}applyOrder()}relink();snapAll();ensureKeys();save();saveS();savePlans();try{localStorage.setItem("kd_mod",v.savedAt)}catch(e){}
+            if(!FRESH&&Array.isArray(v.hidden)){hiddenSecs=v.hidden.filter(function(i){return secById(i)});try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}safe(applyHidden,"yashirish")}
+            if(!FRESH&&Array.isArray(v.layout)){order=normOrder(v.layout);try{localStorage.setItem("kd_order",JSON.stringify(order))}catch(e){}applyOrder()}relink();snapAll();ensureKeys();save();saveS();savePlans();try{localStorage.setItem("kd_mod",v.savedAt)}catch(e){}
             safe(render,"render");tick()}}}
     }catch(e){}
   }
+  if(FRESH){FRESH=false;try{localStorage.removeItem("kdt_fresh")}catch(e){}try{queueDb()}catch(e){}}
   $("saveSt").textContent=dbRef?"Bulutga ulangan: ma’lumot avtomatik saqlanadi.":"Bulutga ulanmagan — ma’lumot shu brauzerda saqlanadi.";
   $("shSt").textContent="";window.__tmAuto=!!dbRef&&!(window.TEAM&&TEAM.as);
 }
