@@ -2114,7 +2114,14 @@ function tint(hex,a){var m=/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(h
 function plg(n,cls){var l=prLogo(n);return l?'<img class="plg'+(cls?" "+cls:"")+'" src="'+esc(l)+'" alt="" title="'+esc(n)+'">':""}
 function projOpts(names,cur,ph){var h=ph?'<option value="">'+esc(ph)+'</option>':"";names.forEach(function(n){h+='<option value="'+esc(n)+'"'+(n===cur?" selected":"")+'>'+esc(n)+'</option>'});return h}
 function prUse(n){var k=normK(n),c=0;tasks.forEach(function(x){if(normK(x.p)===k)c++});sessions.forEach(function(x){if(normK(sInfo(x).p)===k)c++});media.forEach(function(x){if(normK(x.p)===k)c++});mdExtra.forEach(function(x){if(normK(x)===k)c++});return c}
-function prSetF(n,f){var e=prGet(n);if(!e){e={n:String(n).trim()};PR.push(e)}for(var k in f){if(f[k]===""||f[k]==null)delete e[k];else e[k]=f[k]}prLocal();queueSync();render()}
+/* bulutdagi va shu qurilmadagi loyihalarni birlashtiradi (yangiroq o'zgartirilgani yutadi; hech narsa yo'qolmaydi) */
+function prMerge(list){var ch=false;(list||[]).forEach(function(c){if(!c||typeof c.n!=="string"||!c.n.trim())return;var e=prGet(c.n);
+  if(!e){PR.push({n:c.n,c:c.c,l:c.l,u:c.u||0});ch=true;return}
+  if((c.u||0)>(e.u||0)){if(e.c!==c.c||e.l!==c.l){e.c=c.c;if(c.l)e.l=c.l;else delete e.l;ch=true}e.u=c.u}
+  else if(!e.l&&c.l){e.l=c.l;ch=true}
+  else if(!e.c&&c.c){e.c=c.c;ch=true}});
+  if(ch)prLocal();return ch}
+function prSetF(n,f){var e=prGet(n);if(!e){e={n:String(n).trim()};PR.push(e)}e.u=Date.now();for(var k in f){if(f[k]===""||f[k]==null)delete e[k];else e[k]=f[k]}prLocal();queueSync();render()}
 var PRNEW={l:""},PRT="";
 function prLoadFile(file){return new Promise(function(res,rej){
   if(!file||!/^image\//.test(file.type||"")){rej({message:"Faqat rasm fayli (PNG, JPG, WebP, SVG)."});return}
@@ -2166,7 +2173,7 @@ function prAddNew(){
   if(prGet(nm)||projNames().some(function(q){return normK(q)===normK(nm)})){
     var ex=prGet(nm);if(!ex){var f={c:$("prC").value};if(PRNEW.l)f.l=PRNEW.l;prSetF(nm,f);prSay("“"+nm+"” ro‘yxatga qo‘shildi (u oldindan vazifalarda bor edi).");$("prN").value="";PRNEW.l="";prNewPaint();return}
     setErr($("prN"),"Bu loyiha allaqachon bor");return}
-  var o={n:nm,c:$("prC").value};if(PRNEW.l)o.l=PRNEW.l;PR.push(o);prLocal();queueSync();
+  var o={n:nm,c:$("prC").value,u:Date.now()};if(PRNEW.l)o.l=PRNEW.l;PR.push(o);prLocal();queueSync();
   $("prN").value="";PRNEW.l="";prNewPaint();$("prC").value=COLORS[PR.length%COLORS.length];
   prSay("✓ “"+nm+"” qo‘shildi.");render();var sel=$("np");if(sel){sel.value=nm;npLogo()}}
 function npLogo(){var s=$("np"),w=$("npLg");if(w)w.innerHTML=s&&s.value?plg(s.value):""}
@@ -4010,11 +4017,12 @@ async function initRuntime(){
             sessions=Array.isArray(v.sessions)?JSON.parse(JSON.stringify(v.sessions)):[];run=v.run&&v.run.id?JSON.parse(JSON.stringify(v.run)):null;
             
             if(Array.isArray(v.plans))plans=JSON.parse(JSON.stringify(v.plans));
-            if(Array.isArray(v.projects)){PR=v.projects.filter(function(x){return x&&typeof x.n==="string"&&x.n.trim()});prLocal()}
+            if(Array.isArray(v.projects))prMerge(v.projects);
             if(Array.isArray(v.media)){media=JSON.parse(JSON.stringify(v.media)).filter(function(e){return e&&e.d});media.forEach(function(e){if(!e.k)e.k=uid();if(!Array.isArray(e.c))e.c=[];e.p=e.p||"";e.t=e.t||""});if(Array.isArray(v.mediaProjects))mdExtra=v.mediaProjects.filter(function(x){return typeof x==="string"});mdNorm();mdLocal();mSel=null;safe(renderMedia,"media-reja")}
             if(!FRESH&&Array.isArray(v.hidden)){hiddenSecs=v.hidden.filter(function(i){return secById(i)});try{localStorage.setItem("kd_hidden",JSON.stringify(hiddenSecs))}catch(e){}safe(applyHidden,"yashirish")}
             if(!FRESH&&Array.isArray(v.layout)){order=normOrder(v.layout);try{localStorage.setItem("kd_order",JSON.stringify(order))}catch(e){}applyOrder()}relink();snapAll();ensureKeys();save();saveS();savePlans();try{localStorage.setItem("kd_mod",v.savedAt)}catch(e){}
-            safe(render,"render");tick()}}}
+            safe(render,"render");tick()}
+          else if(v&&Array.isArray(v.projects)&&prMerge(v.projects)){safe(render,"render");queueDb()}}}
     }catch(e){}
   }
   if(FRESH){FRESH=false;try{localStorage.removeItem("kdt_fresh")}catch(e){}try{queueDb()}catch(e){}}
