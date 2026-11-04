@@ -1433,6 +1433,10 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
   .alr.ok{animation:alOk .3s ease}
   .alp.out{animation:alPanelOut .32s var(--ease) forwards;max-height:600px}
 }
+
+.mver{margin:8px 14px 2px;font-size:11px;color:var(--mute);text-align:center}
+#updBar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:900;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:#14213d;color:#fff;font-size:14px;box-shadow:0 14px 34px -10px rgba(0,0,0,.5);max-width:calc(100vw - 24px)}
+#updBar .ghost{color:#fff;opacity:.7}
 </style>
 </head>
 <body>
@@ -1476,6 +1480,7 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
     <div class="mrow"><div class="selw"><select id="fontSel" aria-label="Shrift"></select></div></div>
     <div class="mh" id="lyH">Joylashuv</div><p class="lyhint" id="lyHint">Bo‘limlarni yuqoridagi ro‘yxatda chap tarafdagi ⠿ belgisidan ushlab sudrang.</p>
     <div class="mrow" id="lyR"><button class="sm" data-layout="reset">↺ Standart holatga qaytarish</button></div>
+    <div class="mver" id="mVer"></div>
   </div>
 </header>
 <div class="recbar" id="rec" role="status"><span class="rdot" id="recDot"></span><b>REC</b><span id="recName"></span><textarea id="recNote" class="nt" rows="1" placeholder="Natija / izoh (ixtiyoriy)" aria-label="Natija"></textarea><span class="rtime" id="recTime">00:00</span><span class="since" id="recSince"></span><button class="stop" data-stop="1"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>Finish</button><button class="save" data-save="1"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Saqlash</button></div>
@@ -4215,6 +4220,26 @@ async function initRuntime(){
 relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"tozalash");$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as))safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
 </script>
 <!-- v:tday-top -->
+<script>
+/* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
+window.__BUILD="20261104-1609";
+(function(){
+  var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
+  var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
+  if(B==="dev"||location.protocol==="file:"||!window.fetch)return;
+  var last=0;
+  function newer(){return fetch(location.pathname+(location.search||""),{cache:"no-store",credentials:"same-origin"}).then(function(r){return r.ok?r.text():""}).then(function(t){var m=/window\.__BUILD="([^"]+)"/.exec(t||"");return !!(m&&m[1]!==B&&m[1]!=="dev")}).catch(function(){return false})}
+  function banner(){if(document.getElementById("updBar"))return;var d=document.createElement("div");d.id="updBar";d.setAttribute("role","status");
+    d.innerHTML='<span>Yangi versiya chiqdi.</span><button type="button" class="sm" id="updGo">Yangilash</button><button type="button" class="ghost" id="updX" aria-label="Yopish">×</button>';
+    document.body.appendChild(d);document.getElementById("updGo").onclick=function(){hard()};document.getElementById("updX").onclick=function(){d.remove()}}
+  function hard(){try{SS.setItem("kdt_rl",String(Date.now()))}catch(e){}location.reload()}
+  /* sahifa ochilganda: yangi versiya bo'lsa, o'zi yangilanadi (har 2 daqiqada bir martadan ko'p emas) */
+  var rl=0;try{rl=+SS.getItem("kdt_rl")||0}catch(e){}
+  newer().then(function(n){if(!n)return;if(Date.now()-rl>120000)hard();else banner()});
+  document.addEventListener("visibilitychange",function(){if(document.visibilityState!=="visible"||Date.now()-last<300000)return;last=Date.now();newer().then(function(n){if(n)banner()})});
+})();
+</script>
+
 <script>
 /* telefonda qidiruv maydoni qisqa yozuv ko'rsatadi (sig'masligi uchun) */
 (function(){var q=document.getElementById("gsQ");if(!q)return;var L=q.getAttribute("placeholder"),mq=window.matchMedia("(max-width:520px)");
