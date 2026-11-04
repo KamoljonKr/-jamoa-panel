@@ -1317,9 +1317,31 @@ input[type=color].prcol,.prnew input[type=color]{width:40px;height:40px;padding:
 .psel{min-width:0;flex:1;cursor:pointer}
 #s-tasks .pc .psel{width:100%}
 .npw .pc{gap:8px}
-.npw .pc .psel{height:40px}
+.npw .pc .psel{height:auto}
+.npw .plg{width:32px;height:32px}
 body.viewas .prnew,body.viewas [data-prdel],body.viewas [data-prdelc]{display:none!important}
 body.viewas .prm [data-prcol],body.viewas .prm [data-prlogo]{pointer-events:none}
+
+/* ===== Logotip tahrirlagich va jurnal logotiplari ===== */
+.lged{position:fixed;inset:0;z-index:700;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,16,30,.55);backdrop-filter:blur(3px)}
+.lged[hidden]{display:none}
+.lgc{width:min(360px,100%);max-height:calc(100vh - 24px);overflow:auto;background:var(--card);color:var(--ink);border-radius:18px;padding:16px;box-shadow:0 30px 70px -20px rgba(0,0,0,.55);display:flex;flex-direction:column;gap:10px}
+.lgc h3{margin:0;font-size:16px}
+.lgcv{align-self:center;width:min(256px,100%);aspect-ratio:1;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:conic-gradient(#e6e9f0 25%,#fff 0 50%,#e6e9f0 0 75%,#fff 0) 0 0/16px 16px}
+.lgcv canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.lgcv canvas:active{cursor:grabbing}
+.lgz{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600}
+.lgz input{flex:1;min-width:0;accent-color:var(--cool)}
+.lgz output{min-width:42px;text-align:right;color:var(--mute);font-weight:600}
+.lgw{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+.lgw input{width:18px;height:18px;flex:none;accent-color:var(--cool)}
+.lgb{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.lgb .lgsp{flex:1}
+body.lgopen{overflow:hidden}
+@media (prefers-reduced-motion:no-preference){.lged:not([hidden]){animation:fadeIn .2s ease backwards}.lged:not([hidden]) .lgc{animation:popIn .28s var(--ease) backwards}}
+.jlg{display:inline-flex;align-items:center;gap:8px;min-width:0}
+.jlg .jlt{min-width:0}
+.plg.sm{width:22px;height:22px;border-radius:6px}
 </style>
 </head>
 <body>
@@ -1753,7 +1775,7 @@ function renderHist(){
   $("histList").innerHTML=days.map(function(k){var v=map[k],open=!!openDays[k],body="",pc=Math.round(v.m/availMin*100);
     if(open)body='<div class="tw"><table class="jt" style="min-width:700px"><thead><tr><th>Vazifa</th><th>Start</th><th>Finish</th><th>Davomiyligi</th><th>Natija</th><th></th></tr></thead><tbody>'
       +daySess(k).map(function(o){var s=o.s,x=sInfo(s),m=(s.e-s.s)/60000;
-        return '<tr><td>'+esc(x.p)+' — '+esc(x.t)+'</td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.s)+'" data-tses="'+o.i+'" data-tk="s" aria-label="Start"></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.e)+'" data-tses="'+o.i+'" data-tk="e" aria-label="Finish"></td><td><div class="dwrap"><input type="number" class="dn" min="0.1" step="any" value="'+(Math.round(m*10)/10)+'" data-dses="'+o.i+'" aria-label="Davomiylik (daqiqa)"><span>daq.</span></div></td><td>'+jfCell(s,o.i)+'</td><td><button class="ghost" data-delses="'+o.i+'" aria-label="O‘chirish">×</button></td></tr>'}).join("")+'</tbody></table></div>';
+        return '<tr><td><span class="jlg">'+plg(x.p,'sm')+'<span class="jlt">'+esc(x.p)+' — '+esc(x.t)+'</span></span></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.s)+'" data-tses="'+o.i+'" data-tk="s" aria-label="Start"></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.e)+'" data-tses="'+o.i+'" data-tk="e" aria-label="Finish"></td><td><div class="dwrap"><input type="number" class="dn" min="0.1" step="any" value="'+(Math.round(m*10)/10)+'" data-dses="'+o.i+'" aria-label="Davomiylik (daqiqa)"><span>daq.</span></div></td><td>'+jfCell(s,o.i)+'</td><td><button class="ghost" data-delses="'+o.i+'" aria-label="O‘chirish">×</button></td></tr>'}).join("")+'</tbody></table></div>';
     return '<div class="hday" data-hday="'+k+'"><div class="hrow"><div style="flex:1;min-width:220px"><b>'+k+'</b> — '+hmTxt(v.m)+' · ish vaqtining '+pc+'% · '+v.n+' ta yozuv<small>'+Object.keys(v.p).map(function(n){return esc(n)+" "+hmTxt(v.p[n])}).join(" · ")+'</small><div class="pb"><i style="width:'+Math.min(100,pc)+'%"></i></div></div><button class="sm" data-day="'+k+'">'+(open?"Yashirish":"Ko‘rish")+'</button></div>'+body+'</div>'}).join("")||'<p class="note">O‘tgan kunlar hali yo‘q.</p>';
 }
 /* --- vaqt maydoni: faqat raqam yozish, avtomatik ":" --- */
@@ -2026,7 +2048,7 @@ function jfLater(paths){if(!paths||!paths.length||(window.TEAM&&TEAM.as))return;
 function renderLog(ds,day){
   var tot=0,h="";fillLists();
   ds.forEach(function(o){var s=o.s,x=sInfo(s),m=(s.e-s.s)/60000;tot+=m;
-    h+='<tr><td>'+esc(x.p)+' — '+esc(x.t)+'</td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.s)+'" data-tses="'+o.i+'" data-tk="s" aria-label="Start"></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.e)+'" data-tses="'+o.i+'" data-tk="e" aria-label="Finish"></td><td><div class="dwrap"><input type="number" class="dn" min="0.1" step="any" value="'+(Math.round(m*10)/10)+'" data-dses="'+o.i+'" aria-label="Davomiylik (daqiqa)"><span>daq.</span></div></td><td>'+jfCell(s,o.i)+'</td><td><button class="ghost" data-delses="'+o.i+'" aria-label="O‘chirish">×</button></td></tr>'});
+    h+='<tr><td><span class="jlg">'+plg(x.p,'sm')+'<span class="jlt">'+esc(x.p)+' — '+esc(x.t)+'</span></span></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.s)+'" data-tses="'+o.i+'" data-tk="s" aria-label="Start"></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.e)+'" data-tses="'+o.i+'" data-tk="e" aria-label="Finish"></td><td><div class="dwrap"><input type="number" class="dn" min="0.1" step="any" value="'+(Math.round(m*10)/10)+'" data-dses="'+o.i+'" aria-label="Davomiylik (daqiqa)"><span>daq.</span></div></td><td>'+jfCell(s,o.i)+'</td><td><button class="ghost" data-delses="'+o.i+'" aria-label="O‘chirish">×</button></td></tr>'});
   $("log").innerHTML=h||'<tr><td colspan="6" class="note">Bugun hali yozuv yo‘q. Jadvaldagi ▶ Start tugmasini bosing yoki vaqtni qo‘lda yozing.</td></tr>';
   $("logTotal").textContent="Bugun jami: "+hmTxt(tot);
 }
@@ -2094,18 +2116,47 @@ function projOpts(names,cur,ph){var h=ph?'<option value="">'+esc(ph)+'</option>'
 function prUse(n){var k=normK(n),c=0;tasks.forEach(function(x){if(normK(x.p)===k)c++});sessions.forEach(function(x){if(normK(sInfo(x).p)===k)c++});media.forEach(function(x){if(normK(x.p)===k)c++});mdExtra.forEach(function(x){if(normK(x)===k)c++});return c}
 function prSetF(n,f){var e=prGet(n);if(!e){e={n:String(n).trim()};PR.push(e)}for(var k in f){if(f[k]===""||f[k]==null)delete e[k];else e[k]=f[k]}prLocal();queueSync();render()}
 var PRNEW={l:""},PRT="";
-function prImg(file){return new Promise(function(res,rej){
+function prLoadFile(file){return new Promise(function(res,rej){
   if(!file||!/^image\//.test(file.type||"")){rej({message:"Faqat rasm fayli (PNG, JPG, WebP, SVG)."});return}
   if(file.size>8e6){rej({message:"Rasm juda katta (8 MB gacha)."});return}
-  var url=URL.createObjectURL(file),im=new Image();
-  im.onload=function(){URL.revokeObjectURL(url);
-    var w=im.naturalWidth||im.width||128,h=im.naturalHeight||im.height||128;if(!w||!h){rej({message:"Rasm o‘qib bo‘lmadi."});return}
-    function mk(S,fmt,q){var c=document.createElement("canvas");c.width=c.height=S;var g=c.getContext("2d");g.imageSmoothingQuality="high";var r=Math.min(S/w,S/h),dw=Math.round(w*r),dh=Math.round(h*r);g.drawImage(im,Math.round((S-dw)/2),Math.round((S-dh)/2),dw,dh);return c.toDataURL(fmt,q)}
-    var out=mk(128,"image/png");if(out.length>90000)out=mk(128,"image/webp",.85);if(out.length>90000)out=mk(96,"image/webp",.8);
-    if(out.length>120000){rej({message:"Rasm juda murakkab. Soddaroq logotip tanlang."});return}
-    res(out)};
-  im.onerror=function(){URL.revokeObjectURL(url);rej({message:"Rasm o‘qib bo‘lmadi."})};
-  im.src=url})}
+  var fr=new FileReader();fr.onerror=function(){rej({message:"Rasm o‘qib bo‘lmadi."})};
+  fr.onload=function(){var im=new Image();im.onload=function(){res(im)};im.onerror=function(){rej({message:"Rasm o‘qib bo‘lmadi."})};im.src=fr.result};
+  fr.readAsDataURL(file)})}
+/* --- Logotip tahrirlagich: siljitish va kattalashtirish/kichraytirish --- */
+var LGE={im:null,t:"",z:1,ox:0,oy:0,white:false,drag:null,S:256};
+function lgBuild(){var m=$("lgEd");if(m)return m;
+  m=document.createElement("div");m.id="lgEd";m.className="lged";m.hidden=true;m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");m.setAttribute("aria-label","Logotipni sozlash");
+  m.innerHTML='<div class="lgc"><h3>Logotipni sozlash</h3><div class="lgcv"><canvas id="lgCv" width="256" height="256" aria-label="Logotip ko‘rinishi"></canvas></div>'
+    +'<label class="lgz"><span>Kattaligi</span><input type="range" id="lgZ" min="15" max="400" value="100" aria-label="Kattaligi"><output id="lgZo">100%</output></label>'
+    +'<label class="lgw"><input type="checkbox" id="lgW"> Oq fon</label>'
+    +'<p class="note">Rasmni siljitish uchun sudrang. Kattalashtirish yoki kichraytirish uchun slayderdan (yoki sichqoncha g‘ildiragidan) foydalaning.</p>'
+    +'<div class="lgb"><button type="button" class="sm" data-lg="new">Boshqa rasm</button><button type="button" class="sm" data-lg="fit">Joyiga qo‘yish</button><span class="lgsp"></span><button type="button" class="sm" data-lg="cancel">Bekor qilish</button><button type="button" class="sm save" data-lg="ok">Saqlash</button></div></div>';
+  document.body.appendChild(m);
+  var cv=m.querySelector("#lgCv");
+  cv.addEventListener("pointerdown",function(e){LGE.drag={x:e.clientX,y:e.clientY,ox:LGE.ox,oy:LGE.oy};try{cv.setPointerCapture(e.pointerId)}catch(x){}e.preventDefault()});
+  cv.addEventListener("pointermove",function(e){if(!LGE.drag)return;var k=LGE.S/cv.getBoundingClientRect().width;LGE.ox=LGE.drag.ox+(e.clientX-LGE.drag.x)*k;LGE.oy=LGE.drag.oy+(e.clientY-LGE.drag.y)*k;lgDraw()});
+  ["pointerup","pointercancel"].forEach(function(n){cv.addEventListener(n,function(){LGE.drag=null})});
+  cv.addEventListener("wheel",function(e){e.preventDefault();lgZoom(LGE.z*(e.deltaY<0?1.08:1/1.08))},{passive:false});
+  m.querySelector("#lgZ").addEventListener("input",function(){lgZoom(+this.value/100)});
+  m.querySelector("#lgW").addEventListener("change",function(){LGE.white=this.checked;lgDraw()});
+  m.addEventListener("click",function(e){if(e.target===m){lgClose();return}var b=e.target.closest&&e.target.closest("[data-lg]");if(!b)return;var a=b.dataset.lg;
+    if(a==="cancel")lgClose();else if(a==="fit"){LGE.z=1;LGE.ox=LGE.oy=0;lgDraw()}else if(a==="ok")lgSave();
+    else if(a==="new"){PRT=LGE.t;var f=$("prFile");f.value="";f.click()}});
+  m.addEventListener("keydown",function(e){if(e.key==="Escape"){e.stopPropagation();lgClose()}});
+  return m}
+function lgZoom(z){LGE.z=Math.max(.15,Math.min(4,z));var r=$("lgZ"),o=$("lgZo");if(r)r.value=Math.round(LGE.z*100);if(o)o.textContent=Math.round(LGE.z*100)+"%";lgDraw()}
+function lgPaint(g,S,k){var im=LGE.im,w=im.naturalWidth||im.width||128,h=im.naturalHeight||im.height||128,r=Math.min(S/w,S/h)*LGE.z,dw=w*r,dh=h*r;
+  g.clearRect(0,0,S,S);if(LGE.white){g.fillStyle="#fff";g.fillRect(0,0,S,S)}
+  g.imageSmoothingQuality="high";g.drawImage(im,(S-dw)/2+LGE.ox*k,(S-dh)/2+LGE.oy*k,dw,dh)}
+function lgDraw(){var cv=$("lgCv");if(!cv||!LGE.im)return;lgPaint(cv.getContext("2d"),LGE.S,1)}
+function lgStart(im,target){var m=lgBuild();LGE.im=im;LGE.t=target;LGE.z=1;LGE.ox=LGE.oy=0;LGE.white=false;$("lgW").checked=false;
+  m.hidden=false;document.body.classList.add("lgopen");lgZoom(1);try{$("lgZ").focus()}catch(e){}}
+function lgClose(){var m=$("lgEd");if(m)m.hidden=true;document.body.classList.remove("lgopen");LGE.im=null;LGE.drag=null}
+function lgOut(){function mk(S,fmt,q){var c=document.createElement("canvas");c.width=c.height=S;lgPaint(c.getContext("2d"),S,S/LGE.S);return c.toDataURL(fmt,q)}
+  var o=mk(128,"image/png");if(o.length>90000)o=mk(128,"image/webp",.85);if(o.length>90000)o=mk(96,"image/webp",.8);return o.length>120000?"":o}
+function lgSave(){if(!LGE.im)return;var out=lgOut();if(!out){prSay("Rasm juda murakkab. Soddaroq logotip tanlang.");lgClose();return}
+  var t=LGE.t;lgClose();if(t===""){PRNEW.l=out;prNewPaint()}else{prSetF(t,{l:out});prSay("")}}
+function lgFromSrc(src,t){var im=new Image();im.onload=function(){lgStart(im,t)};im.src=src}
 function prSay(t){var e=$("prErr");if(e)e.textContent=t||""}
 function prNewPaint(){var b=$("prNL");if(!b)return;b.innerHTML=PRNEW.l?'<img src="'+esc(PRNEW.l)+'" alt="">':'<span class="prph">'+PLUS_IMG+'</span>'}
 function prAddNew(){
@@ -2134,13 +2185,13 @@ function renderPrm(names){
       +(!u?'<button type="button" class="ghost" data-prdel="'+esc(n)+'" title="Loyihani ro‘yxatdan o‘chirish" aria-label="Loyihani o‘chirish: '+esc(n)+'">×</button>':'')+'</div>'}).join("")||'<p class="note">Hozircha loyiha yo‘q. Yuqorida birinchi loyihani qo‘shing.</p>'}
 function prClick(c){var b;
   if(c("#prAdd")){prAddNew();return}
-  if(c("#prNL")){PRT="";var f=$("prFile");f.value="";f.click();return}
-  if(b=c("[data-prlogo]")){PRT=b.dataset.prlogo;var f2=$("prFile");f2.value="";f2.click();return}
+  if(c("#prNL")){if(PRNEW.l){lgFromSrc(PRNEW.l,"")}else{PRT="";var f=$("prFile");f.value="";f.click()}return}
+  if(b=c("[data-prlogo]")){var pn=b.dataset.prlogo,pl=prLogo(pn);if(pl){lgFromSrc(pl,pn)}else{PRT=pn;var f2=$("prFile");f2.value="";f2.click()}return}
   if(b=c("[data-prdelc]")){prSetF(b.dataset.prdelc,{l:""});return}
   if(b=c("[data-prdel]")){var n=b.dataset.prdel;if(prUse(n))return;pushUndo("Loyiha o‘chirildi: "+n);PR=PR.filter(function(e){return normK(e.n)!==normK(n)});mdExtra=mdExtra.filter(function(e){return normK(e)!==normK(n)});mdLocal();prLocal();queueSync();render();renderMedia();return}}
 (function(){var fi=document.createElement("input");fi.type="file";fi.id="prFile";fi.accept="image/*";fi.hidden=true;
   fi.addEventListener("change",function(){var f=fi.files&&fi.files[0];if(!f)return;
-    prImg(f).then(function(d){if(PRT){prSetF(PRT,{l:d});prSay("")}else{PRNEW.l=d;prNewPaint()}},function(e){prSay(e&&e.message||"Rasm o‘qib bo‘lmadi.")});fi.value=""});
+    prLoadFile(f).then(function(im){lgStart(im,PRT)},function(e){prSay(e&&e.message||"Rasm o‘qib bo‘lmadi.")});fi.value=""});
   document.body.appendChild(fi)})();
 function renderRows(names,dm){
   var td0=ymd(Date.now()),cnt={};tasks.forEach(function(x){var k=names.indexOf(x.p)%COLORS.length;cnt[k]=(cnt[k]||0)+1});
