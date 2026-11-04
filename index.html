@@ -1437,6 +1437,23 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
 .mver{margin:8px 14px 2px;font-size:11px;color:var(--mute);text-align:center}
 #updBar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:900;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:14px;background:#14213d;color:#fff;font-size:14px;box-shadow:0 14px 34px -10px rgba(0,0,0,.5);max-width:calc(100vw - 24px)}
 #updBar .ghost{color:#fff;opacity:.7}
+
+/* ===== Panel sarlavhalari: katta va markazda ===== */
+.sec>.card>h2,.sec>.grid>.card>h2{position:relative;text-align:center;font-size:22px;line-height:1.25;letter-spacing:-.015em;font-weight:800;margin:0 0 16px;padding:2px var(--htw,0px);min-height:34px;display:block}
+.sec>.card>h2::after,.sec>.grid>.card>h2::after{content:"";display:block;width:38px;height:3px;border-radius:3px;margin:9px auto 0;background:linear-gradient(90deg,var(--cool),#f2a33a)}
+.htools{position:absolute;right:0;top:0;display:flex;flex-direction:row-reverse;align-items:center;gap:6px;height:34px;font-size:14px;font-weight:400;letter-spacing:0;text-align:left}
+.htools>*{float:none!important;margin:0!important}
+.htools .mdtools{display:inline-flex;gap:6px}
+@media (max-width:700px){
+  .sec>.card>h2,.sec>.grid>.card>h2{font-size:20px;padding:0}
+  .htools{position:static;justify-content:flex-start;flex-direction:row-reverse;margin:0 0 10px;height:auto;flex-wrap:wrap}
+}
+.sec.maxd>.card>h2{margin-bottom:18px}
+/* ===== Media-reja: bugungi kun ko'proq bilinsin ===== */
+.md.today{background:linear-gradient(90deg,rgba(31,138,138,.34),rgba(31,138,138,.14) 45%,rgba(31,138,138,.08)),var(--card);border:2px solid var(--cool);padding:2px 7px;box-shadow:0 0 0 3px rgba(31,138,138,.22),0 12px 24px -14px rgba(31,138,138,.9)}
+.md.today .mdl b{color:var(--cool);font-size:14px;font-weight:800}
+.md.today .mdl b::after{content:"BUGUN";margin-left:8px;padding:1px 7px;border-radius:8px;background:var(--cool);color:#fff;font-size:10.5px;font-weight:800;letter-spacing:.06em;vertical-align:1px}
+.md.today .mdl span{color:var(--cool);font-weight:800}
 </style>
 </head>
 <body>
@@ -1935,7 +1952,7 @@ function initLayout(){
     var bar=document.createElement("div");bar.className="mvbar";
     bar.innerHTML='<span class="grip" draggable="true" title="Sudrab joyini o‘zgartiring" aria-hidden="true">⠿</span><b><span class="mvic">'+mIco(x.id,x.ico)+'</span> '+esc(x.t)+'</b><span class="sp"></span><button class="sm" data-mv="-1" aria-label="Yuqoriga">▲</button><button class="sm" data-mv="1" aria-label="Pastga">▼</button>';
     sec.insertBefore(bar,sec.firstChild);
-    var hh=sec.querySelector(":scope > .card > h2");if(hh){var hb=document.createElement("button");hb.type="button";hb.className="hidebtn";hb.dataset.hide=sec.dataset.sec;hb.innerHTML=ICO.hide;hb.title="Bo‘limni yashirish (menyudan qaytarish mumkin)";hb.setAttribute("aria-label","Bo‘limni yashirish");hh.appendChild(hb)}
+    var hh=sec.querySelector(":scope > .card > h2");if(hh){var hb=document.createElement("button");hb.type="button";hb.className="hidebtn";hb.dataset.hide=sec.dataset.sec;hb.innerHTML=ICO.hide;hb.title="Bo‘limni yashirish (menyudan qaytarish mumkin)";hb.setAttribute("aria-label","Bo‘limni yashirish");hTools(hh).appendChild(hb)}
   });
   applyOrder();
 }
@@ -2407,7 +2424,7 @@ function render(){
   safe(renderCal,"taqvim");
   safe(renderHist,"tarix");
   safe(function(){renderCharts(names,m)},"diagrammalar");
-  safe(jfThumbs,"fayl rasmlari");safe(neRefresh,"natija oynasi");safe(renderAlerts,"ogohlantirishlar");
+  safe(jfThumbs,"fayl rasmlari");safe(neRefresh,"natija oynasi");safe(renderAlerts,"ogohlantirishlar");safe(htFit,"sarlavha o‘lchami");
 }
 function startTask(id){
   var x=byId(id);if(!x)return;
@@ -2428,12 +2445,17 @@ function clearTasks(){
   var n=tasks.length;pushUndo("Barcha vazifalar o‘chirildi ("+n+" ta)");
   if(run)stopTask();snapAll();tasks.splice(0,tasks.length);save();saveS();render();tick();queueSync();queueDb();
 }
+/* --- Panel sarlavhalari: markazda, katta; tugmalar bitta guruhda (o'ngda) --- */
+function hTools(h){var t=h.querySelector(":scope > .htools");if(!t){t=document.createElement("span");t.className="htools";h.insertBefore(t,h.firstChild)}return t}
+function htoolsInit(){Array.prototype.forEach.call(document.querySelectorAll(".sec > .card > h2, .sec > .grid > .card > h2"),function(h){
+  var t=hTools(h);Array.prototype.slice.call(h.children).forEach(function(c){if(c!==t&&(c.classList.contains("mdtools")||c.classList.contains("hidebtn")||c.classList.contains("tkclr")))t.appendChild(c)})});window.addEventListener("resize",htFit);try{document.fonts.ready.then(htFit)}catch(e){}htFit()}
+function htFit(){Array.prototype.forEach.call(document.querySelectorAll(".htools"),function(t){var h=t.parentNode;if(!h)return;var w=t.offsetWidth;if(w)h.style.setProperty("--htw",(w+12)+"px")})}
 function tasksCleanInit(){
   var h=document.querySelector("#s-tasks > .card > h2");if(!h||$("tkClr"))return;
   var b=document.createElement("button");b.type="button";b.id="tkClr";b.className="tkclr";b.dataset.tclr="1";
   b.title="Barcha vazifalarni tozalash (10 soniya ichida bekor qilish mumkin)";b.setAttribute("aria-label","Barcha vazifalarni tozalash");
   b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/></svg><span>Tozalash</span>';
-  h.appendChild(b);
+  hTools(h).appendChild(b);
 }
 function delTask(i){var x=tasks[i];if(!x)return;pushUndo("Vazifa o‘chirildi: "+x.t);if(run&&run.id===x.id)stopTask();snapAll();tasks.splice(i,1);save();saveS();render();tick();queueSync()}
 function setErr(el,msg){var w_=el.parentNode,f=w_.querySelector(".fe");if(msg){el.classList.add("err");if(!f){f=document.createElement("span");f.className="fe";w_.appendChild(f)}f.textContent=msg}else{el.classList.remove("err");if(f)f.textContent=""}}
@@ -3389,7 +3411,7 @@ function secView(id,a){
 function secViewInit(){
   SECVIEW.forEach(function(id){var root=$("s-"+id),card=root&&root.querySelector(":scope > .card"),h=card&&card.querySelector(":scope > h2");if(!card)return;
     var t=document.createElement("span");t.className="mdtools";t.innerHTML='<button type="button" data-secview="'+id+':min"></button><button type="button" data-secview="'+id+':max"></button>';
-    if(h)h.insertBefore(t,h.firstChild);
+    if(h){var ht_=hTools(h);ht_.insertBefore(t,ht_.firstChild)}
     else{var hb=document.createElement("button");hb.type="button";hb.dataset.hide=id;hb.innerHTML=ICO.hide;hb.title="Bo‘limni yashirish (menyudan qaytarish mumkin)";hb.setAttribute("aria-label","Bo‘limni yashirish");t.insertBefore(hb,t.firstChild);card.insertBefore(t,card.firstChild)}
     secViewApply(id)});
   document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-secview]");if(!b)return;var q=b.dataset.secview.split(":");secView(q[0],q[1])});
@@ -4217,12 +4239,12 @@ async function initRuntime(){
   $("saveSt").textContent=dbRef?"Bulutga ulangan: ma’lumot avtomatik saqlanadi.":"Bulutga ulanmagan — ma’lumot shu brauzerda saqlanadi.";
   $("shSt").textContent="";window.__tmAuto=!!dbRef&&!(window.TEAM&&TEAM.as);
 }
-relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"tozalash");$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as))safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
+relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"tozalash");safe(htoolsInit,"sarlavhalar");$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as))safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
 </script>
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261104-1609";
+window.__BUILD="20261104-1615";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
