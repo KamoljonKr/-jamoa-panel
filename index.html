@@ -503,6 +503,8 @@ label.rpc .rd{width:10px;height:10px;border-radius:50%;display:inline-block}
 .mdhist{display:flex;gap:6px;overflow-x:auto;padding:2px 0 4px}
 .mdhist .mdh{flex:0 0 auto;padding:5px 11px;font-size:12.5px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px}
 .mdhist .mdh.on{background:var(--cool);color:#fff;border-color:var(--cool)}
+.mdhist{display:none!important}
+.mdstats:empty{display:none}
 .mdstats{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 8px}
 .mdchip{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:3px 10px;font-size:12.5px;display:inline-flex;gap:5px;align-items:center}
 .mdchip .rd{width:9px;height:9px;border-radius:50%;display:inline-block}
@@ -1769,11 +1771,11 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
     </div>
     <div class="mdhist" id="mdHist"></div>
     <div class="mdstats" id="mdStats"></div>
+    <div id="mdBody"></div>
     <details class="mdplan" id="mdPlan" open><summary>Reja bo‘yicha nima qilindi ?</summary>
       <div id="planStats"></div>
       <p class="note">Reja soni shu oyning media-rejasidagi kontentlardan o‘zi hisoblanadi. Kunlardagi “tayyor” belgisini qo‘ysangiz, shu kontent turi bajarilganlarga qo‘shiladi. Statistika tepada tanlangan loyiha va oy bo‘yicha chiqadi.</p>
     </details>
-    <div id="mdBody"></div>
   </div>
   </section>
 
@@ -3086,9 +3088,7 @@ function mdStatsRender(){
   filled=Object.keys(days).length;
   var st=$("mdStats");if(!st)return;
   var mx=$("s-media").classList.contains("max"),sl=mdSelVal();
-  st.innerHTML=(mx?'<span class="mdchip m">'+monthLabel(mMonth)+' · '+esc(sl||"Barcha loyihalar")+'</span>':'')+'<span class="mdchip"><b>'+tot+'</b> kontent</span><span class="mdchip"><b>'+filled+'</b> / '+keys.length+' kun to‘ldirilgan</span><span class="mdchip"><b>'+done+'</b> / '+tot+' tayyor</span>'
-    +(CT.some(function(c){return mx||tc[c]||mTf===c})?'<span class="mdsl">Tur bo‘yicha ko‘rish:</span>':'')+CT.filter(function(c){return mx||tc[c]||mTf===c}).map(function(c){return'<button type="button" class="mdchip t'+(tc[c]?'':' z')+(mTf===c?' on':'')+'" data-mtf="'+esc(c)+'" aria-pressed="'+(mTf===c)+'" title="'+(mTf===c?'Ajratib ko‘rsatishni bekor qilish':'Media-rejada faqat “'+esc(c)+'” kataklarini ajratib ko‘rsatish')+'">'+esc(c)+' <b>'+(tc[c]||0)+'</b></button>'}).join("")
-    +(all?Object.keys(pc).map(function(p){return'<span class="mdchip p"><span class="rd" style="background:'+col(names.indexOf(p))+'"></span>'+esc(p)+' <b>'+pc[p]+'</b></span>'}).join(""):"");
+  st.innerHTML=CT.filter(function(c){return mx||tc[c]||mTf===c}).map(function(c){return'<button type="button" class="mdchip t'+(tc[c]?'':' z')+(mTf===c?' on':'')+'" data-mtf="'+esc(c)+'" aria-pressed="'+(mTf===c)+'" title="'+(mTf===c?'Ajratib ko‘rsatishni bekor qilish':'Media-rejada faqat “'+esc(c)+'” kataklarini ajratib ko‘rsatish')+'">'+esc(c)+' <b>'+(tc[c]||0)+'</b></button>'}).join("");
   var today=ymd(Date.now()),cnt={};media.forEach(function(e){if(!mdEmpty(e)&&mdMatch(e)){var m=e.d.slice(0,7);cnt[m]=(cnt[m]||0)+1}});cnt[today.slice(0,7)]=cnt[today.slice(0,7)]||0;cnt[mMonth]=cnt[mMonth]||0;
   $("mdHist").innerHTML=Object.keys(cnt).sort().reverse().map(function(m){return'<button type="button" class="mdh'+(m===mMonth?" on":"")+'" data-mgo="'+m+'">'+MSH[+m.slice(5,7)-1]+' '+m.slice(0,4)+(cnt[m]?' · '+cnt[m]:'')+'</button>'}).join("");
   try{mdCalRefresh()}catch(e){}
@@ -4434,7 +4434,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261105-1139";
+window.__BUILD="20261105-1149";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
