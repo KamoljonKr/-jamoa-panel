@@ -714,6 +714,24 @@ body.secmaxed{overflow:hidden}
 .gsh i{font-style:normal;background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:0 5px;color:var(--ink)}
 .sec,#s-media tr,.me{scroll-margin-top:calc(var(--hh,52px) + 64px)}
 .me.flash{animation:fl 3s ease-out}
+/* Media-reja: bugun (och yashil) va kechikkan (qizil) ogohlantirish belgisi */
+.mdb{display:none;position:relative;flex:none;align-items:center;justify-content:center;width:22px;height:22px;margin-right:4px;border-radius:7px;color:#fff;font-weight:900;font-size:14px;line-height:1;background:linear-gradient(135deg,#8fdcb0,#3fb47b);box-shadow:0 5px 10px -4px rgba(47,158,99,.75)}
+.mdb::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid #3fb47b;opacity:0}
+.md.today .me.pend .mdb,.md.past .me.pend .mdb{display:inline-flex}
+.md.past .me.pend .mdb{background:linear-gradient(135deg,#ff8a78,#d8432c);box-shadow:0 5px 10px -4px rgba(216,67,44,.75)}
+.md.past .me.pend .mdb::after{border-color:#d8432c}
+.md.past .me.pend{background:rgba(216,67,44,.07)}
+.md.today .me.pend{background:rgba(63,180,123,.12)}
+.mcc{position:relative}
+.mcb{position:absolute;top:-5px;right:-4px;width:15px;height:15px;border-radius:5px;text-decoration:none;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;line-height:1;color:#fff;background:linear-gradient(135deg,#8fdcb0,#3fb47b);box-shadow:0 3px 6px -2px rgba(47,158,99,.7)}
+.mcc.pl .mcb{background:linear-gradient(135deg,#ff8a78,#d8432c);box-shadow:0 3px 6px -2px rgba(216,67,44,.7)}
+.mcc.pl{border-color:rgba(216,67,44,.6)}
+@media (prefers-reduced-motion:no-preference){
+  .md .me.pend .mdb::after{animation:alPulse 1.8s ease-out infinite}
+  .mcb{animation:mcbPop 1.8s ease-in-out infinite}
+}
+@keyframes mcbPop{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+
 /* Tasks: ko'zga yaqqol, zich inputlar */
 #s-tasks .tkt input.txt,#s-tasks .tkt select.psel{background:var(--card);border-color:color-mix(in srgb,var(--ink) 22%,var(--line))}
 #s-tasks .tkt input.txt:focus,#s-tasks .tkt select.psel:focus{border-color:var(--cool);box-shadow:0 0 0 3px rgba(31,138,138,.16);outline:0}
@@ -3024,7 +3042,7 @@ function mdRow(e,i,k,names,all,ps){
    +(all?'<select class="mps" aria-label="Loyiha"><option value="">— loyiha —</option>'+ps.map(function(p){return'<option'+(e&&normK(p)===normK(e.p)?" selected":"")+'>'+esc(p)+'</option>'}).join("")+'</select>':'')
    +'<details class="ms"><summary aria-label="Kontent turi">'+mdSum(e||{c:[]})+'</summary><div class="mso">'+CT.map(function(t){return'<label><input type="checkbox" data-mt="'+esc(t)+'"'+(e&&e.c.indexOf(t)>-1?" checked":"")+'>'+esc(t)+'</label>'}).join("")+'</div></details>'
    +'<textarea class="mt nt" rows="1" placeholder="Kontent reja mavzusi" aria-label="Kontent mavzusi">'+esc(e?e.t:"")+'</textarea>'
-   +'<span class="ma"><label class="mxl" title="Tayyor bo‘ldi"><input type="checkbox" data-mdone'+(e&&e.x?" checked":"")+'>tayyor</label><button type="button" class="ghost" data-mdel aria-label="Qatorni o‘chirish">×</button></span></div>';
+   +'<span class="ma"><span class="mdb" aria-hidden="true">!</span><label class="mxl" title="Tayyor bo‘ldi"><input type="checkbox" data-mdone'+(e&&e.x?" checked":"")+'>tayyor</label><button type="button" class="ghost" data-mdel aria-label="Qatorni o‘chirish">×</button></span></div>';
 }
 function renderMedia(){
   var body=$("mdBody");if(!body)return;
@@ -3043,7 +3061,7 @@ function renderMedia(){
     return'<div class="md'+(k===today?" today":"")+(k<today?" past":"")+(wk?" wk":"")+(k===mDay?" sel":"")+'" data-day="'+k+'"><div class="mdl"><b>'+k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4)+'</b><span>'+WDN[wd]+'</span><button type="button" class="sm" data-madd="'+k+'"'+(all?' disabled title="Avval yuqoridan loyihani tanlang"':' title="Shu kunga yana kontent qo‘shish"')+' aria-label="Shu kunga kontent qo‘shish">'+ADD_SV+'</button></div><div class="mde">'+rows+'</div></div>'}).join("");
   body.innerHTML='<div class="mcal" id="mdCal" role="group" aria-label="Oy kunlari">'+mdCalInner()+'</div>'+(mDay?'':'<p class="mdhint">Kunni bosing — shu kunning kontent rejasi ochiladi.</p>')+(h||'<p class="note">Bu oyda to‘ldirilgan kun yo‘q.</p>');
   var ct=$("mdCtlT");if(ct)ct.textContent=(sel||"Barcha loyihalar")+" · "+monthLabel(mMonth);
-  mdStatsRender();mdTf();mxProjUi();if($("mdDist")&&!$("mdDist").hidden)mddUi();if(typeof mdaiShow==="function")mdaiShow();
+  mdStatsRender();mdTf();mdRowSync();mxProjUi();if($("mdDist")&&!$("mdDist").hidden)mddUi();if(typeof mdaiShow==="function")mdaiShow();
 }
 var MWD=["Du","Se","Ch","Pa","Ju","Sh","Ya"];
 function mdCalInner(){
@@ -3053,13 +3071,17 @@ function mdCalInner(){
   var lead=(new Date(keys[0]+"T12:00:00").getDay()+6)%7;
   for(i=0;i<lead;i++)h+='<span class="mcc blank" aria-hidden="true"></span>';
   keys.forEach(function(k){
-    var it=by[k]||[],wd=new Date(k+"T12:00:00").getDay(),wk=(wd===0||wd===6),nd=it.filter(function(e){return e.x}).length,dots="",ts=[];
+    var it=by[k]||[],wd=new Date(k+"T12:00:00").getDay(),wk=(wd===0||wd===6),nd=it.filter(function(e){return e.x}).length,dots="",ts=[],pn=it.length-nd;
     it.slice(0,6).forEach(function(e){dots+='<i class="'+(e.x?'d':'')+'" style="--dc:'+col(names.indexOf(e.p))+'"></i>'});
     if(it.length>6)dots+='<em>+'+(it.length-6)+'</em>';
     it.forEach(function(e){e.c.forEach(function(c){if(ts.indexOf(c)<0)ts.push(c)})});
-    h+='<button type="button" class="mcc'+(k===today?' td':'')+(wk?' wk':'')+(it.length?' has':'')+(it.length&&nd===it.length?' alld':'')+(k<today?' past':'')+(k===mDay?' sel':'')+'" data-mday="'+k+'" data-t="'+esc(ts.join("|"))+'" aria-pressed="'+(k===mDay)+'" aria-label="'+parseInt(k.slice(8))+' '+MONTHS[+k.slice(5,7)-1].toLowerCase()+', '+WDN[wd]+(it.length?': '+it.length+' ta kontent, '+nd+' tasi tayyor':': kontent yo‘q')+'"><b>'+parseInt(k.slice(8))+'</b><span class="mcd">'+dots+'</span></button>'});
+    h+='<button type="button" class="mcc'+(k===today?' td':'')+(wk?' wk':'')+(it.length?' has':'')+(it.length&&nd===it.length?' alld':'')+(k<today?' past':'')+(k===mDay?' sel':'')+(pn&&k===today?' pt':'')+(pn&&k<today?' pl':'')+'" data-mday="'+k+'" data-t="'+esc(ts.join("|"))+'" aria-pressed="'+(k===mDay)+'" aria-label="'+parseInt(k.slice(8))+' '+MONTHS[+k.slice(5,7)-1].toLowerCase()+', '+WDN[wd]+(it.length?': '+it.length+' ta kontent, '+nd+' tasi tayyor':': kontent yo‘q')+'"><b>'+parseInt(k.slice(8))+'</b><span class="mcd">'+dots+'</span>'+(pn&&k<=today?'<u class="mcb" aria-hidden="true">!</u>':'')+'</button>'});
   return h}
-function mdCalRefresh(){var c=$("mdCal");if(c){c.innerHTML=mdCalInner();mdTf()}}
+function mdRowSync(){var td=ymd(Date.now()),rs=document.querySelectorAll("#mdBody .me");
+  for(var i=0;i<rs.length;i++){var r=rs[i],mi=r.dataset.mi,e=mi!==""&&mi!==undefined?media[+mi]:null,p=!!(e&&!mdEmpty(e)&&!e.x);
+    r.classList.toggle("pend",p);
+    if(p){var b=r.querySelector(".mdb"),d=r.dataset.md;if(b)b.title=d===td?"Bugun qilinadigan ish":(d<td?"Kechikkan: ‘tayyor’ belgilanmagan":"")}}}
+function mdCalRefresh(){var c=$("mdCal");if(c){c.innerHTML=mdCalInner();mdTf()}mdRowSync()}
 function mdCtlInit(){var cw=$("mdCtl"),b=$("mdCtlB");if(!cw||!b)return;
   var on=getPref("kd_mdctl","")==="1";
   cw.classList.toggle("open",on);b.setAttribute("aria-expanded",on);
@@ -4434,7 +4456,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261105-1149";
+window.__BUILD="20261105-1159";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
