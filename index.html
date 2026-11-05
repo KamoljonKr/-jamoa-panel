@@ -719,7 +719,15 @@ body.secmaxed{overflow:hidden}
 
 @media(max-width:380px){html #s-tasks .tkt td:nth-child(4)::before{content:"⏱ "}html #s-tasks .tkt tr{column-gap:6px;padding:8px 7px 8px 10px;grid-template-columns:24px minmax(0,1fr) auto auto}}
 /* Media-reja: sozlamalar bloki (telefonda yashiriladi) va oy kalendari */
-.mdctlt,.mcal,.mdhint{display:none}
+.mcal,.mdhint{display:none}
+.mdctlt{display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;margin:6px 0 8px;border:1.5px dashed var(--cool);border-radius:12px;background:rgba(31,138,138,.07);color:var(--ink);font:inherit;font-size:14px;cursor:pointer;text-align:left;transition:background .2s}
+.mdctlt:hover{background:rgba(31,138,138,.14)}
+.mdctla{font-weight:800;color:var(--cool);flex:none}
+.mdctlc{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mute);font-size:12.5px;text-align:right}
+.mdctlv{flex:none;color:var(--cool);transition:transform .25s var(--ease,ease)}
+.mdctl.open .mdctlv{transform:rotate(180deg)}
+.mdctl:not(.open) .mdctlb{display:none}
+@media (prefers-reduced-motion:no-preference){.mdctl.open .mdctlb{animation:dropIn .3s var(--ease) backwards;transform-origin:50% 0}}
 .mcc{appearance:none;-webkit-appearance:none;font:inherit;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;min-height:48px;padding:6px 2px 5px;border:1px solid var(--line);border-radius:10px;background:var(--card);cursor:pointer;transition:transform .15s,background .2s,border-color .2s,opacity .25s,filter .25s}
 .mcc:active{transform:scale(.94)}
 .mcc.blank{visibility:hidden;pointer-events:none}
@@ -740,18 +748,12 @@ body.secmaxed{overflow:hidden}
 .mcc.mtf-on{outline:2px dashed var(--cool);outline-offset:1px}
 .mch{text-align:center;font-size:11px;font-weight:800;color:var(--mute);letter-spacing:.03em;padding:2px 0}
 @media(max-width:760px){
-  .mdctlt{display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;margin:6px 0 8px;border:1.5px dashed var(--cool);border-radius:12px;background:rgba(31,138,138,.07);color:var(--ink);font:inherit;font-size:14px;cursor:pointer;text-align:left}
-  .mdctla{font-weight:800;color:var(--cool);flex:none}
-  .mdctlc{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mute);font-size:12.5px;text-align:right}
-  .mdctlv{flex:none;color:var(--cool);transition:transform .25s var(--ease,ease)}
-  .mdctl.open .mdctlv{transform:rotate(180deg)}
-  .mdctl:not(.open) .mdctlb{display:none}
   .mcal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin:6px 0 8px}
   .mdhint{display:block;margin:2px 0 10px;text-align:center;color:var(--mute);font-size:12.5px}
   #mdBody .md:not(.sel){display:none}
   #mdBody .md.sel{margin-top:6px}
 }
-@media (prefers-reduced-motion:no-preference){@media(max-width:760px){.mdctl.open .mdctlb{animation:dropIn .3s var(--ease) backwards;transform-origin:50% 0}#mdBody .md.sel{animation:dropIn .28s var(--ease) backwards;transform-origin:50% 0}}}
+@media (prefers-reduced-motion:no-preference){@media(max-width:760px){#mdBody .md.sel{animation:dropIn .28s var(--ease) backwards;transform-origin:50% 0}}}
 
 /* Media-reja: tur bo'yicha ajratib ko'rsatish */
 button.mdchip{font:inherit;font-size:12.5px;color:var(--ink);cursor:pointer;transition:transform .15s,outline-color .15s,background .15s}
@@ -4414,7 +4416,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261105-1123";
+window.__BUILD="20261105-1130";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
