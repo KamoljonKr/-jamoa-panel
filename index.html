@@ -663,6 +663,8 @@ body.secmaxed{overflow:hidden}
 #s-journal .jc textarea.nt{field-sizing:fixed;height:4.9em;min-height:4.9em;max-height:4.9em;overflow:hidden;resize:none;line-height:1.5;padding:5px 8px;font-size:13px;border-radius:8px}
 .jc .jfbar{margin-top:auto}
 .jc.flash{animation:fl 3s ease-out}
+.dwrap.dz span{visibility:hidden}
+.dwrap input.dn::placeholder{color:var(--mute);font-weight:700;opacity:1}
 @media(max-width:700px){.jcards{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:420px){.jtr{gap:4px;flex-wrap:nowrap}#s-journal .jtr input.tm{width:58px}#s-journal .jtr input.dn{width:52px}.jtr .dwrap{gap:3px;white-space:nowrap}.jc{padding:12px}}
 #s-journal .add{margin-top:8px;gap:6px}
@@ -674,7 +676,6 @@ body.secmaxed{overflow:hidden}
 .add .addt{grid-column:1/-1;display:flex;align-items:center;gap:6px;font-weight:800;font-size:13px;color:var(--cool);letter-spacing:.01em;padding-bottom:6px;margin-bottom:2px;border-bottom:1px solid rgba(31,138,138,.25)}
 .add input,.add select,.add textarea{background:var(--card);border-color:rgba(31,138,138,.4)}
 .add input:focus,.add select:focus,.add textarea:focus{border-color:var(--cool)}
-.add>button{background:var(--cool);color:#fff}
 .menubtn{white-space:nowrap;flex:none}
 .gs{position:relative;display:flex;align-items:center;flex:1 1 260px;max-width:440px;margin-left:6px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:0 8px;color:var(--mute)}
 .gs:focus-within{border-color:var(--cool);box-shadow:0 0 0 3px rgba(31,138,138,.18);color:var(--cool)}
@@ -1298,15 +1299,31 @@ body.viewas [data-jattach],body.viewas [data-jfdel]{display:none!important}
 @keyframes tspin{to{transform:rotate(360deg)}}
 
 /* ===== Qo'shish tugmalari: ikonka ===== */
-.addic{display:inline-flex;align-items:center;justify-content:center;gap:0;min-width:44px;height:40px;padding:0 14px;border-radius:12px;background:var(--cool);color:#fff;border:0;box-shadow:0 8px 16px -8px rgba(31,138,138,.8),inset 0 1px 0 rgba(255,255,255,.22);transition:transform .18s var(--ease),box-shadow .2s,filter .2s}
-.addic:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.addic{display:inline-flex;align-items:center;justify-content:center;gap:0;min-width:44px;height:40px;padding:0 14px;border-radius:12px;background:rgba(31,138,138,.08);color:var(--cool);border:1.5px dashed var(--cool);box-shadow:none;cursor:pointer;transition:transform .18s var(--ease),background .2s,color .2s}
+.addic:hover{background:rgba(31,138,138,.18);transform:translateY(-1px)}
 .addic:active{transform:scale(.95)}
 .addic .addsv{width:18px;height:18px;flex:none}
 #s-tasks .add button.addic,#s-journal .add button.addic{padding:0 14px;font-size:0}
 .mdnav .addic,.mdnew .addic{height:34px;min-width:38px;padding:0 10px;border-radius:10px}
-.mdl .sm[data-madd]{display:inline-flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0}
+.mdl .sm[data-madd]{display:inline-flex;align-items:center;justify-content:center;width:30px;height:28px;padding:0;background:rgba(31,138,138,.08);color:var(--cool);border:1.5px dashed var(--cool);box-shadow:none}
+.mdl .sm[data-madd]:hover{background:rgba(31,138,138,.18)}
+.mdnav .addic.sm,.mdnew .addic.sm{background:rgba(31,138,138,.08);color:var(--cool);border:1.5px dashed var(--cool)}
 .mdl .sm[data-madd] .addsv{width:15px;height:15px}
-@media (min-width:701px){.add .addic{justify-self:start;align-self:end;width:64px}}
+/* + tugmasi o'ng chetda, oldidagi maydonlar qolgan joyni egallaydi */
+.add .addic{justify-self:end;align-self:end;width:64px}
+#s-tasks .add:not(.man){grid-template-columns:minmax(0,1.2fr) minmax(0,1.6fr) auto}
+@media(min-width:701px) and (max-width:1050px){
+  #s-journal .add.man{grid-template-columns:repeat(3,minmax(0,1fr)) auto}
+  #s-journal .add.man>div:nth-of-type(3){grid-column:span 2}
+}
+@media(max-width:700px){
+  #s-tasks .add:not(.man){grid-template-columns:minmax(0,1fr) auto}
+  #s-tasks .add:not(.man)>.npw{grid-column:1/-1}
+  #s-tasks .add:not(.man)>button{grid-column:2}
+  #s-journal .add.man>div.wide{grid-column:1/4}
+  #s-journal .add.man>button{grid-column:4;width:100%}
+  .prnew .addic{flex:none;margin-left:auto}
+}
 .add label .opt{font-weight:400;color:var(--mute);font-size:11px}
 
 /* ===== Loyihalar ro'yxati ===== */
@@ -1322,7 +1339,7 @@ body.viewas [data-jattach],body.viewas [data-jfdel]{display:none!important}
 .prnew .prf:first-child{flex:1 1 200px}
 .prnew label{font-size:12px;color:var(--mute);font-weight:600}
 .prnew input[type=text],.prnew input:not([type]){width:100%}
-@media (max-width:700px){.prnew .prf:first-child{flex:1 1 100%}.prnew .prf:not(:first-child){flex:none}.prnew .addic{flex:1 1 auto;margin-left:auto}}
+@media (max-width:700px){.prnew .prf:first-child{flex:1 1 100%}.prnew .prf:not(:first-child){flex:none}.prnew .addic{flex:none;margin-left:auto}}
 .prerr{min-height:0;margin:4px 0 0;color:var(--cool)}
 input[type=color].prcol,.prnew input[type=color]{width:40px;height:40px;padding:3px;border-radius:10px;border:1px solid var(--line);background:var(--bg);cursor:pointer}
 .prlg{width:40px;height:40px;padding:0;border-radius:10px;border:1px dashed var(--mute);background:var(--bg);display:inline-flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;color:var(--mute);flex:none}
@@ -1705,7 +1722,7 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
     <p class="note" id="logTotal"></p>
     <div class="add man">
       <div class="addt"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Vaqtni qo‘lda yozish</div>
-      <div><label for="mP">Loyiha nomi</label><input id="mP" list="dlP" placeholder="Masalan, SQB" autocomplete="off"></div>
+      <div class="npw"><label for="mP">Loyiha nomi</label><div class="pc"><select id="mP" class="txt psel" aria-label="Loyiha nomi"></select><span id="mPLg" class="plgw"></span></div></div>
       <div><label for="mT">Vazifa nomi</label><input id="mT" list="dlT" placeholder="Masalan, Post matni" autocomplete="off"></div>
       <div><label for="mD">Sana</label><input id="mD" type="date"></div>
       <div><label for="mS">Start <span class="opt">(ixtiyoriy)</span></label><input id="mS" class="tm" type="text" inputmode="numeric" maxlength="5" placeholder="09:30" autocomplete="off"></div>
@@ -1713,8 +1730,8 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
       <div class="wide"><label for="mN">Natija (ixtiyoriy)</label><textarea id="mN" class="nt" rows="1" placeholder="Nima qilindi?" title="Enter — yangi qator, Ctrl+Enter — qo‘shish"></textarea></div>
       <button id="manBtn" type="button" class="addic" title="Yozuv qo‘shish" aria-label="Vaqt yozuvini qo‘shish"><svg class="addsv" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
     </div>
-    <p class="note">Nomlarni yozing yoki ro‘yxatdan tanlang. Yangi nom avtomatik vazifalar ro‘yxatiga qo‘shiladi. Start va Finish ixtiyoriy: yozilmasa, yozuv vaqtsiz (0 daq.) qo‘shiladi va vaqtni jadvalda keyin kiritsa bo‘ladi. Boshqa sanaga yozsangiz, yozuv Tarix bo‘limida ko‘rinadi. Enter bosib ham qo‘shish mumkin.</p>
-    <datalist id="dlP"></datalist><datalist id="dlT"></datalist>
+    <p class="note">Loyihani ro‘yxatdan tanlang (yangi loyiha “Loyihalarni tahrirlash” bo‘limida qo‘shiladi). Vazifa nomini yozing yoki ro‘yxatdan tanlang: yangi nom avtomatik vazifalar ro‘yxatiga qo‘shiladi. Start va Finish ixtiyoriy: yozilmasa, davomiylik “–” bo‘lib qoladi va vaqtni kartada keyin kiritsa bo‘ladi. Boshqa sanaga yozsangiz, yozuv Tarix bo‘limida ko‘rinadi. Enter bosib ham qo‘shish mumkin.</p>
+    <datalist id="dlT"></datalist>
     <p class="note" id="mErr"></p>
   </div>
   </section>
@@ -1773,7 +1790,8 @@ function r2(n){return Math.round(n*100)/100}
 function pad(n){return (n<10?"0":"")+n}
 function mTxt(m){if(m>0&&m<1)return Math.max(1,Math.round(m*60))+" s";return Math.round(m)+" daq."}
 function hmTxt(m){m=Math.round(m);var h=Math.floor(m/60),r=m%60;if(!h)return m+" daq.";return h+" soat"+(r?" "+r+" daq.":"")}
-function dTxt(m){return m<1?mTxt(m):hmTxt(m)}
+function dTxt(m){return m<=0?"–":(m<1?mTxt(m):hmTxt(m))}
+function dVal(m){return m>0?String(Math.round(m*10)/10):""}
 function hm(h){return hmTxt(h*60)}
 function col(i){var c=i>=0&&PCOL[i];return c||COLORS[(i<0?0:i)%COLORS.length]}
 function ymd(ts){var d=new Date(ts);return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
@@ -1912,7 +1930,7 @@ function renderHist(){
   $("histList").innerHTML=days.map(function(k){var v=map[k],open=!!openDays[k],body="",pc=Math.round(v.m/availMin*100);
     if(open)body='<div class="tw"><table class="jt" style="min-width:700px"><thead><tr><th>Vazifa</th><th>Start</th><th>Finish</th><th>Davomiyligi</th><th>Natija</th><th></th></tr></thead><tbody>'
       +daySess(k).map(function(o){var s=o.s,x=sInfo(s),m=(s.e-s.s)/60000;
-        return '<tr><td><span class="jlg">'+plg(x.p,'sm')+'<span class="jlt">'+esc(x.p)+' — '+esc(x.t)+'</span></span></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.s)+'" data-tses="'+o.i+'" data-tk="s" aria-label="Start"></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.e)+'" data-tses="'+o.i+'" data-tk="e" aria-label="Finish"></td><td><div class="dwrap"><input type="number" class="dn" min="0.1" step="any" value="'+(Math.round(m*10)/10)+'" data-dses="'+o.i+'" aria-label="Davomiylik (daqiqa)"><span>daq.</span></div></td><td>'+jfCell(s,o.i)+'</td><td><button class="ghost" data-delses="'+o.i+'" aria-label="O‘chirish">×</button></td></tr>'}).join("")+'</tbody></table></div>';
+        return '<tr><td><span class="jlg">'+plg(x.p,'sm')+'<span class="jlt">'+esc(x.p)+' — '+esc(x.t)+'</span></span></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.s)+'" data-tses="'+o.i+'" data-tk="s" aria-label="Start"></td><td><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.e)+'" data-tses="'+o.i+'" data-tk="e" aria-label="Finish"></td><td><div class="dwrap'+(m>0?'':' dz')+'"><input type="number" class="dn" min="0.1" step="any" value="'+dVal(m)+'" placeholder="–" data-dses="'+o.i+'" aria-label="Davomiylik (daqiqa)"><span>daq.</span></div></td><td>'+jfCell(s,o.i)+'</td><td><button class="ghost" data-delses="'+o.i+'" aria-label="O‘chirish">×</button></td></tr>'}).join("")+'</tbody></table></div>';
     return '<div class="hday" data-hday="'+k+'"><div class="hrow"><div style="flex:1;min-width:220px"><b>'+k+'</b> — '+hmTxt(v.m)+' · ish vaqtining '+pc+'% · '+v.n+' ta yozuv<small>'+Object.keys(v.p).map(function(n){return esc(n)+" "+hmTxt(v.p[n])}).join(" · ")+'</small><div class="pb"><i style="width:'+Math.min(100,pc)+'%"></i></div></div><button class="sm" data-day="'+k+'">'+(open?"Yashirish":"Ko‘rish")+'</button></div>'+body+'</div>'}).join("")||'<p class="note">O‘tgan kunlar hali yo‘q.</p>';
 }
 /* --- vaqt maydoni: faqat raqam yozish, avtomatik ":" --- */
@@ -2242,7 +2260,7 @@ function renderLog(ds,day){
   ds.forEach(function(o){var s=o.s,x=sInfo(s),m=(s.e-s.s)/60000,cl=col(nm.indexOf(x.p));tot+=m;
     var lg=plg(x.p),ini=esc((x.p||"?").trim().charAt(0).toUpperCase()||"?");
     h+='<article class="jc" style="--pc:'+cl+'"><div class="jch"><span class="jbd">'+(lg||'<span class="jin">'+ini+'</span>')+'</span><div class="jct"><b title="'+esc(x.t)+'">'+esc(x.t)+'</b><small title="'+esc(x.p)+'">'+esc(x.p)+'</small></div><button class="ghost" data-delses="'+o.i+'" aria-label="O‘chirish" title="O‘chirish">×</button></div>'
-     +'<div class="jtr"><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.s)+'" data-tses="'+o.i+'" data-tk="s" aria-label="Start"><span class="jdash">–</span><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.e)+'" data-tses="'+o.i+'" data-tk="e" aria-label="Finish"><div class="dwrap"><input type="number" class="dn" min="0.1" step="any" value="'+(Math.round(m*10)/10)+'" data-dses="'+o.i+'" aria-label="Davomiylik (daqiqa)"><span>daq.</span></div></div>'
+     +'<div class="jtr"><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.s)+'" data-tses="'+o.i+'" data-tk="s" aria-label="Start"><span class="jdash">–</span><input type="text" inputmode="numeric" maxlength="5" autocomplete="off" class="tm" value="'+clock(s.e)+'" data-tses="'+o.i+'" data-tk="e" aria-label="Finish"><div class="dwrap'+(m>0?'':' dz')+'"><input type="number" class="dn" min="0.1" step="any" value="'+dVal(m)+'" placeholder="–" data-dses="'+o.i+'" aria-label="Davomiylik (daqiqa)"><span>daq.</span></div></div>'
      +jfCell(s,o.i)+'</article>'});
   $("log").innerHTML=h||'<p class="note jempty">Bugun hali yozuv yo‘q. Jadvaldagi ▶ Start tugmasini bosing yoki vaqtni qo‘lda yozing.</p>';
   $("logTotal").textContent="Bugun jami: "+hmTxt(tot);
@@ -2487,7 +2505,10 @@ function delTask(i){var x=tasks[i];if(!x)return;pushUndo("Vazifa o‘chirildi: "
 function setErr(el,msg){var w_=el.parentNode,f=w_.querySelector(".fe");if(msg){el.classList.add("err");if(!f){f=document.createElement("span");f.className="fe";w_.appendChild(f)}f.textContent=msg}else{el.classList.remove("err");if(f)f.textContent=""}}
 function fillLists(){
   var pv=($("mP").value||"").trim().toLowerCase(),ts_=tasks.filter(function(x){return !pv||x.p.toLowerCase()===pv}),seen={};
-  $("dlP").innerHTML=projNames().map(function(n){return '<option value="'+esc(n)+'">'}).join("");
+  var mp=$("mP"),pn_=projNames(),cur_=mp.value;
+  mp.innerHTML=projOpts(pn_,cur_,pn_.length?"— Loyihani tanlang —":"Avval “Loyihalarni tahrirlash” bo‘limida loyiha qo‘shing");
+  if(cur_&&pn_.indexOf(cur_)>-1)mp.value=cur_;
+  $("mPLg").innerHTML=mp.value?plg(mp.value):"";
   $("dlT").innerHTML=ts_.filter(function(x){if(seen[x.t])return false;seen[x.t]=1;return true}).map(function(x){return '<option value="'+esc(x.t)+'">'}).join("");
 }
 function manualAdd(){var pn=$("mP").value.trim(),tn=$("mT").value.trim(),a=$("mS").value.trim(),b=$("mE").value.trim(),er=$("mErr"),dEl=$("mD");
@@ -2512,7 +2533,7 @@ function manualAdd(){var pn=$("mP").value.trim(),tn=$("mT").value.trim(),a=$("mS
   sessions.push({k:"r"+uid(),id:mt.id,s:s,e:e,n:$("mN").value.trim(),p:mt.p,t:mt.t});
   var idx=sessions.length-1,k=ymd(s),past=k!==ymd(Date.now());
   $("mT").value="";$("mS").value="";$("mE").value="";$("mN").value="";saveS();
-  er.textContent="✓ Yozuv qo‘shildi."+(s===e?" Vaqt kiritilmagan (0 daq.): Start va Finish’ni jadvalda yozishingiz mumkin.":"")+(past?" U "+k+" kuniga tushdi va Tarix bo‘limida ochildi.":"")+(made?" Yangi vazifa ro‘yxatga qo‘shildi.":"");
+  er.textContent="✓ Yozuv qo‘shildi."+(s===e?" Vaqt kiritilmagan (davomiylik “–”): Start va Finish’ni kartada yozishingiz mumkin.":"")+(past?" U "+k+" kuniga tushdi va Tarix bo‘limida ochildi.":"")+(made?" Yangi vazifa ro‘yxatga qo‘shildi.":"");
   if(past){openDays[k]=true;$("hist").open=true}
   render();queueSync();
   var el=document.querySelector((past?"#histList":"#log")+' [data-delses="'+idx+'"]');
@@ -3480,7 +3501,7 @@ function gsSearch(q){
   sessions.forEach(function(s,i){
     var f=sInfo(s),k=ymd(s.s);
     if(!gsMatch(f.p+" "+f.t+" "+(s.n||"")+" "+gsDateStr(k),toks))return;
-    out.push({ty:"ses",idx:i,ts:s.s,m:(s.e-s.s)/60000,ttl:f.p+" — "+f.t,sub:parseInt(k.slice(8))+" "+MONTHS[+k.slice(5,7)-1].toLowerCase()+" "+k.slice(0,4)+" · "+clock(s.s)+"–"+clock(s.e)+" · "+hmTxt((s.e-s.s)/60000),sn:s.n?gsSnip(s.n,toks):"",c:col(names.indexOf(f.p)),w:gsMatch(f.p+" "+f.t,toks)?0:1});
+    out.push({ty:"ses",idx:i,ts:s.s,m:(s.e-s.s)/60000,ttl:f.p+" — "+f.t,sub:parseInt(k.slice(8))+" "+MONTHS[+k.slice(5,7)-1].toLowerCase()+" "+k.slice(0,4)+" · "+clock(s.s)+"–"+clock(s.e)+" · "+dTxt((s.e-s.s)/60000),sn:s.n?gsSnip(s.n,toks):"",c:col(names.indexOf(f.p)),w:gsMatch(f.p+" "+f.t,toks)?0:1});
   });
   media.forEach(function(e,i){
     if(mdEmpty(e))return;
@@ -4167,7 +4188,7 @@ document.addEventListener("change",function(e){var t=e.target;
   if(t.id==="mS"||t.id==="mE"){var pt0=parseTime(t.value);if(pt0)t.value=pt0}
   if(t.dataset&&t.dataset.dses!==undefined){var q2=sessions[+t.dataset.dses],v2=parseFloat(String(t.value).replace(",","."));
     if(q2&&v2>0){q2.e=q2.s+Math.round(v2*60000);saveS();queueSync();$("saveSt").textContent="✓ Davomiylik o‘zgartirildi: Finish vaqti yangilandi"}
-    else $("saveSt").textContent="Davomiylik 0 dan katta bo‘lishi kerak.";
+    else if(!(q2&&!String(t.value).trim()&&q2.e<=q2.s))$("saveSt").textContent="Davomiylik 0 dan katta bo‘lishi kerak.";
     setTimeout(renderKeepFocus,0);return}
   if(t.dataset&&t.dataset.tses!==undefined){var q=sessions[+t.dataset.tses];
     if(q&&t.value&&!parseTime(t.value)){$("saveSt").textContent="Vaqt noto‘g‘ri: 09:30 ko‘rinishida yozing."}
@@ -4270,7 +4291,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261104-1653";
+window.__BUILD="20261105-0951";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
