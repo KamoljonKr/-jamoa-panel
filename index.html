@@ -712,6 +712,17 @@ body.secmaxed{overflow:hidden}
 .gsh i{font-style:normal;background:var(--bg);border:1px solid var(--line);border-radius:5px;padding:0 5px;color:var(--ink)}
 .sec,#s-media tr,.me{scroll-margin-top:calc(var(--hh,52px) + 64px)}
 .me.flash{animation:fl 3s ease-out}
+/* Media-reja: tur bo'yicha ajratib ko'rsatish */
+button.mdchip{font:inherit;font-size:12.5px;color:var(--ink);cursor:pointer;transition:transform .15s,outline-color .15s,background .15s}
+button.mdchip:hover{transform:translateY(-1px)}
+.mdchip.t.on{outline:2px dashed var(--cool);outline-offset:2px;font-weight:800}
+.me.mtf-on{outline:2px dashed var(--cool);outline-offset:2px;border-radius:8px}
+.me.mtf-on:not(.done){background:rgba(31,138,138,.08)}
+.me.mtf-off{filter:grayscale(1) contrast(.85);opacity:.2}
+.md.mtf-off{filter:grayscale(1) contrast(.85);opacity:.2}
+.md.mtf-off .me.mtf-off{filter:none;opacity:1}
+@media (prefers-reduced-motion:no-preference){.me{transition:opacity .25s,filter .25s,background .2s,outline-color .2s}}
+
 @media(max-width:700px){.brand{display:none}.gs{flex:1 1 auto;max-width:none;margin-left:0}.gsk{display:none}.topst{font-size:12px}}
 /* === JAMOA === */
 .tmacc{flex-direction:column;align-items:stretch;gap:6px}
@@ -2919,7 +2930,7 @@ function rpInit(){
 }
 
 /* --- Media-reja --- */
-var media=[],mdExtra=[],mMonth=ymd(Date.now()).slice(0,7),mOnly=0,mSel=null,mdT=0,MSH=["Yan","Fev","Mar","Apr","May","Iyn","Iyl","Avg","Sen","Okt","Noy","Dek"],mxEx=[];
+var media=[],mdExtra=[],mMonth=ymd(Date.now()).slice(0,7),mOnly=0,mTf="",mSel=null,mdT=0,MSH=["Yan","Fev","Mar","Apr","May","Iyn","Iyl","Avg","Sen","Okt","Noy","Dek"],mxEx=[];
 try{var m0=JSON.parse(localStorage.getItem("kd_media")||"[]");if(Array.isArray(m0))media=m0.filter(function(e){return e&&e.d})}catch(e){}
 try{var m1=JSON.parse(localStorage.getItem("kd_mdproj")||"[]");if(Array.isArray(m1))mdExtra=m1.filter(function(x){return typeof x==="string"&&x.trim()})}catch(e){}
 try{var m2=JSON.parse(localStorage.getItem("kd_mxex")||"[]");if(Array.isArray(m2))mxEx=m2}catch(e){}
@@ -2959,8 +2970,18 @@ function renderMedia(){
     var rows=idx.length?idx.map(function(i){return mdRow(media[i],i,k,names,all,ps)}).join(""):(all?'<div class="mnone">—</div>':mdRow(null,"",k,names,false,ps));
     return'<div class="md'+(k===today?" today":"")+(k<today?" past":"")+(wk?" wk":"")+'" data-day="'+k+'"><div class="mdl"><b>'+k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4)+'</b><span>'+WDN[wd]+'</span><button type="button" class="sm" data-madd="'+k+'"'+(all?' disabled title="Avval yuqoridan loyihani tanlang"':' title="Shu kunga yana kontent qo‘shish"')+' aria-label="Shu kunga kontent qo‘shish">'+ADD_SV+'</button></div><div class="mde">'+rows+'</div></div>'}).join("");
   body.innerHTML=h||'<p class="note">Bu oyda to‘ldirilgan kun yo‘q.</p>';
-  mdStatsRender();mxProjUi();if($("mdDist")&&!$("mdDist").hidden)mddUi();if(typeof mdaiShow==="function")mdaiShow();
+  mdStatsRender();mdTf();mxProjUi();if($("mdDist")&&!$("mdDist").hidden)mddUi();if(typeof mdaiShow==="function")mdaiShow();
 }
+function mdTf(){var sec=$("s-media");if(!sec)return;sec.classList.toggle("mtf",!!mTf);
+  var rows=sec.querySelectorAll("#mdBody .me");
+  for(var i=0;i<rows.length;i++){var r=rows[i],on=false;
+    if(mTf){var cb=r.querySelectorAll("input[data-mt]");for(var j=0;j<cb.length;j++)if(cb[j].checked&&cb[j].dataset.mt===mTf){on=true;break}}
+    r.classList.toggle("mtf-on",!!mTf&&on);r.classList.toggle("mtf-off",!!mTf&&!on)}
+  var ds=sec.querySelectorAll("#mdBody .md");
+  for(var k=0;k<ds.length;k++)ds[k].classList.toggle("mtf-off",!!mTf&&!ds[k].querySelector(".me.mtf-on"))}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mtf]");if(!b||!$("s-media")||!$("s-media").contains(b))return;
+  mTf=mTf===b.dataset.mtf?"":b.dataset.mtf;mdStatsRender();mdTf()});
+document.addEventListener("change",function(e){var t=e.target;if(mTf&&t&&t.dataset&&t.dataset.mt!==undefined)setTimeout(mdTf,0)});
 function mdStatsRender(){
   var all=!mdSelVal(),keys=mdKeys(mMonth),names=projNames(),filled=0,done=0,tot=0,tc={},pc={},days={};
   media.forEach(function(e){if(e.d.slice(0,7)!==mMonth||!mdMatch(e)||mdEmpty(e))return;
@@ -2969,7 +2990,7 @@ function mdStatsRender(){
   var st=$("mdStats");if(!st)return;
   var mx=$("s-media").classList.contains("max"),sl=mdSelVal();
   st.innerHTML=(mx?'<span class="mdchip m">'+monthLabel(mMonth)+' · '+esc(sl||"Barcha loyihalar")+'</span>':'')+'<span class="mdchip"><b>'+tot+'</b> kontent</span><span class="mdchip"><b>'+filled+'</b> / '+keys.length+' kun to‘ldirilgan</span><span class="mdchip"><b>'+done+'</b> / '+tot+' tayyor</span>'
-    +CT.filter(function(c){return mx||tc[c]}).map(function(c){return'<span class="mdchip t'+(tc[c]?'':' z')+'">'+esc(c)+' <b>'+(tc[c]||0)+'</b></span>'}).join("")
+    +CT.filter(function(c){return mx||tc[c]||mTf===c}).map(function(c){return'<button type="button" class="mdchip t'+(tc[c]?'':' z')+(mTf===c?' on':'')+'" data-mtf="'+esc(c)+'" aria-pressed="'+(mTf===c)+'" title="'+(mTf===c?'Ajratib ko‘rsatishni bekor qilish':'Media-rejada faqat “'+esc(c)+'” kataklarini ajratib ko‘rsatish')+'">'+esc(c)+' <b>'+(tc[c]||0)+'</b></button>'}).join("")
     +(all?Object.keys(pc).map(function(p){return'<span class="mdchip p"><span class="rd" style="background:'+col(names.indexOf(p))+'"></span>'+esc(p)+' <b>'+pc[p]+'</b></span>'}).join(""):"");
   var today=ymd(Date.now()),cnt={};media.forEach(function(e){if(!mdEmpty(e)&&mdMatch(e)){var m=e.d.slice(0,7);cnt[m]=(cnt[m]||0)+1}});cnt[today.slice(0,7)]=cnt[today.slice(0,7)]||0;cnt[mMonth]=cnt[mMonth]||0;
   $("mdHist").innerHTML=Object.keys(cnt).sort().reverse().map(function(m){return'<button type="button" class="mdh'+(m===mMonth?" on":"")+'" data-mgo="'+m+'">'+MSH[+m.slice(5,7)-1]+' '+m.slice(0,4)+(cnt[m]?' · '+cnt[m]:'')+'</button>'}).join("");
@@ -4315,7 +4336,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261105-1011";
+window.__BUILD="20261105-1015";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
