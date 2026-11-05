@@ -756,9 +756,27 @@ body.secmaxed{overflow:hidden}
 @media (prefers-reduced-motion:no-preference){@media(max-width:760px){#mdBody .md.sel{animation:dropIn .28s var(--ease) backwards;transform-origin:50% 0}}}
 
 /* Media-reja: tur bo'yicha ajratib ko'rsatish */
-button.mdchip{font:inherit;font-size:12.5px;color:var(--ink);cursor:pointer;transition:transform .15s,outline-color .15s,background .15s}
-button.mdchip:hover{transform:translateY(-1px)}
-.mdchip.t.on{outline:2px dashed var(--cool);outline-offset:2px;font-weight:800}
+button.mdchip{font:inherit;color:var(--ink);cursor:pointer;transition:transform .15s,outline-color .15s,background .15s,box-shadow .15s}
+.mdchip.t.on{outline:2px dashed var(--cool);outline-offset:3px}
+/* Statistika: kattaroq, bosiladigan tur tugmalari */
+#s-media .mdstats{gap:8px 9px;align-items:center;margin:8px 0 12px}
+#s-media .mdstats .mdchip{font-size:14px;padding:6px 13px;border-radius:999px}
+#s-media .mdstats .mdsl{flex:none;width:100%;margin-top:4px;color:var(--mute);font-size:12.5px;font-weight:700;letter-spacing:.02em}
+#s-media .mdstats button.mdchip.t{font-size:15.5px;font-weight:700;gap:9px;padding:6px 7px 6px 16px;background:var(--card);color:var(--ink);border:1.5px solid rgba(31,138,138,.6);box-shadow:0 3px 0 rgba(31,138,138,.22),0 6px 14px -8px rgba(20,33,61,.35)}
+#s-media .mdstats button.mdchip.t b{min-width:28px;height:28px;padding:0 8px;border-radius:999px;background:var(--cool);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-variant-numeric:tabular-nums}
+#s-media .mdstats button.mdchip.t:hover{transform:translateY(-2px);background:rgba(31,138,138,.1);box-shadow:0 5px 0 rgba(31,138,138,.25),0 10px 18px -8px rgba(20,33,61,.4)}
+#s-media .mdstats button.mdchip.t:active{transform:translateY(1px);box-shadow:0 1px 0 rgba(31,138,138,.25)}
+#s-media .mdstats button.mdchip.t:focus-visible{outline:3px solid var(--cool);outline-offset:2px}
+#s-media .mdstats button.mdchip.t.on{background:var(--cool);color:#fff;border-color:var(--cool);outline:2px dashed var(--cool);outline-offset:3px}
+#s-media .mdstats button.mdchip.t.on b{background:#fff;color:var(--cool)}
+#s-media .mdstats button.mdchip.t.z{background:var(--card);color:var(--mute);border-color:var(--line);box-shadow:none;opacity:.75}
+#s-media .mdstats button.mdchip.t.z b{background:var(--mute)}
+#s-media .mdstats button.mdchip.t.z.on{background:var(--cool);color:#fff;border-color:var(--cool);opacity:1}
+#s-media.max .mdstats .mdchip{font-size:13.5px;padding:5px 11px}
+#s-media.max .mdstats .mdsl{width:auto;margin:0}
+#s-media.max .mdstats button.mdchip.t{font-size:14px;padding:4px 6px 4px 13px}
+#s-media.max .mdstats button.mdchip.t b{min-width:24px;height:24px;font-size:12.5px}
+@media(max-width:560px){#s-media .mdstats button.mdchip.t{font-size:15px}}
 .me.mtf-on{outline:2px dashed var(--cool);outline-offset:2px;border-radius:8px}
 .me.mtf-on:not(.done){background:rgba(31,138,138,.08)}
 .me.mtf-off{filter:grayscale(1) contrast(.85);opacity:.2}
@@ -3069,7 +3087,7 @@ function mdStatsRender(){
   var st=$("mdStats");if(!st)return;
   var mx=$("s-media").classList.contains("max"),sl=mdSelVal();
   st.innerHTML=(mx?'<span class="mdchip m">'+monthLabel(mMonth)+' · '+esc(sl||"Barcha loyihalar")+'</span>':'')+'<span class="mdchip"><b>'+tot+'</b> kontent</span><span class="mdchip"><b>'+filled+'</b> / '+keys.length+' kun to‘ldirilgan</span><span class="mdchip"><b>'+done+'</b> / '+tot+' tayyor</span>'
-    +CT.filter(function(c){return mx||tc[c]||mTf===c}).map(function(c){return'<button type="button" class="mdchip t'+(tc[c]?'':' z')+(mTf===c?' on':'')+'" data-mtf="'+esc(c)+'" aria-pressed="'+(mTf===c)+'" title="'+(mTf===c?'Ajratib ko‘rsatishni bekor qilish':'Media-rejada faqat “'+esc(c)+'” kataklarini ajratib ko‘rsatish')+'">'+esc(c)+' <b>'+(tc[c]||0)+'</b></button>'}).join("")
+    +(CT.some(function(c){return mx||tc[c]||mTf===c})?'<span class="mdsl">Tur bo‘yicha ko‘rish:</span>':'')+CT.filter(function(c){return mx||tc[c]||mTf===c}).map(function(c){return'<button type="button" class="mdchip t'+(tc[c]?'':' z')+(mTf===c?' on':'')+'" data-mtf="'+esc(c)+'" aria-pressed="'+(mTf===c)+'" title="'+(mTf===c?'Ajratib ko‘rsatishni bekor qilish':'Media-rejada faqat “'+esc(c)+'” kataklarini ajratib ko‘rsatish')+'">'+esc(c)+' <b>'+(tc[c]||0)+'</b></button>'}).join("")
     +(all?Object.keys(pc).map(function(p){return'<span class="mdchip p"><span class="rd" style="background:'+col(names.indexOf(p))+'"></span>'+esc(p)+' <b>'+pc[p]+'</b></span>'}).join(""):"");
   var today=ymd(Date.now()),cnt={};media.forEach(function(e){if(!mdEmpty(e)&&mdMatch(e)){var m=e.d.slice(0,7);cnt[m]=(cnt[m]||0)+1}});cnt[today.slice(0,7)]=cnt[today.slice(0,7)]||0;cnt[mMonth]=cnt[mMonth]||0;
   $("mdHist").innerHTML=Object.keys(cnt).sort().reverse().map(function(m){return'<button type="button" class="mdh'+(m===mMonth?" on":"")+'" data-mgo="'+m+'">'+MSH[+m.slice(5,7)-1]+' '+m.slice(0,4)+(cnt[m]?' · '+cnt[m]:'')+'</button>'}).join("");
@@ -4416,7 +4434,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261105-1130";
+window.__BUILD="20261105-1139";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
