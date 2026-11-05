@@ -1396,8 +1396,10 @@ body.lgopen{overflow:hidden}
 .nex{flex:none;width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;padding:0;box-shadow:var(--sh);cursor:pointer;transition:background .15s,color .15s,transform .15s}
 .nex:hover{background:rgba(209,67,42,.12);color:#d1432a}
 .nex:active{transform:scale(.94)}
-#neTa{flex:1 1 40%;min-height:160px;width:100%;resize:none;font:inherit;font-size:17px;line-height:1.55;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:var(--card);color:var(--ink);box-shadow:var(--sh)}
-#neTa:focus{outline:2px solid var(--cool);outline-offset:0}
+#neTa,#leTa{flex:1 1 40%;min-height:160px;width:100%;resize:none;font:inherit;font-size:17px;line-height:1.55;padding:14px 16px;border-radius:16px;border:1px solid var(--line);background:var(--card);color:var(--ink);box-shadow:var(--sh)}
+#neTa:focus,#leTa:focus{outline:2px solid var(--cool);outline-offset:0}
+#lEd .nef .savebar{margin:0}
+#lEd .nef .note{margin:0}
 .nef{flex:none;display:flex;flex-direction:column;gap:8px}
 .nefh{display:flex;align-items:center;gap:8px;font-size:14px}
 .nefh #neFc{color:var(--mute);font-size:12.5px}
@@ -1425,7 +1427,7 @@ body.neopen{overflow:hidden}
 body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
 .jfth{display:inline-flex;width:22px;height:22px;flex:none;border-radius:5px;overflow:hidden;align-items:center;justify-content:center}
 .jfth img{width:100%;height:100%;object-fit:cover}
-@media (max-width:700px){.nepg{grid-template-columns:1fr}.nek-pdf{grid-column:auto}.nepv iframe{height:300px}#neTa{font-size:16px}}
+@media (max-width:700px){.nepg{grid-template-columns:1fr}.nek-pdf{grid-column:auto}.nepv iframe{height:300px}#neTa,#leTa{font-size:16px}}
 @keyframes neUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
 @keyframes neDown{from{opacity:1;transform:none}to{opacity:0;transform:translateY(100%)}}
 @media (prefers-reduced-motion:no-preference){.ned:not([hidden]):not(.out){animation:neUp .3s var(--ease) backwards}.ned.out{animation:neDown .34s cubic-bezier(.4,0,.8,.4) forwards;pointer-events:none}}
@@ -2084,7 +2086,7 @@ function commitTip(){
   var el=tipEl;if(!el||!tipDirty)return;tipDirty=false;
   if(document.body.contains(el)){el.dispatchEvent(new Event("change",{bubbles:true}))}
 }
-document.addEventListener("focusin",function(e){var t=e.target;if(t&&t.tagName==="TEXTAREA"&&t.dataset&&t.dataset.ses!==undefined&&!NE.open){commitTip();hideTip();var ni=+t.dataset.ses;try{t.blur()}catch(x){}neOpen(ni);return}if(inTip(t))return;if(isTextInput(t)){if(tipEl&&tipEl!==t){commitTip();hideTip()}showTip(t)}else{commitTip();hideTip()}});
+document.addEventListener("focusin",function(e){var t=e.target;if(t&&t.id==="mdaiT"&&!LE.open&&!NE.open){commitTip();hideTip();try{t.blur()}catch(x){}leOpen();return}if(t&&t.tagName==="TEXTAREA"&&t.dataset&&t.dataset.ses!==undefined&&!NE.open){commitTip();hideTip();var ni=+t.dataset.ses;try{t.blur()}catch(x){}neOpen(ni);return}if(inTip(t))return;if(isTextInput(t)){if(tipEl&&tipEl!==t){commitTip();hideTip()}showTip(t)}else{commitTip();hideTip()}});
 document.addEventListener("input",function(e){var t=e.target;
   if(t&&t.id==="tipTa"){if(tipEl&&document.body.contains(tipEl)){tipEl.value=tipEl.tagName==="TEXTAREA"?t.value:t.value.replace(/[\r\n]+/g," ");tipDirty=true;tipEl.dispatchEvent(new Event("input",{bubbles:true}));fitTa();placeTip()}return}
   if(isTextInput(t)&&t===tipEl){showTip(t)}else if(isTextInput(t)&&!inTip(t))showTip(t)});
@@ -2212,6 +2214,28 @@ function jfIsImg(x){return /^(png|jpg|jpeg|webp|gif)$/.test(x||"")}
 function jfThumbs(){if(!window.TEAM||!document.querySelector)return;var o=avUid();if(!o)return;
   Array.prototype.forEach.call(document.querySelectorAll("[data-jfth]:not([data-ok])"),function(el){el.setAttribute("data-ok","1");
     jfBlob(el.dataset.jfth,JF.mt[jfExt(el.dataset.jfth)]).then(function(c){if(document.body.contains(el))el.innerHTML='<img src="'+c.url+'" alt="">'},function(){})})}
+var LE={open:false,tm:0};
+function leBuild(){var m=$("lEd");if(m)return m;
+  m=document.createElement("div");m.id="lEd";m.className="ned";m.hidden=true;m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");m.setAttribute("aria-label","Ro‘yxatdan rejani tahrirlash");
+  m.innerHTML='<div class="nec"><header class="neh"><div class="net"><small>Media-reja</small><b id="leT"></b></div><button type="button" class="nex" data-le="close" title="Yopish" aria-label="Yopish"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>'
+    +'<textarea id="leTa" aria-label="Kontent ro‘yxati"></textarea>'
+    +'<div class="nef"><div class="savebar"><button type="button" class="sm save" data-le="go">✨ Tarqatib yuborish</button><button type="button" class="sm" data-le="close">Yopish</button></div><p class="note">Tur nomi va raqamlangan mavzular yozing. Almashtirish, “bugundan boshlab”, shanba kabi sozlamalar yopilgandan keyin panelda turadi.</p></div></div>';
+  document.body.appendChild(m);
+  m.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-le]");if(!b)return;if(b.dataset.le==="close")leClose();else if(b.dataset.le==="go"){leClose();mdaiRun("list")}});
+  m.addEventListener("keydown",function(e){if(e.key==="Escape"){e.preventDefault();e.stopPropagation();leClose()}});
+  m.querySelector("#leTa").addEventListener("input",function(){$("mdaiT").value=this.value});
+  return m}
+function leOpen(){if(LE.open||(window.TEAM&&TEAM.as))return;LE.open=true;
+  var m=leBuild(),ta=$("leTa"),src=$("mdaiT");clearTimeout(LE.tm);
+  var sl=mdSelVal();$("leT").innerHTML='<span>✨ Ro‘yxatdan reja</span><small>'+esc(monthLabel(mMonth))+' · '+esc(sl||"Barcha loyihalar")+'</small>';
+  ta.placeholder=src.placeholder;ta.value=src.value;
+  m.classList.remove("out");m.hidden=false;document.body.classList.add("neopen");
+  setTimeout(function(){try{ta.focus({preventScroll:true});var l=ta.value.length;ta.setSelectionRange(l,l)}catch(e){}},30)}
+function leClose(){if(!LE.open)return;LE.open=false;var m=$("lEd");$("mdaiT").value=$("leTa").value;
+  try{document.activeElement&&document.activeElement.blur()}catch(e){}
+  var fast=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
+  m.classList.add("out");
+  LE.tm=setTimeout(function(){m.hidden=true;m.classList.remove("out");document.body.classList.remove("neopen")},fast?0:340)}
 var NE={k:null,open:false,tm:0,tw:0};
 function neIdx(){if(!NE.k)return -1;for(var i=0;i<sessions.length;i++)if(sessions[i].k===NE.k)return i;return -1}
 function neBuild(){var m=$("nEd");if(m)return m;
@@ -3299,7 +3323,7 @@ function mdaiInit(){
   root.hidden=getPref("kd_mdai","0")!=="1";mdaiShow();
   if(mdaiAiOn()){var w=$("mdaiAiW");if(w)w.hidden=false}
   document.getElementById("s-media").addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mdai]");if(!b)return;var a=b.dataset.mdai;
-    if(a==="open"){root.hidden=!root.hidden;setPref("kd_mdai",root.hidden?"0":"1");if(!root.hidden){var ta=$("mdaiT");try{ta.focus()}catch(x){}}return}
+    if(a==="open"){root.hidden=!root.hidden;setPref("kd_mdai",root.hidden?"0":"1");if(!root.hidden){try{root.scrollIntoView({block:"nearest",behavior:"smooth"})}catch(x){}}return}
     if(a==="x"){root.hidden=true;setPref("kd_mdai","0");return}
     if(a==="go")mdaiRun("list");else if(a==="cmd")mdaiRun("cmd")});
   $("mdaiC").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();mdaiRun("cmd")}});
@@ -4291,7 +4315,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261105-0951";
+window.__BUILD="20261105-1011";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
