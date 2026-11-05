@@ -1610,6 +1610,8 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
 .me.done textarea.mt,.me.done .ms summary .ph{color:var(--mute)}
 .me.done .ms summary,.me.done textarea.mt,.me.done .mps{background:transparent;border-color:transparent}
 .me.done .ms summary i{background:transparent;color:var(--mute);border-color:var(--line);box-shadow:none}
+.me.done .ms,.me.done textarea.mt,.me.done .mps{opacity:.32;transition:opacity .2s}
+.me.done .ms:hover,.me.done textarea.mt:focus,.me.done .ms[open]{opacity:.9}
 .me.done .mxl{color:#2f9e63;font-weight:700}
 .me .mxl input[type=checkbox]{accent-color:#2f9e63}
 @media(max-width:760px){.md,.md.wk{grid-template-columns:minmax(0,1fr)}.md.today{padding:2px 7px}.mdl{border-bottom:1px solid var(--line);padding:6px 2px 7px}.me textarea.mt,.ms summary,.me.done textarea.mt,.me.done .ms summary{border-color:var(--line)}}
@@ -4478,7 +4480,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261105-1228";
+window.__BUILD="20261105-1233";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
