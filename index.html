@@ -1626,7 +1626,15 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
 .pn2{font-weight:800;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}.pp2{font-size:11.5px;font-weight:700;color:var(--mute);text-align:right;font-variant-numeric:tabular-nums}
 .pr2.z .pt{color:var(--mute);border-color:var(--line);opacity:.8}.pr2.z .pn2,.pr2.z .pp2{color:var(--mute);opacity:.75}
 .pr2.d .pt{color:#2f9e63;border-color:#2f9e63}.pr2.d .track i{background:#2f9e63}.pr2.d .pn2,.pr2.d .pp2{color:#2f9e63}
-@media(max-width:420px){.pr2{grid-template-columns:96px minmax(0,1fr) 46px 32px;gap:6px}.pr2 .pt{font-size:11px;padding:0 7px}.mdplan .pbox{padding:11px 10px}}
+@media(max-width:420px){.pr2{grid-template-columns:116px minmax(0,1fr) 44px 32px;gap:5px}.pr2 .pt{font-size:11px;padding:0 7px}.mdplan .pbox{padding:11px 10px}}
+
+/* ===== Kontent turi ikonkalari ===== */
+.ci{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.22em}
+.ms summary i{display:inline-flex;align-items:center;gap:4px}.ms summary i .ci{width:1.15em;height:1.15em;stroke-width:2}
+.mso label .ci{color:var(--cool);width:1.3em;height:1.3em}
+#s-media .mdstats button.mdchip.t .ci{width:1.5em;height:1.5em;margin:0 -3px 0 -2px;stroke-width:1.7}
+.pr2 .pt{display:inline-flex;align-items:center;gap:4px}.pr2 .pt span{min-width:0;overflow:hidden;text-overflow:ellipsis}.pr2 .pt .ci{width:1.15em;height:1.15em;stroke-width:2}
+.dcn{display:inline-flex;align-items:center;gap:6px}.dcn .ci{color:var(--cool);width:1.25em;height:1.25em}
 </style>
 </head>
 <body>
@@ -1951,6 +1959,15 @@ function prLogo(n){var e=prGet(n);return e&&e.l?e.l:""}
 var PLUS_IMG='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="9" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
 var PR_TRASH='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>';
 var CT=["Story","Post","Reels","Short","Oblojka","YouTube long"],plans=[];
+var CTI={
+ "Story":'<circle cx="12" cy="12" r="9" stroke-dasharray="3.3 3"/><path d="M12 8v8M8 12h8"/>',
+ "Post":'<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="9" cy="9.3" r="1.6"/><path d="M4 17l5.2-4.6 3.6 3 3-2.6 4.2 3.9"/>',
+ "Reels":'<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><path d="M10.2 8.6v6.8l5.6-3.4z"/>',
+ "Short":'<rect x="6.5" y="2.5" width="11" height="19" rx="3.5"/><path d="M10.7 9.3v5.4l4.1-2.7z"/>',
+ "Oblojka":'<rect x="2.5" y="5" width="19" height="14" rx="3"/><circle cx="8.2" cy="9.7" r="1.5"/><path d="M3 16.2l4.4-3.4 3.2 2.6"/><rect x="14.2" y="13.6" width="5" height="2.8" rx="1"/>',
+ "YouTube long":'<rect x="2.5" y="4" width="19" height="12.5" rx="3.5"/><path d="M10.2 7.6v5.3l4.3-2.65z"/><path d="M3 20.3h18" opacity=".35"/><path d="M3 20.3h8.5"/>'
+};
+function cIc(c){return CTI[c]?'<svg class="ci" viewBox="0 0 24 24" aria-hidden="true">'+CTI[c]+'</svg>':''}
 try{var pl0=JSON.parse(localStorage.getItem("kd_plans")||"[]");if(Array.isArray(pl0))plans=pl0}catch(e){}
 try{var ss=JSON.parse(localStorage.getItem("kd_ses")||"[]");if(Array.isArray(ss))sessions=ss;var rr=JSON.parse(localStorage.getItem("kd_run")||"null");if(rr&&rr.id&&rr.s)run=rr}catch(e){}
 var tmAutoT=0;function touch(){localMod=Date.now();try{localStorage.setItem("kd_mod",localMod)}catch(e){}if(window.__tmAuto){clearTimeout(tmAutoT);tmAutoT=setTimeout(function(){if(dbAt<localMod)queueDb()},350)}}
@@ -2262,7 +2279,7 @@ function renderPlan(){
     var rows="",tot=0,dn=0;
     CT.forEach(function(c){var v=P.t[c];if(!v)return;tot+=v.plan;dn+=v.done;
       var pct=v.plan?Math.round(v.done/v.plan*100):0,st=v.plan&&v.done>=v.plan?" d":(!v.done?" z":"");
-      rows+='<div class="pr2'+st+'"><i class="pt">'+esc(c)+'</i><div class="track"><i style="width:'+Math.min(100,pct)+'%"></i></div><span class="pn2">'+v.done+' / '+v.plan+'</span><span class="pp2">'+pct+'%</span></div>'});
+      rows+='<div class="pr2'+st+'"><i class="pt">'+cIc(c)+'<span>'+esc(c)+'</span></i><div class="track"><i style="width:'+Math.min(100,pct)+'%"></i></div><span class="pn2">'+v.done+' / '+v.plan+'</span><span class="pp2">'+pct+'%</span></div>'});
     var tp=tot?Math.round(dn/tot*100):0;
     if(rows)h+='<div class="pbox" style="--pc:'+col(names.indexOf(P.name))+'"><h3><span class="dot" style="background:'+col(names.indexOf(P.name))+'"></span>'+esc(P.name)+'<small class="ptot">'+dn+' / '+tot+'</small></h3><div class="psum"><i style="width:'+Math.min(100,tp)+'%"></i></div>'+rows+'</div>'});
   box.innerHTML=h?'<div class="pgrid">'+h+'</div>':'<p class="note">'+esc(monthLabel(mMonth))+' uchun kontent turi tanlangan media-reja yo‘q. Pastdagi kunlarda kontent turini tanlang: reja soni shu yerda o‘zi hisoblanadi.</p>';
@@ -3071,12 +3088,12 @@ function mdSelVal(){var ps=mdProjects();
   if(mSel===null){var v=getPref("kd_mdsel","");mSel=v==="__all"?"":(v&&ps.some(function(p){return normK(p)===normK(v)})?v:(ps[0]||""))}
   return mSel}
 function mdMatch(e){var s=mdSelVal();return !s||normK(e.p)===normK(s)}
-function mdSum(e){return e.c.length?e.c.map(function(c){return'<i>'+esc(c)+'</i>'}).join(""):'<span class="ph">Kontent turi</span>'}
+function mdSum(e){return e.c.length?e.c.map(function(c){return'<i>'+cIc(c)+esc(c)+'</i>'}).join(""):'<span class="ph">Kontent turi</span>'}
 function mdRow(e,i,k,names,all,ps){
   var c=e?col(names.indexOf(e.p)):"var(--line)";
   return'<div class="me'+(all?" all":"")+(e&&e.x?" done":"")+'" data-mi="'+(e?i:"")+'" data-md="'+k+'" style="--c:'+c+'">'
    +(all?'<select class="mps" aria-label="Loyiha"><option value="">— loyiha —</option>'+ps.map(function(p){return'<option'+(e&&normK(p)===normK(e.p)?" selected":"")+'>'+esc(p)+'</option>'}).join("")+'</select>':'')
-   +'<details class="ms"><summary aria-label="Kontent turi">'+mdSum(e||{c:[]})+'</summary><div class="mso">'+CT.map(function(t){return'<label><input type="checkbox" data-mt="'+esc(t)+'"'+(e&&e.c.indexOf(t)>-1?" checked":"")+'>'+esc(t)+'</label>'}).join("")+'</div></details>'
+   +'<details class="ms"><summary aria-label="Kontent turi">'+mdSum(e||{c:[]})+'</summary><div class="mso">'+CT.map(function(t){return'<label><input type="checkbox" data-mt="'+esc(t)+'"'+(e&&e.c.indexOf(t)>-1?" checked":"")+'>'+cIc(t)+esc(t)+'</label>'}).join("")+'</div></details>'
    +'<textarea class="mt nt" rows="1" placeholder="Kontent reja mavzusi" aria-label="Kontent mavzusi">'+esc(e?e.t:"")+'</textarea>'
    +'<span class="ma"><span class="mdb" aria-hidden="true">!</span><label class="mxl" title="Tayyor bo‘ldi"><input type="checkbox" data-mdone'+(e&&e.x?" checked":"")+'>tayyor</label><button type="button" class="ghost" data-mdel aria-label="Qatorni o‘chirish">×</button></span></div>';
 }
@@ -3146,7 +3163,7 @@ function mdStatsRender(){
   filled=Object.keys(days).length;
   var st=$("mdStats");if(!st)return;
   var mx=$("s-media").classList.contains("max"),sl=mdSelVal();
-  st.innerHTML=CT.filter(function(c){return mx||tc[c]||mTf===c}).map(function(c){return'<button type="button" class="mdchip t'+(tc[c]?'':' z')+(mTf===c?' on':'')+'" data-mtf="'+esc(c)+'" aria-pressed="'+(mTf===c)+'" title="'+(mTf===c?'Ajratib ko‘rsatishni bekor qilish':'Media-rejada faqat “'+esc(c)+'” kataklarini ajratib ko‘rsatish')+'">'+esc(c)+' <b>'+(tc[c]||0)+'</b></button>'}).join("");
+  st.innerHTML=CT.filter(function(c){return mx||tc[c]||mTf===c}).map(function(c){return'<button type="button" class="mdchip t'+(tc[c]?'':' z')+(mTf===c?' on':'')+'" data-mtf="'+esc(c)+'" aria-pressed="'+(mTf===c)+'" title="'+(mTf===c?'Ajratib ko‘rsatishni bekor qilish':'Media-rejada faqat “'+esc(c)+'” kataklarini ajratib ko‘rsatish')+'">'+cIc(c)+'<span>'+esc(c)+'</span> <b>'+(tc[c]||0)+'</b></button>'}).join("");
   var today=ymd(Date.now()),cnt={};media.forEach(function(e){if(!mdEmpty(e)&&mdMatch(e)){var m=e.d.slice(0,7);cnt[m]=(cnt[m]||0)+1}});cnt[today.slice(0,7)]=cnt[today.slice(0,7)]||0;cnt[mMonth]=cnt[mMonth]||0;
   $("mdHist").innerHTML=Object.keys(cnt).sort().reverse().map(function(m){return'<button type="button" class="mdh'+(m===mMonth?" on":"")+'" data-mgo="'+m+'">'+MSH[+m.slice(5,7)-1]+' '+m.slice(0,4)+(cnt[m]?' · '+cnt[m]:'')+'</button>'}).join("");
   try{mdCalRefresh()}catch(e){}
@@ -3225,7 +3242,7 @@ function mddUi(){
   var sel=mdSelVal(),D=mddDays().length,c=mddCounts(),tot=0;Object.keys(c).forEach(function(k){tot+=c[k]});
   $("mddT").textContent=monthLabel(mMonth)+" · "+(sel||"loyiha tanlanmagan");
   $("mddD").textContent=" "+D+" ish kuni (shanba va yakshanba hisobga olinmaydi)";
-  var g=$("mddG");if(!g.dataset.b){g.dataset.b=1;g.innerHTML=CT.map(function(t){return'<label>'+esc(t)+'<input type="number" min="0" max="200" inputmode="numeric" data-dc="'+esc(t)+'" placeholder="0"><small></small></label>'}).join("")}
+  var g=$("mddG");if(!g.dataset.b){g.dataset.b=1;g.innerHTML=CT.map(function(t){return'<label><span class="dcn">'+cIc(t)+esc(t)+'</span><input type="number" min="0" max="200" inputmode="numeric" data-dc="'+esc(t)+'" placeholder="0"><small></small></label>'}).join("")}
   Array.prototype.forEach.call(g.querySelectorAll("[data-dc]"),function(i){i.disabled=!sel;var n=c[i.dataset.dc]||0,sm=i.parentNode.querySelector("small");sm.textContent=n&&D?(n<=D?"har "+(D/n).toFixed(1).replace(".",",")+" ish kunida":"kuniga ≈ "+(n/D).toFixed(1).replace(".",",")+" ta"):""});
   $("mddInfo").textContent=!sel?"Avval yuqoridan loyihani tanlang.":(!D?"Tanlangan oyda ish kuni qolmadi.":(tot?tot+" ta kontent "+D+" ish kuniga teng taqsimlanadi.":"Har tur uchun nechta kontent kerakligini yozing."));
 }
@@ -4492,7 +4509,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261105-1251";
+window.__BUILD="20261106-0847";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
