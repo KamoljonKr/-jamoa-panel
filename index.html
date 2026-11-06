@@ -1688,6 +1688,10 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 .mdctl.open .mdctlb{margin-top:6px}
 .card.mdmin .mdcfg,.card.secmin .mdcfg{display:none}
 @media(max-width:700px){.mdctx{position:static;display:block;max-width:none;height:auto;margin:6px 0 0;font-size:12.5px;text-align:center}}
+
+/* Media-reja sarlavhasi: stikersiz, kattaroq */
+#s-media>.card>h2{font-size:28px;letter-spacing:-.02em;line-height:1.2}
+@media(max-width:700px){#s-media>.card>h2{font-size:23px}}
 </style>
 </head>
 <body>
@@ -1855,7 +1859,7 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 
   <section class="sec" id="s-media" data-sec="media">
   <div class="card">
-    <h2>🗓 Media-reja<span class="mdctx" id="mdCtlT"></span><span class="mdtools"><button type="button" class="mdcfg" id="mdCtlB" aria-expanded="false" aria-controls="mdCtlBody"></button><button type="button" data-mdview="min" id="mdMinB"></button><button type="button" data-mdview="max" id="mdMaxB"></button></span></h2>
+    <h2>Media-reja<span class="mdctx" id="mdCtlT"></span><span class="mdtools"><button type="button" class="mdcfg" id="mdCtlB" aria-expanded="false" aria-controls="mdCtlBody"></button><button type="button" data-mdview="min" id="mdMinB"></button><button type="button" data-mdview="max" id="mdMaxB"></button></span></h2>
     <div class="mdctl" id="mdCtl">
       <div class="mdctlb" id="mdCtlBody">
     <p class="note">Avval loyihani tanlang — pastda shu loyihaning oylik kontent rejasi chiqadi. Har kun uchun kontent turi (bir nechtasini tanlash mumkin) va mavzuni yozing. Sana va hafta kuni avtomatik qo‘yiladi.</p>
@@ -4607,7 +4611,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261106-1257";
+window.__BUILD="20261106-1303";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
