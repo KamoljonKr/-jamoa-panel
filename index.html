@@ -1647,6 +1647,25 @@ body.viewas #nEd .jfa,body.viewas #nEd .jfx2{display:none!important}
 .mdt-add{margin:0 0 4px}.mdt-add input{max-width:260px}.mdt-add .addic{height:34px;min-width:38px;padding:0 10px;border-radius:10px;background:rgba(31,138,138,.08);color:var(--cool);border:1.5px dashed var(--cool)}
 .mdt-i{display:block;min-height:1.2em}.mdt-i.bad{color:#d1432a}
 body.viewas .mdtx,body.viewas .mdt-add{display:none}
+
+/* ===== Loyiha slayderi (Variant A: logotip-nuqtalar) ===== */
+.mdsw{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 12px;min-width:0}.mdsw[hidden]{display:none}
+.mdst{display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;position:relative;padding:5px 3px;min-width:0;max-width:100%}.mdst::-webkit-scrollbar{display:none}
+.mdsa{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--mute);display:grid;place-items:center;cursor:pointer;padding:0;transition:color .2s,border-color .2s,transform .2s}.mdsa:hover{color:var(--cool);border-color:var(--cool)}.mdsa:active{transform:scale(.92)}
+.mdsd{flex:none;display:inline-flex;align-items:center;border:2px solid transparent;border-radius:999px;background:transparent;padding:0;color:var(--ink);font:inherit;cursor:pointer;opacity:.55;filter:saturate(.45);transition:opacity .25s,filter .25s,border-color .3s,padding .35s var(--ease),box-shadow .3s,background .3s}
+.mdsd:hover{opacity:.9;filter:none}
+.mdsg{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;overflow:hidden;flex:none;font-weight:800;font-size:13px;color:var(--c);background:var(--card);border:2px solid var(--c);transition:background .3s,color .3s,border-color .3s;margin:-2px}
+.mdsg img{width:100%;height:100%;object-fit:contain;background:#fff;display:block}
+.mdsx{display:inline-flex;align-items:baseline;gap:7px;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;transition:max-width .4s var(--ease),opacity .25s,margin .4s var(--ease)}
+.mdsx b{font-size:13.5px;font-weight:800;overflow:hidden;text-overflow:ellipsis}.mdsx small{font-size:11.5px;font-weight:700;color:var(--mute)}
+.mdsd.on{opacity:1;filter:none;border-color:var(--c);background:var(--card);box-shadow:0 6px 16px -9px var(--c);padding:3px 0 3px 3px}
+.mdsd.on .mdsg{border-color:var(--c);margin:0}.mdsd.on:not(.hasimg) .mdsg{background:var(--c);color:#fff}
+.mdsd.on .mdsx{max-width:230px;opacity:1;margin:0 14px 0 9px}
+.mdsd:focus-visible{outline:2px solid var(--cool);outline-offset:2px}
+@keyframes mdSlR{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}@keyframes mdSlL{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+#mdBody.slr,#mdStats.slr{animation:mdSlR .38s var(--ease) both}#mdBody.sll,#mdStats.sll{animation:mdSlL .38s var(--ease) both}
+@media(max-width:420px){.mdsd.on .mdsx b{max-width:104px}.mdsd.on .mdsx{margin:0 10px 0 7px}.mdsw{gap:5px}.mdsa{width:28px;height:28px}}
+@media(prefers-reduced-motion:reduce){.mdsd,.mdsx,.mdsg{transition:none}}
 </style>
 </head>
 <body>
@@ -1844,6 +1863,7 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
     </div>
       </div>
     </div>
+    <div class="mdsw" id="mdSw" hidden><button type="button" class="mdsa" data-mdsl="-1" aria-label="Oldingi loyiha"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><div class="mdst" id="mdSl" role="tablist" aria-label="Loyihalar"></div><button type="button" class="mdsa" data-mdsl="1" aria-label="Keyingi loyiha"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>
     <div class="mdhist" id="mdHist"></div>
     <div class="mdstats" id="mdStats"></div>
     <div id="mdBody"></div>
@@ -3145,7 +3165,7 @@ function renderMedia(){
     return'<div class="md'+(k===today?" today":"")+(k<today?" past":"")+(wk?" wk":"")+(k===mDay?" sel":"")+'" data-day="'+k+'"><div class="mdl"><b>'+k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4)+'</b><span>'+WDN[wd]+'</span><button type="button" class="sm" data-madd="'+k+'"'+(all?' disabled title="Avval yuqoridan loyihani tanlang"':' title="Shu kunga yana kontent qo‘shish"')+' aria-label="Shu kunga kontent qo‘shish">'+ADD_SV+'</button></div><div class="mde">'+rows+'</div></div>'}).join("");
   body.innerHTML='<div class="mcal" id="mdCal" role="group" aria-label="Oy kunlari">'+mdCalInner()+'</div>'+(mDay?'':'<p class="mdhint">Kunni bosing — shu kunning kontent rejasi ochiladi.</p>')+(h||'<p class="note">Bu oyda to‘ldirilgan kun yo‘q.</p>');
   var ct=$("mdCtlT");if(ct)ct.textContent=(sel||"Barcha loyihalar")+" · "+monthLabel(mMonth);
-  mdStatsRender();mdTf();mdRowSync();mxProjUi();if($("mdDist")&&!$("mdDist").hidden)mddUi();if(typeof mdaiShow==="function")mdaiShow();
+  mdSlRender(ps,sel);mdSlAnim();mdStatsRender();mdTf();mdRowSync();mxProjUi();if($("mdDist")&&!$("mdDist").hidden)mddUi();if(typeof mdaiShow==="function")mdaiShow();
 }
 var MWD=["Du","Se","Ch","Pa","Ju","Sh","Ya"];
 function mdCalInner(){
@@ -3215,7 +3235,23 @@ function mdField(t){
   saveMedia();mdStatsRender();
 }
 function mdGo(m){mdPurge();mMonth=m;renderMedia()}
-function mdSetSel(v){mSel=v==="__all"?"":v;setPref("kd_mdsel",v==="__all"?"__all":v);mdPurge();renderMedia()}
+var mSlDir=0;
+function mdSlItems(){return[""].concat(mdProjects())}
+function mdSlIdx(n){var it=mdSlItems(),r=0;it.forEach(function(x,k){if(normK(x)===normK(n))r=k});return r}
+function mdSlGo(d){var it=mdSlItems(),i=mdSlIdx(mdSelVal()),j=(i+d+it.length)%it.length;mSlDir=d>0?1:-1;mdSetSel(it[j]===""?"__all":it[j])}
+function mdSlRender(ps,sel){var w=$("mdSw"),t=$("mdSl");if(!w||!t)return;
+  if(ps.length<2){w.hidden=true;return}w.hidden=false;
+  var names=projNames(),it=[""].concat(ps),sig=it.map(function(n){return n+"|"+(n?prLogo(n):"")+"|"+(n?col(names.indexOf(n)):"")}).join("§");
+  if(t.dataset.sig!==sig){t.dataset.sig=sig;
+    t.innerHTML=it.map(function(n,k){var c=n?col(names.indexOf(n)):"#1f8a8a",lg=n?(prLogo(n)?'<img src="'+esc(prLogo(n))+'" alt="">':esc(n.trim().charAt(0).toUpperCase())):'<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.6"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.6"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.6"/></svg>';
+      return'<button type="button" class="mdsd'+(n&&prLogo(n)?" hasimg":"")+'" role="tab" data-mdsv="'+(n?esc(n):"__all")+'" title="'+esc(n||"Barcha loyihalar")+'" style="--c:'+c+'"><span class="mdsg">'+lg+'</span><span class="mdsx"><b>'+esc(n||"Barcha loyihalar")+'</b><small></small></span></button>'}).join("")}
+  var ai=mdSlIdx(sel),n=ps.length;
+  Array.prototype.forEach.call(t.children,function(b,k){var on=k===ai;b.classList.toggle("on",on);b.setAttribute("aria-selected",on?"true":"false");b.tabIndex=on?0:-1;var sm=b.querySelector("small");sm.textContent=on?(k===0?n+" ta":k+"/"+n):""});
+  var a=t.children[ai];if(a){var go=function(sm){var l=a.offsetLeft-(t.clientWidth-a.offsetWidth)/2;try{t.scrollTo({left:Math.max(0,l),behavior:sm?"smooth":"auto"})}catch(e){t.scrollLeft=Math.max(0,l)}};
+    go(!!t.dataset.ready);t.dataset.ready="1";clearTimeout(t._st);t._st=setTimeout(function(){go(true)},450)}}
+function mdSlAnim(){var d=mSlDir;mSlDir=0;if(!d)return;if(window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+  ["mdStats","mdBody"].forEach(function(id){var el=$(id);if(!el)return;el.classList.remove("slr","sll");void el.offsetWidth;el.classList.add(d>0?"slr":"sll");el.addEventListener("animationend",function f(){el.classList.remove("slr","sll");el.removeEventListener("animationend",f)})})}
+function mdSetSel(v){if(!mSlDir){var o=mdSlIdx(mdSelVal()),nw=mdSlIdx(v==="__all"?"":v);mSlDir=nw>o?1:nw<o?-1:0}mSel=v==="__all"?"":v;setPref("kd_mdsel",v==="__all"?"__all":v);mdPurge();renderMedia()}
 function mdAddProj(){var inp=$("mdNewP"),n=inp.value.trim();if(!n)return;
   var ex=mdProjects().filter(function(p){return normK(p)===normK(n)})[0];
   if(!ex){mdExtra.push(n);mdLocal();touch();queueDb()}
@@ -3234,9 +3270,15 @@ function mdInit(){
     mdField(t)});
   root.addEventListener("keydown",function(e){if(e.target.id==="mdNewP"&&e.key==="Enter"){e.preventDefault();mdAddProj()}
     if(e.target.id==="mdtNew"&&e.key==="Enter"){e.preventDefault();mdtAdd()}
+    if(e.target.closest&&e.target.closest(".mdsd")&&(e.key==="ArrowLeft"||e.key==="ArrowRight")){e.preventDefault();mdSlGo(e.key==="ArrowRight"?1:-1);setTimeout(function(){var a=document.querySelector("#mdSl .mdsd.on");if(a)a.focus()},30)}
     if(e.key==="Escape"){Array.prototype.forEach.call(root.querySelectorAll("details.ms[open]"),function(d){d.open=false;e.mdEsc=true})}});
+  (function(){var sx=0,sy=0,ok=false;
+    root.addEventListener("touchstart",function(e){var t=e.touches[0];sx=t.clientX;sy=t.clientY;ok=!!(e.target.closest&&e.target.closest("#mdBody,#mdStats")&&!e.target.closest("textarea,input,select,.mso,.mcal"))},{passive:true});
+    root.addEventListener("touchend",function(e){if(!ok)return;ok=false;var t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.8)mdSlGo(dx<0?1:-1)},{passive:true})})();
   root.addEventListener("toggle",function(e){var d=e.target;if(d&&d.classList&&d.classList.contains("ms")){var md=d.closest(".md");if(md)md.classList.toggle("up",d.open)}},true);
-  root.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mm],[data-madd],[data-mdel],[data-mgo],[data-mdnew],[data-mdnewok],[data-mdtadd],[data-mdtdel]");if(!b)return;
+  root.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-mm],[data-madd],[data-mdel],[data-mgo],[data-mdnew],[data-mdnewok],[data-mdtadd],[data-mdtdel],[data-mdsl],[data-mdsv]");if(!b)return;
+    if(b.dataset.mdsl!==undefined){mdSlGo(+b.dataset.mdsl);return}
+    if(b.dataset.mdsv!==undefined){mdSetSel(b.dataset.mdsv);return}
     if(b.dataset.mdtadd!==undefined){mdtAdd();return}
     if(b.dataset.mdtdel!==undefined){mdtDel(b.dataset.mdtdel);return}
     if(b.dataset.mdnew!==undefined){var bx=$("mdNewBox");bx.hidden=!bx.hidden;if(!bx.hidden)$("mdNewP").focus();return}
@@ -4544,7 +4586,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261106-0959";
+window.__BUILD="20261106-1236";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
