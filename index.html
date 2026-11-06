@@ -1708,6 +1708,14 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 .sec>.card>h2::after,.sec>.grid>.card>h2::after{display:none}
 .sec>.card>h2>.htools,.sec>.grid>.card>h2>.htools{order:5;flex:0 0 100%;justify-content:flex-end;margin:10px 0 0;height:auto}
 }
+/* ===== Panel foni: ogohlantirish uslubi — sarlavha zonasi (Variant C) ===== */
+.sec>.card:has(>h2),.sec>.grid>.card:has(>h2){position:relative;border-radius:20px;border:1px solid hsl(var(--hue) 70% 55%/.26);
+background:linear-gradient(180deg,hsl(var(--hue) 85% 58%/.22),hsl(calc(var(--hue) + 20) 80% 52%/.09) 85px,transparent 135px),var(--card);
+box-shadow:0 18px 38px -24px hsl(var(--hue) 80% 50%/.5),var(--sh)}
+.sec>.card:has(>h2)::before,.sec>.grid>.card:has(>h2)::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;border-radius:20px 20px 0 0;pointer-events:none;
+background:linear-gradient(90deg,hsl(var(--hue) 88% 62%),hsl(calc(var(--hue) + 20) 80% 50%) 55%,transparent)}
+:root[data-theme="light"] .sec>.card:has(>h2),:root[data-theme="cream"] .sec>.card:has(>h2){background:linear-gradient(180deg,hsl(var(--hue) 85% 58%/.20),hsl(calc(var(--hue) + 20) 80% 52%/.07) 85px,transparent 135px),var(--card)}
+@media(max-width:700px){.sec>.card:has(>h2),.sec>.grid>.card:has(>h2){border-radius:16px}.sec>.card:has(>h2)::before,.sec>.grid>.card:has(>h2)::before{border-radius:16px 16px 0 0}}
 </style>
 </head>
 <body>
@@ -4632,7 +4640,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261106-1333";
+window.__BUILD="20261106-1857";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
