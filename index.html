@@ -1690,8 +1690,24 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 @media(max-width:700px){.mdctx{position:static;display:block;max-width:none;height:auto;margin:6px 0 0;font-size:12.5px;text-align:center}}
 
 /* Media-reja sarlavhasi: stikersiz, kattaroq */
-#s-media>.card>h2{font-size:28px;letter-spacing:-.02em;line-height:1.2}
-@media(max-width:700px){#s-media>.card>h2{font-size:23px}}
+
+/* ===== Panel sarlavhalari: "Jurnal muqovasi" uslubi (Variant B) ===== */
+#sections{counter-reset:secn}.sec{counter-increment:secn;--hue:200;--ha:hsl(var(--hue) 68% 42%);--hb:hsl(calc(var(--hue) + 38) 82% 56%)}
+:root[data-theme="dark"] .sec{--ha:hsl(var(--hue) 72% 68%);--hb:hsl(calc(var(--hue) + 38) 82% 66%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="cream"]) .sec{--ha:hsl(var(--hue) 72% 68%);--hb:hsl(calc(var(--hue) + 38) 82% 66%)}}
+.sec>.card>h2,.sec>.grid>.card>h2{display:flex;flex-wrap:wrap;align-items:center;text-align:left;font-size:30px;line-height:1.1;letter-spacing:-.03em;margin:0 0 16px;padding:0;min-height:0}
+.sec>.card>h2::after,.sec>.grid>.card>h2::after{content:"";display:block;order:2;flex:1 1 40px;width:auto;height:2px;border-radius:2px;margin:0 14px;background:linear-gradient(90deg,var(--ha),var(--hb) 40%,transparent)}
+.sec>.card>h2>.htools,.sec>.grid>.card>h2>.htools{position:static;order:3;flex:none;height:34px;margin:0}
+.sec>.card>h2>.kk,.sec>.grid>.card>h2>.kk{order:0;flex:0 0 100%;display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:11px;font-weight:800;letter-spacing:.14em;line-height:1.2;color:var(--mute)}
+.kk i{font-style:normal}.kk b{color:var(--ha);font-size:12px;font-weight:800}.kk b::before{content:counter(secn,decimal-leading-zero)}.kk.nonum b{display:none}
+.kk::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.sec>.card>h2>.mdctx{position:static;order:4;flex:0 0 100%;max-width:none;height:auto;display:block;margin:5px 0 0;font-size:12.5px;font-weight:600;color:var(--mute);text-align:left;letter-spacing:0}
+#tlTitle{order:0}
+@media(max-width:700px){
+.sec>.card>h2,.sec>.grid>.card>h2{font-size:25px;margin-bottom:14px}
+.sec>.card>h2::after,.sec>.grid>.card>h2::after{display:none}
+.sec>.card>h2>.htools,.sec>.grid>.card>h2>.htools{order:5;flex:0 0 100%;justify-content:flex-end;margin:10px 0 0;height:auto}
+}
 </style>
 </head>
 <body>
@@ -1771,7 +1787,7 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
     </div>
   </div>
   <div class="card">
-    <h2>👥 Jamoa (admin)</h2>
+    <h2>Jamoa (admin)</h2>
     <div class="tmband" id="tmBand" aria-live="polite"></div>
     <div class="tmtool"><label>Davr <select id="tmPer"><option value="1">Bugun</option><option value="7" selected>Oxirgi 7 kun</option><option value="30">Oxirgi 30 kun</option><option value="0">Shu oy</option></select></label>
       <button class="sm" type="button" data-tmact="refresh">⟳ Yangilash</button>
@@ -1803,7 +1819,7 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 
   <section class="sec" id="s-timeline" data-sec="timeline">
   <div class="card">
-    <h2 id="tlTitle">Bugun: soat nechida nima qilindi</h2>
+    <h2><span id="tlTitle">Bugun: soat nechida nima qilindi</span></h2>
     <div class="tlgrid">
       <div>
         <div class="calh"><button class="sm" data-calnav="-1" aria-label="Oldingi oy">‹</button><b id="calTitle"></b><button class="sm" data-calnav="1" aria-label="Keyingi oy">›</button><button class="sm" data-calnav="0">Bugun</button></div>
@@ -1901,7 +1917,7 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 
   <section class="sec" id="s-mediaxl" data-sec="mediaxl">
   <div class="card">
-    <h2>📥 Media-reja → Excel</h2>
+    <h2>Media-reja → Excel</h2>
     <p class="note">Media-rejani Excel fayl qilib yuklab oling: qaysi loyihalar, qaysi oylar va qaysi holatdagi kontent kirishini tanlang.</p>
     <div class="rpq"><button type="button" data-mxq="cur">Shu oy</button><button type="button" data-mxq="sel">Ko‘rilayotgan oy</button><button type="button" data-mxq="every">Barcha oylar</button></div>
     <div class="rpf">
@@ -1942,7 +1958,7 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 
   <section class="sec" id="s-report" data-sec="report">
   <div class="card">
-    <h2>📄 PDF hisobot</h2>
+    <h2>PDF hisobot</h2>
     <p class="note">Istalgan kun yoki davr bo‘yicha barcha statistika, diagrammalar va natijalarni chiroyli PDF qilib yuklab oling. Pastdagi ko‘rinish PDF bilan bir xil.</p>
     <div class="rpq"><button type="button" data-rpq="today">Bugun</button><button type="button" data-rpq="yest">Kecha</button><button type="button" data-rpq="7">Oxirgi 7 kun</button><button type="button" data-rpq="month">Shu oy</button><button type="button" data-rpq="prev">O‘tgan oy</button></div>
     <div class="rpf">
@@ -2734,6 +2750,11 @@ function clearTasks(){
 function hTools(h){var t=h.querySelector(":scope > .htools");if(!t){t=document.createElement("span");t.className="htools";h.insertBefore(t,h.firstChild)}return t}
 function htoolsInit(){Array.prototype.forEach.call(document.querySelectorAll(".sec > .card > h2, .sec > .grid > .card > h2"),function(h){
   var t=hTools(h);Array.prototype.slice.call(h.children).forEach(function(c){if(c!==t&&(c.classList.contains("mdtools")||c.classList.contains("hidebtn")||c.classList.contains("tkclr")))t.appendChild(c)})});window.addEventListener("resize",htFit);try{document.fonts.ready.then(htFit)}catch(e){}htFit()}
+var SEC_KICK={team:"JAMOA",timeline:"BUGUN",charts:"TAHLIL",tasks:"VAZIFALAR",media:"MEDIA",mediaxl:"EKSPORT",journal:"JURNAL",report:"HISOBOT",history:"TARIX"};
+function secHeadInit(){Array.prototype.forEach.call(document.querySelectorAll(".sec > .card > h2, .sec > .grid > .card > h2"),function(h){
+  var sec=h.closest(".sec");if(!sec)return;var id=sec.dataset.sec;sec.style.setProperty("--hue",(SEC_HUE[id]!==undefined?SEC_HUE[id]:200));
+  if(h.querySelector(":scope > .kk"))return;var k=document.createElement("span");k.className="kk"+(h.parentNode.parentNode===sec?"":" nonum");
+  k.innerHTML="<b></b><i>"+(SEC_KICK[id]||"")+"</i>";var t=h.querySelector(":scope > .htools");h.insertBefore(k,t?t.nextSibling:h.firstChild)})}
 function htFit(){Array.prototype.forEach.call(document.querySelectorAll(".htools"),function(t){var h=t.parentNode;if(!h)return;var w=t.offsetWidth;if(w)h.style.setProperty("--htw",(w+12)+"px")})}
 function tasksCleanInit(){
   var h=document.querySelector("#s-tasks > .card > h2");if(!h||$("tkClr"))return;
@@ -4606,12 +4627,12 @@ async function initRuntime(){
   $("saveSt").textContent=dbRef?"Bulutga ulangan: ma’lumot avtomatik saqlanadi.":"Bulutga ulanmagan — ma’lumot shu brauzerda saqlanadi.";
   $("shSt").textContent="";window.__tmAuto=!!dbRef&&!(window.TEAM&&TEAM.as);
 }
-relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"tozalash");safe(htoolsInit,"sarlavhalar");$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as))safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
+relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"tozalash");safe(htoolsInit,"sarlavhalar");safe(secHeadInit,"sarlavha belgilari");$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as))safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
 </script>
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261106-1303";
+window.__BUILD="20261106-1333";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
