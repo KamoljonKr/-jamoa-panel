@@ -1680,6 +1680,14 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 .mdsw .mdsd.on{flex-grow:2;min-width:190px;opacity:1;padding:0 14px 0 4px;background:var(--card);box-shadow:0 5px 14px -8px var(--c),0 1px 2px rgba(20,33,61,.08)}
 .mdsw .mdsd.on .mdsx{max-width:100%;margin:0 0 0 9px}
 }
+
+/* ===== Media-reja sarlavhasi: sozlamalar tugmasi va kontekst yozuvi ===== */
+.mdctx{position:absolute;left:0;top:0;height:34px;display:flex;align-items:center;max-width:calc(50% - 120px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:700;letter-spacing:0;color:var(--mute)}
+.mdtools .mdcfg[aria-expanded="true"]{color:var(--cool);border-color:var(--cool);background:rgba(31,138,138,.1)}
+.mdtools .mdcfg svg{transition:transform .4s var(--ease,ease)}.mdtools .mdcfg[aria-expanded="true"] svg{transform:rotate(60deg)}
+.mdctl.open .mdctlb{margin-top:6px}
+.card.mdmin .mdcfg,.card.secmin .mdcfg{display:none}
+@media(max-width:700px){.mdctx{position:static;display:block;max-width:none;height:auto;margin:6px 0 0;font-size:12.5px;text-align:center}}
 </style>
 </head>
 <body>
@@ -1847,9 +1855,8 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 
   <section class="sec" id="s-media" data-sec="media">
   <div class="card">
-    <h2>🗓 Media-reja<span class="mdtools"><button type="button" data-mdview="min" id="mdMinB"></button><button type="button" data-mdview="max" id="mdMaxB"></button></span></h2>
+    <h2>🗓 Media-reja<span class="mdctx" id="mdCtlT"></span><span class="mdtools"><button type="button" class="mdcfg" id="mdCtlB" aria-expanded="false" aria-controls="mdCtlBody"></button><button type="button" data-mdview="min" id="mdMinB"></button><button type="button" data-mdview="max" id="mdMaxB"></button></span></h2>
     <div class="mdctl" id="mdCtl">
-      <button type="button" class="mdctlt" id="mdCtlB" aria-expanded="false" aria-controls="mdCtlBody"><span class="mdctla">⚙ Sozlamalar</span><span class="mdctlc" id="mdCtlT"></span><svg class="mdctlv" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
       <div class="mdctlb" id="mdCtlBody">
     <p class="note">Avval loyihani tanlang — pastda shu loyihaning oylik kontent rejasi chiqadi. Har kun uchun kontent turi (bir nechtasini tanlash mumkin) va mavzuni yozing. Sana va hafta kuni avtomatik qo‘yiladi.</p>
     <div class="mdnav"><select id="mdProj" class="mdp" aria-label="Loyiha"></select><button class="sm addic" type="button" data-mdnew="1" title="Yangi loyiha qo‘shish" aria-label="Yangi loyiha qo‘shish"><svg class="addsv" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button><button class="sm" type="button" data-mdclr="open" title="Oy rejasini bittada tozalash">🧹 Oyni tozalash</button><button class="sm" type="button" data-mddist="open" title="Kontent sonini oy kunlariga teng taqsimlash">🎲 Tarqatish</button><button class="sm" type="button" data-mdai="open" title="Ro‘yxatni joylang: kunlarga o‘zi tarqatadi">✨ Ro‘yxatdan</button><button class="sm" type="button" data-mm="-1" aria-label="Oldingi oy">‹</button><b id="mdTitle"></b><button class="sm" type="button" data-mm="1" aria-label="Keyingi oy">›</button><button class="sm" type="button" data-mm="0">Bugun</button><input type="month" id="mdPick" aria-label="Oyni tanlash"><label><input type="checkbox" id="mdOnly">Faqat to‘ldirilgan kunlar</label></div>
@@ -3178,7 +3185,7 @@ function renderMedia(){
     var rows=idx.length?idx.map(function(i){return mdRow(media[i],i,k,names,all,ps)}).join(""):(all?'<div class="mnone">—</div>':mdRow(null,"",k,names,false,ps));
     return'<div class="md'+(k===today?" today":"")+(k<today?" past":"")+(wk?" wk":"")+(k===mDay?" sel":"")+'" data-day="'+k+'"><div class="mdl"><b>'+k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4)+'</b><span>'+WDN[wd]+'</span><button type="button" class="sm" data-madd="'+k+'"'+(all?' disabled title="Avval yuqoridan loyihani tanlang"':' title="Shu kunga yana kontent qo‘shish"')+' aria-label="Shu kunga kontent qo‘shish">'+ADD_SV+'</button></div><div class="mde">'+rows+'</div></div>'}).join("");
   body.innerHTML='<div class="mcal" id="mdCal" role="group" aria-label="Oy kunlari">'+mdCalInner()+'</div>'+(mDay?'':'<p class="mdhint">Kunni bosing — shu kunning kontent rejasi ochiladi.</p>')+(h||'<p class="note">Bu oyda to‘ldirilgan kun yo‘q.</p>');
-  var ct=$("mdCtlT");if(ct)ct.textContent=(sel||"Barcha loyihalar")+" · "+monthLabel(mMonth);
+  var ct=$("mdCtlT");if(ct){ct.textContent=(sel||"Barcha loyihalar")+" · "+monthLabel(mMonth);ct.title=ct.textContent}
   mdSlRender(ps,sel);mdSlAnim();mdStatsRender();mdTf();mdRowSync();mxProjUi();if($("mdDist")&&!$("mdDist").hidden)mddUi();if(typeof mdaiShow==="function")mdaiShow();
 }
 var MWD=["Du","Se","Ch","Pa","Ju","Sh","Ya"];
@@ -3319,7 +3326,7 @@ function mdView(a){
   if(a==="max"){var on=!root.classList.contains("max");root.classList.toggle("max",on);document.body.classList.toggle("mdmaxed",on);
     if(on&&getPref("kd_mdmin","")==="1")setPref("kd_mdmin","")}
   var mn=getPref("kd_mdmin","")==="1";card.classList.toggle("mdmin",mn);
-  setIco($("mdMinB"),mn?"unfold":"fold",mn?"Yoyish":"Yig‘ish");setIco($("mdMaxB"),root.classList.contains("max")?"restore":"max",root.classList.contains("max")?"Kichraytirish (Esc)":"Kattalashtirish");if(a==="max")mdStatsRender();
+  setIco($("mdCtlB"),"cfg","Sozlamalar");setIco($("mdMinB"),mn?"unfold":"fold",mn?"Yoyish":"Yig‘ish");setIco($("mdMaxB"),root.classList.contains("max")?"restore":"max",root.classList.contains("max")?"Kichraytirish (Esc)":"Kattalashtirish");if(a==="max")mdStatsRender();
 }
 function renderStatsOnly(){mdStatsRender()}
 function mdcSel(){var m=$("mdcMonth").value||mMonth,sc=$("mdcScope").value,mode=$("mdcMode").value;
@@ -3747,7 +3754,7 @@ function undoInit(){
 /* --- Bo'limni yig'ish / kattalashtirish (umumiy) --- */
 var ICO={};
 (function(){function f(d){return'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>'}
-ICO.fold=f('<path d="M6 15l6-6 6 6"/>');ICO.unfold=f('<path d="M6 9l6 6 6-6"/>');
+ICO.cfg=f('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>');ICO.fold=f('<path d="M6 15l6-6 6 6"/>');ICO.unfold=f('<path d="M6 9l6 6 6-6"/>');
 ICO.max=f('<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>');ICO.restore=f('<path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/>');
 ICO.hide=f('<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/>')})();
 function setIco(b,k,t){if(!b)return;b.innerHTML=ICO[k];b.title=t;b.setAttribute("aria-label",t)}
@@ -4600,7 +4607,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261106-1247";
+window.__BUILD="20261106-1257";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
