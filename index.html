@@ -1708,13 +1708,11 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 .sec>.card>h2::after,.sec>.grid>.card>h2::after{display:none}
 .sec>.card>h2>.htools,.sec>.grid>.card>h2>.htools{order:5;flex:0 0 100%;justify-content:flex-end;margin:10px 0 0;height:auto}
 }
-/* ===== Panel foni: "Shisha va yorug' shar" (Variant D) ===== */
+/* ===== Panel foni: "Uch nuqtali aurora" (Variant D2) ===== */
 .sec>.card:has(>h2),.sec>.grid>.card:has(>h2){position:relative;border-radius:24px;border:1px solid color-mix(in srgb,var(--ink) 10%,transparent);
-background:radial-gradient(circle 230px at calc(100% + 10px) -20px,hsl(var(--hue) 90% 60%/.40),hsl(var(--hue) 90% 60%/.12) 45%,transparent 68%),
-radial-gradient(circle 200px at -20px calc(100% + 30px),hsl(calc(var(--hue) + 40) 90% 60%/.16),transparent 65%),
-linear-gradient(145deg,color-mix(in srgb,var(--card) 92%,white),var(--card));box-shadow:var(--sh)}
-:root[data-theme="light"] .sec>.card:has(>h2),:root[data-theme="cream"] .sec>.card:has(>h2){background:radial-gradient(circle 230px at calc(100% + 10px) -20px,hsl(var(--hue) 90% 62%/.30),hsl(var(--hue) 90% 62%/.10) 45%,transparent 68%),
-radial-gradient(circle 200px at -20px calc(100% + 30px),hsl(calc(var(--hue) + 40) 90% 62%/.14),transparent 65%),var(--card)}
+background:radial-gradient(ellipse 72% 52% at 100% 0%,hsl(var(--hue) 90% 60%/.34),transparent 100%),
+radial-gradient(ellipse 52% 62% at 0% 52%,hsl(calc(var(--hue) + 45) 90% 62%/.24),transparent 100%),
+radial-gradient(ellipse 62% 48% at 100% 100%,hsl(calc(var(--hue) - 35) 90% 60%/.26),transparent 100%),var(--card);box-shadow:var(--sh)}
 .sec>.card:has(>h2) .kk b,.sec>.grid>.card:has(>h2) .kk b{background:hsl(var(--hue) 80% 55%/.2);padding:2px 7px;border-radius:8px}
 @media(max-width:700px){.sec>.card:has(>h2),.sec>.grid>.card:has(>h2){border-radius:18px}}
 </style>
@@ -4641,7 +4639,7 @@ relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"t
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261107-0856";
+window.__BUILD="20261107-0921";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
