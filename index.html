@@ -1708,12 +1708,30 @@ body.viewas .mdtx,body.viewas .mdt-add{display:none}
 .sec>.card>h2::after,.sec>.grid>.card>h2::after{display:none}
 .sec>.card>h2>.htools,.sec>.grid>.card>h2>.htools{order:5;flex:0 0 100%;justify-content:flex-end;margin:10px 0 0;height:auto}
 }
-/* ===== Panel foni: "Kuchli yorug'lik" (Variant D3) ===== */
-.sec>.card:has(>h2),.sec>.grid>.card:has(>h2){position:relative;border-radius:24px;border:1px solid color-mix(in srgb,var(--ink) 10%,transparent);
-background:radial-gradient(ellipse 100% 72% at 100% 0%,hsl(var(--hue) 92% 58%/.46),hsl(var(--hue) 92% 58%/.16) 58%,transparent 100%),
-radial-gradient(ellipse 80% 56% at 0% 100%,hsl(var(--hue) 92% 58%/.30),hsl(var(--hue) 92% 58%/.09) 58%,transparent 100%),var(--card);box-shadow:var(--sh)}
+/* ===== Panel foni: "Kuchli yorug'lik" (D3) — yorug'lik va shaffoflik sozlanadi ===== */
+.sec{--bgl:1;--bgg:0}
+.sec>.card:has(>h2),.sec>.grid>.card:has(>h2){position:relative;border-radius:24px;border:1px solid color-mix(in srgb,var(--ink) calc(10% + var(--bgg)*10%),transparent);
+background:radial-gradient(ellipse 100% 72% at 100% 0%,hsl(var(--hue) 92% 58%/calc(.46*var(--bgl))),hsl(var(--hue) 92% 58%/calc(.16*var(--bgl))) 58%,transparent 100%),
+radial-gradient(ellipse 80% 56% at 0% 100%,hsl(var(--hue) 92% 58%/calc(.30*var(--bgl))),hsl(var(--hue) 92% 58%/calc(.09*var(--bgl))) 58%,transparent 100%),
+color-mix(in srgb,var(--card) calc(100% - var(--bgg)*55%),transparent);
+box-shadow:var(--sh),inset 0 1px 0 rgba(255,255,255,calc(var(--bgg)*.14))}
+.sec[data-glass]>.card:has(>h2),.sec[data-glass]>.grid>.card:has(>h2){-webkit-backdrop-filter:blur(calc(var(--bgg)*14px)) saturate(calc(1 + var(--bgg)*.5));backdrop-filter:blur(calc(var(--bgg)*14px)) saturate(calc(1 + var(--bgg)*.5))}
 .sec>.card:has(>h2) .kk b,.sec>.grid>.card:has(>h2) .kk b{background:hsl(var(--hue) 80% 55%/.2);padding:2px 7px;border-radius:8px}
 @media(max-width:700px){.sec>.card:has(>h2),.sec>.grid>.card:has(>h2){border-radius:18px}}
+.bgbtn{width:30px;height:30px;padding:0;display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--mute);border:1px solid var(--line);border-radius:9px;line-height:1;cursor:pointer;transition:color .15s,background .15s,border-color .15s}
+.bgbtn:hover{color:var(--ink);background:var(--bg);border-color:var(--mute)}
+.bgbtn[aria-expanded="true"]{color:var(--cool);border-color:var(--cool);background:rgba(31,138,138,.1)}
+.bgbtn svg{display:block}
+#bgPop{position:fixed;z-index:9000;width:272px;max-width:calc(100vw - 16px);padding:14px 14px 12px;border-radius:16px;background:var(--card);color:var(--ink);border:1px solid var(--line);box-shadow:0 20px 50px -16px rgba(0,0,0,.55);display:none}
+#bgPop.open{display:block}
+#bgPop h3{font-size:13px;font-weight:800;margin:0 0 2px;display:flex;justify-content:space-between;gap:8px}
+#bgPop .bgnm{color:var(--mute);font-size:10.5px;letter-spacing:.12em;font-weight:800}
+#bgPop label{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;margin:12px 0 4px}
+#bgPop label output{color:var(--mute);font-weight:600}
+#bgPop input[type=range]{width:100%;accent-color:var(--cool);height:26px;margin:0;padding:0}
+#bgPop .bgrow{display:flex;gap:8px;margin-top:12px}
+#bgPop .bgrow button{flex:1;padding:8px 6px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+#bgPop .bgrow button:hover{border-color:var(--mute);background:var(--bg)}
 </style>
 </head>
 <body>
@@ -2761,6 +2779,34 @@ function secHeadInit(){Array.prototype.forEach.call(document.querySelectorAll(".
   var sec=h.closest(".sec");if(!sec)return;var id=sec.dataset.sec;sec.style.setProperty("--hue",(SEC_HUE[id]!==undefined?SEC_HUE[id]:200));
   if(h.querySelector(":scope > .kk"))return;var k=document.createElement("span");k.className="kk"+(h.parentNode.parentNode===sec?"":" nonum");
   k.innerHTML="<b></b><i>"+(SEC_KICK[id]||"")+"</i>";var t=h.querySelector(":scope > .htools");h.insertBefore(k,t?t.nextSibling:h.firstChild)})}
+var BG_KEY="kd_bg",bgBtn=null,bgSec=null;
+var ICO_BG='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.7s7 6.6 7 11.3a7 7 0 0 1-14 0C5 9.3 12 2.7 12 2.7z"/><path d="M9 14.5a3 3 0 0 0 3 3"/></svg>';
+function bgGet(){try{var o=JSON.parse(getPref(BG_KEY,"{}"));return o&&typeof o==="object"?o:{}}catch(e){return{}}}
+function bgNum(v,d,lo,hi){v=+v;return isFinite(v)?Math.max(lo,Math.min(hi,v)):d}
+function bgVals(id){var s=bgGet()[id]||{};return{l:bgNum(s.l,100,0,150),g:bgNum(s.g,0,0,100)}}
+function bgApply(sec,l,g){sec.style.setProperty("--bgl",(l/100).toFixed(2));sec.style.setProperty("--bgg",(g/100).toFixed(2));if(g>0)sec.setAttribute("data-glass","1");else sec.removeAttribute("data-glass")}
+function bgStore(id,l,g){var o=bgGet();if(l===100&&g===0)delete o[id];else o[id]={l:l,g:g};setPref(BG_KEY,JSON.stringify(o))}
+function bgPlace(){var p=$("bgPop");if(!p||!bgBtn)return;var r=bgBtn.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight){bgClose();return}
+  var w=p.offsetWidth,h=p.offsetHeight,x=Math.min(Math.max(8,r.right-w),innerWidth-w-8),y=r.bottom+8;if(y+h>innerHeight-8)y=Math.max(8,r.top-h-8);p.style.left=x+"px";p.style.top=y+"px"}
+function bgClose(){var p=$("bgPop");if(p)p.classList.remove("open");if(bgBtn)bgBtn.setAttribute("aria-expanded","false");bgBtn=null;bgSec=null}
+function bgShow(){var v=bgVals(bgSec.dataset.sec);$("bgL").value=v.l;$("bgG").value=v.g;$("bgLo").textContent=v.l+"%";$("bgGo").textContent=v.g+"%"}
+function bgBuild(){var p=$("bgPop");if(p)return p;p=document.createElement("div");p.id="bgPop";p.setAttribute("role","dialog");p.setAttribute("aria-label","Panel foni sozlamalari");
+  p.innerHTML='<h3><span>Panel foni</span><span class="bgnm" id="bgNm"></span></h3><label for="bgL">Yorug‘lik <output id="bgLo"></output></label><input type="range" id="bgL" min="0" max="150" step="1"><label for="bgG">Shaffoflik <output id="bgGo"></output></label><input type="range" id="bgG" min="0" max="100" step="1"><div class="bgrow"><button type="button" id="bgR">Asl holat</button><button type="button" id="bgA">Hammasiga</button></div>';
+  document.body.appendChild(p);
+  p.addEventListener("input",function(){if(!bgSec)return;var l=bgNum($("bgL").value,100,0,150),g=bgNum($("bgG").value,0,0,100);$("bgLo").textContent=l+"%";$("bgGo").textContent=g+"%";bgApply(bgSec,l,g);bgStore(bgSec.dataset.sec,l,g)});
+  $("bgR").addEventListener("click",function(){if(!bgSec)return;bgApply(bgSec,100,0);bgStore(bgSec.dataset.sec,100,0);bgShow()});
+  $("bgA").addEventListener("click",function(){if(!bgSec)return;var l=bgNum($("bgL").value,100,0,150),g=bgNum($("bgG").value,0,0,100);Array.prototype.forEach.call(document.querySelectorAll(".bgbtn"),function(b){var sc=b.closest(".sec");if(sc){bgApply(sc,l,g);bgStore(sc.dataset.sec,l,g)}});
+    var a=$("bgA");a.textContent="Qo‘llandi ✓";setTimeout(function(){a.textContent="Hammasiga"},1400)});
+  document.addEventListener("click",function(e){if(!bgBtn)return;if(e.target.closest&&(e.target.closest("#bgPop")||e.target.closest(".bgbtn")))return;bgClose()});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&bgBtn){e.stopPropagation();var b=bgBtn;bgClose();b.focus()}},true);
+  window.addEventListener("resize",bgPlace);window.addEventListener("scroll",bgPlace,true);return p}
+function bgToggle(btn){var sec=btn.closest(".sec");if(!sec)return;if(bgBtn===btn){bgClose();return}bgClose();var p=bgBuild();bgBtn=btn;bgSec=sec;btn.setAttribute("aria-expanded","true");
+  $("bgNm").textContent=SEC_KICK[sec.dataset.sec]||"";bgShow();p.classList.add("open");bgPlace()}
+function bgInit(){Array.prototype.forEach.call(document.querySelectorAll(".sec > .card > h2, .sec > .grid > .card > h2"),function(h){
+  var sec=h.closest(".sec");if(!sec)return;var v=bgVals(sec.dataset.sec);bgApply(sec,v.l,v.g);
+  if(h.querySelector(".bgbtn"))return;var b=document.createElement("button");b.type="button";b.className="bgbtn";b.innerHTML=ICO_BG;
+  b.title="Panel foni: yorug‘lik va shaffoflik";b.setAttribute("aria-label","Panel foni: yorug‘lik va shaffoflik");b.setAttribute("aria-expanded","false");b.setAttribute("aria-controls","bgPop");
+  b.addEventListener("click",function(e){e.stopPropagation();bgToggle(b)});hTools(h).appendChild(b)});htFit()}
 function htFit(){Array.prototype.forEach.call(document.querySelectorAll(".htools"),function(t){var h=t.parentNode;if(!h)return;var w=t.offsetWidth;if(w)h.style.setProperty("--htw",(w+12)+"px")})}
 function tasksCleanInit(){
   var h=document.querySelector("#s-tasks > .card > h2");if(!h||$("tkClr"))return;
@@ -4633,12 +4679,12 @@ async function initRuntime(){
   $("saveSt").textContent=dbRef?"Bulutga ulangan: ma’lumot avtomatik saqlanadi.":"Bulutga ulanmagan — ma’lumot shu brauzerda saqlanadi.";
   $("shSt").textContent="";window.__tmAuto=!!dbRef&&!(window.TEAM&&TEAM.as);
 }
-relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"tozalash");safe(htoolsInit,"sarlavhalar");safe(secHeadInit,"sarlavha belgilari");$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as))safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
+relink();snapAll();ensureKeys();buildFonts();initLayout();safe(tasksCleanInit,"tozalash");safe(htoolsInit,"sarlavhalar");safe(secHeadInit,"sarlavha belgilari");safe(bgInit,"panel foni");$("mD").value=ymd(Date.now());applyPrefs();setHH();window.addEventListener("resize",setHH);try{document.fonts.ready.then(setHH)}catch(e){}safe(render,"render");safe(undoInit,"undo");safe(secViewInit,"bo‘lim ko‘rinishi");safe(mdInit,"media-reja");safe(applyHidden,"yashirish");safe(rpInit,"hisobot");if(!(window.TEAM&&TEAM.role==="admin"&&!TEAM.as))safe(gsInit,"qidiruv");safe(tmInit,"jamoa");setInterval(tick,1000);tick();initRuntime();
 </script>
 <!-- v:tday-top -->
 <script>
 /* --- Yangi versiyani tekshirish: telefon eski nusxani keshda saqlab qolmasin --- */
-window.__BUILD="20261107-1013";
+window.__BUILD="20261107-1022";
 (function(){
   var B=window.__BUILD,LS=window.localStorage,SS=window.sessionStorage;
   var v=document.getElementById("mVer");if(v)v.textContent="Versiya: "+B;
